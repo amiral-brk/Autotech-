@@ -968,28 +968,38 @@ function openCase(type){
   const reel=document.getElementById('caseReel');
   const titles={car:'CAISSE VOITURES',circuit:'CAISSE CIRCUITS',pilot:'CAISSE PILOTES',all:'CAISSE SURPRISE'};
   document.getElementById('caseOpenTitle').textContent=titles[type]||'OUVERTURE';
-  reel.innerHTML=reelItems.map(item=>`
+  const itemW = 138; // 130px width + 8px gap
+  const winnerIndex = 35;
+
+  reel.innerHTML = reelItems.map(item=>`
     <div class="case-item ${item.rarity}">
       <span>${item.emoji}</span>
       <div class="case-item-name">${item.name}</div>
       <div class="case-item-rarity">${item.rarity}</div>
     </div>`).join('');
   overlay.classList.add('show');
-  const itemW=138;
-  const centerOffset=window.innerWidth/2-65;
-  const targetPos=-(35*itemW-centerOffset+Math.random()*60-30);
-  reel.style.transition='none';
-  reel.style.transform='translateX(0)';
+
+  // Calculate exact position so winner lands perfectly under the center line
+  // Center of screen - padding of reel-wrap - position of winner item - half item width
+  const reelWrap = document.querySelector('.case-reel-wrap');
+  const wrapWidth = reelWrap ? reelWrap.offsetWidth : Math.min(window.innerWidth, 800);
+  const centerOfWrap = wrapWidth / 2;
+  const winnerCenter = winnerIndex * itemW + (itemW / 2);
+  const targetPos = -(winnerCenter - centerOfWrap);
+
+  reel.style.transition = 'none';
+  reel.style.transform = 'translateX(0)';
+
   setTimeout(()=>{
-    reel.style.transition='transform 4s cubic-bezier(0.15,0.85,0.25,1)';
-    reel.style.transform=`translateX(${targetPos}px)`;
+    reel.style.transition = 'transform 7s cubic-bezier(0.05, 0.95, 0.25, 1)';
+    reel.style.transform = `translateX(${targetPos}px)`;
     setTimeout(()=>{
       overlay.classList.remove('show');
       collection.push(winner);
-      localStorage.setItem('atCollection',JSON.stringify(collection));
+      localStorage.setItem('atCollection', JSON.stringify(collection));
       showWin(winner);
-    },4500);
-  },100);
+    }, 7800);
+  }, 200);
 }
 
 function showWin(item){
