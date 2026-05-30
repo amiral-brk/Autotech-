@@ -644,11 +644,17 @@ const DIFF_TIMES = {easy:30, normal:20, hard:15, none:0};
 const CASE_PRICE = 200;
 
 // ============ COINS ============
+function saveAll(){
+  localStorage.setItem('atCoins', coins);
+  localStorage.setItem('atCollection', JSON.stringify(collection));
+  localStorage.setItem('atStats', JSON.stringify(statsData));
+}
+
 function updateCoinDisplay(){
   document.getElementById('coinDisplay').textContent = coins;
   document.getElementById('quizCoins').textContent = sessionCoins;
   document.getElementById('coinsForCases').textContent = coins;
-  localStorage.setItem('atCoins', coins);
+  saveAll();
 }
 
 function showCoinToast(amount){
@@ -680,7 +686,7 @@ function updateStats(){
   document.getElementById('statAnswered').textContent = statsData.answered;
   document.getElementById('statCorrect').textContent = statsData.correct;
   document.getElementById('statCollection').textContent = collection.length;
-  localStorage.setItem('atStats', JSON.stringify(statsData));
+  saveAll();
 }
 
 // ============ NAV ============
@@ -730,7 +736,7 @@ function timeOut(){
   streak = 0;
   updateStreakBadge();
   statsData.answered++;
-  localStorage.setItem('atStats', JSON.stringify(statsData));
+  saveAll();
   if(currentMode==='mcq'){
     // Reveal correct
     const allBtns = document.querySelectorAll('#mcqOptions .option-btn');
@@ -856,7 +862,7 @@ function flashcardAnswer(correct){
     streak++; statsData.correct++;
     addCoins(Math.round(10*getMultiplier()));
   } else { streak=0; }
-  localStorage.setItem('atStats', JSON.stringify(statsData));
+  saveAll();
   setTimeout(()=>{ currentIndex++; showQuestion(); }, 600);
 }
 
@@ -891,7 +897,7 @@ function selectMCQ(btn, correct, options, grid){
   allBtns.forEach((b,i)=>{ b.disabled=true; if(options[i].correct) b.classList.add('correct'); });
   if(correct){ btn.classList.add('correct'); streak++; statsData.correct++; addCoins(Math.round(10*getMultiplier())); }
   else{ btn.classList.add('wrong'); streak=0; }
-  localStorage.setItem('atStats', JSON.stringify(statsData));
+  saveAll();
   document.getElementById('mcqNext').classList.add('show');
 }
 
@@ -961,45 +967,60 @@ function openCase(type){
   coins-=CASE_PRICE; updateCoinDisplay();
   const winner=getRandomItem(type);
   const allItems=type==='all'?[...ITEMS.car,...ITEMS.circuit,...ITEMS.pilot]:ITEMS[type];
+
+  // Build reel: 60 items, winner at index 50
+  const WINNER_INDEX = 50;
   const reelItems=[];
-  for(let i=0;i<40;i++) reelItems.push(allItems[Math.floor(Math.random()*allItems.length)]);
-  reelItems[35]=winner;
+  for(let i=0;i<60;i++) reelItems.push(allItems[Math.floor(Math.random()*allItems.length)]);
+  reelItems[WINNER_INDEX] = winner;
+
   const overlay=document.getElementById('caseOpening');
   const reel=document.getElementById('caseReel');
   const titles={car:'CAISSE VOITURES',circuit:'CAISSE CIRCUITS',pilot:'CAISSE PILOTES',all:'CAISSE SURPRISE'};
   document.getElementById('caseOpenTitle').textContent=titles[type]||'OUVERTURE';
-  const itemW = 138; // 130px width + 8px gap
-  const winnerIndex = 35;
 
-  reel.innerHTML = reelItems.map(item=>`
-    <div class="case-item ${item.rarity}">
+  // Item size: 130px width + 8px gap = 138px per item
+  const ITEM_W = 138;
+
+  reel.innerHTML = reelItems.map((item, idx)=>`
+    <div class="case-item ${item.rarity}" data-index="${idx}">
       <span>${item.emoji}</span>
       <div class="case-item-name">${item.name}</div>
       <div class="case-item-rarity">${item.rarity}</div>
     </div>`).join('');
+
   overlay.classList.add('show');
 
-  // Calculate exact position so winner lands perfectly under the center line
-  // Center of screen - padding of reel-wrap - position of winner item - half item width
-  const reelWrap = document.querySelector('.case-reel-wrap');
-  const wrapWidth = reelWrap ? reelWrap.offsetWidth : Math.min(window.innerWidth, 800);
-  const centerOfWrap = wrapWidth / 2;
-  const winnerCenter = winnerIndex * itemW + (itemW / 2);
-  const targetPos = -(winnerCenter - centerOfWrap);
+  // Wait for DOM to render, then calculate positions precisely
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      const reelWrap = document.querySelector('.case-reel-wrap');
+      const wrapWidth = reelWrap.offsetWidth;
+      const centerOfWrap = wrapWidth / 2;
 
-  reel.style.transition = 'none';
-  reel.style.transform = 'translateX(0)';
+      // Winner item starts at WINNER_INDEX * ITEM_W from reel start
+      // We want center of winner item to align with center of wrap
+      // targetPos = -(winnerItemLeft + ITEM_W/2 - centerOfWrap)
+      const winnerLeft = WINNER_INDEX * ITEM_W;
+      const winnerMid = winnerLeft + ITEM_W / 2;
+      const targetPos = -(winnerMid - centerOfWrap);
 
-  setTimeout(()=>{
-    reel.style.transition = 'transform 7s cubic-bezier(0.05, 0.95, 0.25, 1)';
-    reel.style.transform = `translateX(${targetPos}px)`;
-    setTimeout(()=>{
-      overlay.classList.remove('show');
-      collection.push(winner);
-      localStorage.setItem('atCollection', JSON.stringify(collection));
-      showWin(winner);
-    }, 7800);
-  }, 200);
+      reel.style.transition = 'none';
+      reel.style.transform = 'translateX(0px)';
+
+      setTimeout(()=>{
+        reel.style.transition = 'transform 7s cubic-bezier(0.03, 0.98, 0.22, 1)';
+        reel.style.transform = `translateX(${targetPos}px)`;
+
+        setTimeout(()=>{
+          overlay.classList.remove('show');
+          collection.push(winner);
+          saveAll();
+          showWin(winner);
+        }, 7800);
+      }, 100);
+    });
+  });
 }
 
 function showWin(item){
@@ -1825,7 +1846,7 @@ function submitOpen() {
   } else {
     streak = 0;
   }
-  localStorage.setItem('atStats', JSON.stringify(statsData));
+  saveAll();
 
   // Bouton suivant au lieu des boutons correct/faux
   const actionsDiv = document.getElementById('openActions');
