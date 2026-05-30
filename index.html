@@ -1,1 +1,777 @@
+// ============ SYSTÈME DE CORRECTION QUESTIONS OUVERTES ============
+// Remplace la fonction submitOpen() et openAnswerResult() existantes
+// et ajoute les données de correction par question
+
+const CORRECTION_DATA = {
+  1: { // Essieu de Dion
+    total: 20,
+    criteria: [
+      { key: ["rigide","rigid"], pts: 4, label: "Essieu rigide (relie les deux roues)" },
+      { key: ["pont moteur","différentiel","boite","boîte"], pts: 5, label: "Pont moteur séparé de l'essieu" },
+      { key: ["caisse","carrosserie","chassis","châssis"], pts: 4, label: "Pont lié à la caisse" },
+      { key: ["parallélisme","parallele","parallèle"], pts: 4, label: "Maintien du parallélisme des roues" },
+      { key: ["masse","suspendu","non suspendu"], pts: 3, label: "Réduction des masses non suspendues" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises parfaitement le principe de l'essieu De Dion.",
+      good: "Bonne réponse, les éléments clés sont là. Attention à bien mentionner la séparation du pont moteur.",
+      average: "Tu as les grandes lignes mais il manque des éléments importants. Revois la différence avec un essieu rigide classique.",
+      poor: "La notion est encore floue. L'essieu De Dion = rigide MAIS pont moteur séparé → c'est sa spécificité."
+    }
+  },
+  2: { // Pompage essieu semi-rigide
+    total: 20,
+    criteria: [
+      { key: ["deplacement","déplacement","mouvement"], pts: 4, label: "Déplacement parasite de l'essieu" },
+      { key: ["avant","arriere","arrière","longitudinal"], pts: 4, label: "Direction avant-arrière du déplacement" },
+      { key: ["vertical","debattement","débattement"], pts: 4, label: "Lors des débattements verticaux" },
+      { key: ["guidage","geometrie","géométrie"], pts: 4, label: "Dû à la géo de guidage longitudinal" },
+      { key: ["direction","braquage","induit"], pts: 4, label: "Perturbation de la direction / braquages induits" },
+    ],
+    comments: {
+      excellent: "Excellent ! Tu as parfaitement décrit le phénomène de pompage et ses conséquences.",
+      good: "Bonne compréhension du phénomène. Pense à mentionner l'origine géométrique du pompage.",
+      average: "Tu as l'idée générale mais le mécanisme n'est pas assez précis. Le pompage vient du guidage longitudinal.",
+      poor: "À revoir. Le pompage est un déplacement AV-AR parasite lors des débattements verticaux dû à la géo."
+    }
+  },
+  3: { // McPherson vs Pseudo McPherson
+    total: 20,
+    criteria: [
+      { key: ["ressort","spring"], pts: 3, label: "Rôle du ressort dans les deux systèmes" },
+      { key: ["coaxial","entoure","amortisseur"], pts: 4, label: "McPherson : ressort coaxial autour de l'amortisseur" },
+      { key: ["compact","place","espace"], pts: 3, label: "Compacité du McPherson" },
+      { key: ["bras","inferieur","inférieur","separé","séparé"], pts: 4, label: "Pseudo McPherson : ressort séparé sur bras inférieur" },
+      { key: ["traction","avant"], pts: 3, label: "McPherson idéal pour essieu avant de traction" },
+      { key: ["liberte","liberté","conception","integration","intégration"], pts: 3, label: "Plus de liberté de conception pour pseudo McPherson" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu distingues clairement les deux systèmes et leurs avantages respectifs.",
+      good: "Bonne réponse. Assure-toi de mentionner où est positionné le ressort dans chaque cas.",
+      average: "Tu confonds peut-être les deux systèmes. La clé : coaxial vs séparé sur bras inférieur.",
+      poor: "À revoir. McPherson = ressort autour amortisseur (coaxial). Pseudo = ressort séparé sur bras inférieur."
+    }
+  },
+  4: { // TOE-IN sous charge
+    total: 20,
+    criteria: [
+      { key: ["exterieur","extérieur","ext"], pts: 5, label: "Braquage vers l'extérieur du virage" },
+      { key: ["sous-virage","sous virage","underst"], pts: 5, label: "Génère du sous-virage" },
+      { key: ["securitaire","sécuritaire","neutre","previsible","prévisible"], pts: 4, label: "Comportement sécuritaire et prévisible" },
+      { key: ["toe out","toe-out","survirage","sportif"], pts: 3, label: "TOE-OUT génère du survirage (sportives)" },
+      { key: ["elastique","élastique","passif","silentbloc"], pts: 3, label: "Braquage élastique passif" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises le comportement élastique passif des essieux multibras.",
+      good: "Bonne réponse. N'oublie pas de contraster avec l'effet TOE-OUT pour les sportives.",
+      average: "L'idée est là mais manque de précision sur la direction du braquage et ses conséquences.",
+      poor: "À revoir. TOE-IN = braquage vers l'EXT = sous-virage = sécuritaire. TOE-OUT = survirage."
+    }
+  },
+  5: { // Déport au sol négatif
+    total: 20,
+    criteria: [
+      { key: ["pivot","axe","centre"], pts: 4, label: "Axe de pivot coupe le sol à l'extérieur du pneu" },
+      { key: ["exterieur","extérieur"], pts: 4, label: "À l'extérieur du centre du pneu" },
+      { key: ["freinage","dissymetrique","dissymétrique","panne"], pts: 4, label: "En cas de freinage dissymétrique" },
+      { key: ["moment","force","couple"], pts: 4, label: "Création d'un moment de correction" },
+      { key: ["securite","sécurité","passif","contre-braquage","contrebraquage"], pts: 4, label: "Sécurité passive / contre-braquage spontané" },
+    ],
+    comments: {
+      excellent: "Excellent ! Tu as bien compris l'intérêt sécuritaire du déport négatif.",
+      good: "Bonne réponse. Détaille mieux le mécanisme de création du moment de correction.",
+      average: "Tu as la définition mais la conséquence sécuritaire n'est pas assez expliquée.",
+      poor: "À revoir. Déport négatif = axe pivot à l'EXT du pneu → frein dissymétrique → contre-braquage automatique."
+    }
+  },
+  6: { // Empattement
+    total: 20,
+    criteria: [
+      { key: ["distance","entre"], pts: 5, label: "Distance entre les deux essieux" },
+      { key: ["axe","rotation","roue"], pts: 5, label: "Axes de rotation des essieux AV et AR" },
+      { key: ["stabilite","stabilité","longitudinal"], pts: 4, label: "Influence sur la stabilité longitudinale" },
+      { key: ["braquage","rayon"], pts: 3, label: "Influence sur le rayon de braquage" },
+      { key: ["masse","repartition","répartition"], pts: 3, label: "Répartition des masses" },
+    ],
+    comments: {
+      excellent: "Parfait ! Définition précise et conséquences bien maîtrisées.",
+      good: "Bonne réponse. Cite les 3 effets : stabilité, rayon de braquage et répartition des masses.",
+      average: "La définition est correcte mais les effets sur le comportement sont incomplets.",
+      poor: "À revoir. Empattement = distance entre axes AV et AR. Influence : stabilité, rayon braquage, répartition masses."
+    }
+  },
+  7: { // Essieu semi-rigide profil T
+    total: 20,
+    criteria: [
+      { key: ["souple","torsion"], pts: 5, label: "Souple en torsion" },
+      { key: ["independant","indépendant","debat","débat"], pts: 4, label: "Chaque roue débat indépendamment" },
+      { key: ["rigide","flexion","lateral","latéral"], pts: 5, label: "Rigide en flexion latérale" },
+      { key: ["parallelisme","parallélisme"], pts: 3, label: "Maintien du parallélisme" },
+      { key: ["CIR","centre","braquage induit","comportement"], pts: 3, label: "CIR détermine les braquages induits" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu as bien compris la dualité souple/rigide du profil T.",
+      good: "Bonne réponse. N'oublie pas le rôle du CIR dans le comportement dynamique.",
+      average: "Tu as une des deux propriétés. Le profil T est souple EN TORSION mais rigide EN FLEXION LATÉRALE.",
+      poor: "À revoir. Profil T = souple en torsion (indépendance) + rigide en flexion latérale (parallélisme)."
+    }
+  },
+  8: { // Braquage induit élastique
+    total: 20,
+    criteria: [
+      { key: ["involontaire","variation","angle"], pts: 4, label: "Variation involontaire de l'angle de roue" },
+      { key: ["freinage","traction","lateral","latéral"], pts: 4, label: "Causes : freinage / traction / charge latérale" },
+      { key: ["silentbloc","geometrie","géométrie","suspension"], pts: 4, label: "Via silentblocs et géométrie de suspension" },
+      { key: ["ameliorer","améliorer","sous-virage","passif"], pts: 4, label: "Peut améliorer (sous-virage passif)" },
+      { key: ["degrader","dégrader","stabilite","stabilité"], pts: 4, label: "Ou dégrader la stabilité" },
+    ],
+    comments: {
+      excellent: "Excellent ! Tu maîtrises parfaitement ce phénomène complexe.",
+      good: "Bonne réponse. Cite bien les deux effets possibles : amélioration ET dégradation.",
+      average: "L'idée est là. Précise les causes (freinage/traction/latéral) et les effets possibles.",
+      poor: "À revoir. Braquage induit = variation involontaire d'angle sous efforts → peut aider ou nuire."
+    }
+  },
+  9: { // Amortisseur mono vs bitube
+    total: 20,
+    criteria: [
+      { key: ["azote","nitrogen","gaz"], pts: 3, label: "Monotube : chambre d'azote séparée" },
+      { key: ["piston flottant","flottant"], pts: 3, label: "Monotube : piston flottant" },
+      { key: ["cavitation","sens","refroidissement"], pts: 3, label: "Monotube : pas de cavitation, montage tous sens" },
+      { key: ["concentrique","externe","chambre externe"], pts: 3, label: "Bitube : chambre concentrique externe" },
+      { key: ["cher","robuste","mecanique","mécanique"], pts: 4, label: "Bitube : moins cher, plus robuste" },
+      { key: ["pression","bar"], pts: 4, label: "Différence de pression (20-30 bar vs 2,5-8 bar)" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises les différences techniques entre les deux technologies.",
+      good: "Bonne réponse. Essaie de donner les plages de pression pour chaque type.",
+      average: "Tu connais un des deux systèmes. Apprends les caractéristiques des deux pour les comparer.",
+      poor: "À revoir. Monotube = azote séparé + piston flottant (20-30 bar). Bitube = concentrique (2,5-8 bar)."
+    }
+  },
+  10: { // Ressorts hélicoïdaux guidage
+    total: 20,
+    criteria: [
+      { key: ["axe","axial","vertical"], pts: 7, label: "Forces uniquement dans l'axe du ressort" },
+      { key: ["lateral","latéral","transversal"], pts: 7, label: "Incapable de transmettre des forces latérales" },
+      { key: ["guider","guidage","seul"], pts: 6, label: "Insuffisant pour guider seul une roue" },
+    ],
+    comments: {
+      excellent: "Parfait ! Réponse concise et précise comme attendu.",
+      good: "Bonne réponse. Sois encore plus précis sur les types de forces concernées.",
+      average: "L'idée est là mais manque de précision technique sur les types de forces.",
+      poor: "À revoir. Ressort = forces axiales uniquement → pas de forces latérales → ne peut pas guider."
+    }
+  },
+  11: { // Fréquence de résonance
+    total: 20,
+    criteria: [
+      { key: ["nausee","nausée","nausées","mal"], pts: 5, label: "≤1 Hz → nausées" },
+      { key: ["vertebral","vertébral","lesion","lésion"], pts: 5, label: "≥1,5 Hz → lésions vertébrales" },
+      { key: ["1 hz","1hz","600"], pts: 4, label: "Valeur de 1 Hz mentionnée" },
+      { key: ["1.5","1,5","hz"], pts: 3, label: "Valeur de 1,5 Hz mentionnée" },
+      { key: ["usage","vehicule","véhicule","adopter"], pts: 3, label: "À adapter selon le véhicule et l'usage" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu connais les valeurs exactes et leurs conséquences.",
+      good: "Bonne réponse. Donne les valeurs numériques précises (1 Hz et 1,5 Hz).",
+      average: "Tu as une des deux conséquences. Les deux limites sont importantes à connaître.",
+      poor: "À revoir. ≤1Hz = nausées. ≥1,5Hz = lésions vertébrales. À choisir selon l'usage."
+    }
+  },
+  12: { // Barre stabilisatrice
+    total: 20,
+    criteria: [
+      { key: ["oppose","opposé","roulis"], pts: 5, label: "Débattements opposés (roulis)" },
+      { key: ["parallele","parallèle","simultanement","simultanément"], pts: 5, label: "N'agit pas en débattements parallèles" },
+      { key: ["essieu","roue","meme","même"], pts: 4, label: "Même essieu, 2 roues" },
+      { key: ["durcir","roulis","sans","vertical"], pts: 3, label: "Durcit le roulis sans durcir la suspension verticale" },
+      { key: ["avantage","independant","indépendant"], pts: 3, label: "Avantage : indépendance roulis / verticale" },
+    ],
+    comments: {
+      excellent: "Excellent ! Tu as bien compris le fonctionnement sélectif de la barre anti-roulis.",
+      good: "Bonne réponse. Insiste sur l'avantage clé : roulis durci SANS affecter la suspension verticale.",
+      average: "Tu as la condition d'activation. Mais pourquoi c'est un avantage ? Explique l'indépendance roulis/vertical.",
+      poor: "À revoir. Barre anti-roulis = agit SEULEMENT en débattements opposés (roulis), pas en parallèle."
+    }
+  },
+  13: { // Anti-roulis actif
+    total: 20,
+    criteria: [
+      { key: ["verin","vérin","hydraulique"], pts: 5, label: "Vérins hydrauliques double effet" },
+      { key: ["diagonale","barre anti-roulis","antiroulis"], pts: 4, label: "Placés en diagonale sur les barres anti-roulis" },
+      { key: ["retracte","rétracte","etend","étend"], pts: 4, label: "Un se rétracte, l'autre s'étend" },
+      { key: ["horizontal","horizontale","caisse"], pts: 4, label: "Caisse ramenée à l'horizontale" },
+      { key: ["ligne droite","rigide","confort"], pts: 3, label: "Barre rigide en ligne droite pour le confort" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises le fonctionnement du système anti-roulis actif.",
+      good: "Bonne réponse. N'oublie pas que la barre reste rigide en ligne droite pour le confort.",
+      average: "Le principe est là. Précise comment les vérins agissent (un se rétracte, l'autre s'étend).",
+      poor: "À revoir. Vérins hydrauliques en diagonale : un se rétracte + l'autre s'étend → caisse horizontale."
+    }
+  },
+  14: { // Fréquence véhicule chargé
+    total: 20,
+    criteria: [
+      { key: ["masse","augmente","m"], pts: 6, label: "La masse m augmente" },
+      { key: ["formule","racine","raideur","k","sqrt"], pts: 6, label: "f = 1/2π × √(k/m)" },
+      { key: ["diminue","baisse","plus basse","inferieure","inférieure"], pts: 5, label: "Fréquence diminue" },
+      { key: ["raideur","constante","fixe"], pts: 3, label: "À raideur k constante" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu connais la formule et tu l'appliques correctement.",
+      good: "Bonne réponse. Cite la formule f = 1/2π × √(k/m) pour être complet.",
+      average: "Tu as la conclusion (fréquence baisse) mais le raisonnement mathématique est absent.",
+      poor: "À revoir. m augmente → f = 1/2π√(k/m) → f diminue (raideur k constante)."
+    }
+  },
+  15: { // Butées hydrauliques progressives
+    total: 20,
+    criteria: [
+      { key: ["3","trois","amortisseur","principal"], pts: 4, label: "3 amortisseurs en 1 (principal + 2 butées)" },
+      { key: ["compression","butee compression","butée compression"], pts: 4, label: "Butée de compression intégrée" },
+      { key: ["detente","détente","rebond"], pts: 4, label: "Butée de détente / pas de rebond" },
+      { key: ["chaleur","energie","énergie","orifice","calibre","calibré"], pts: 4, label: "Dissipation en chaleur via orifices calibrés" },
+      { key: ["caoutchouc","rebond","elastique","élastique"], pts: 4, label: "Pas de rebond (vs caoutchouc)" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises la différence technique entre les deux types de butées.",
+      good: "Bonne réponse. Précise bien les 3 fonctions intégrées dans la butée hydraulique.",
+      average: "Tu connais le principe mais les 3 amortisseurs intégrés doivent être détaillés.",
+      poor: "À revoir. Butée hydraulique = 3 en 1 : principal + compression + détente. Dissipe en chaleur, sans rebond."
+    }
+  },
+  16: { // FSD
+    total: 20,
+    criteria: [
+      { key: ["soupape","valve","parallele","parallèle"], pts: 4, label: "Soupape secondaire à flux parallèle" },
+      { key: ["haute frequence","haute fréquence","vibration"], pts: 4, label: "Haute fréquence → soupape ouverte" },
+      { key: ["doux","confort","souple"], pts: 4, label: "Haute fréquence → amortisseur doux (confort)" },
+      { key: ["basse frequence","basse fréquence","roulis","freinage"], pts: 4, label: "Basse fréquence → soupape fermée" },
+      { key: ["ferme","dur","tenue"], pts: 2, label: "Basse fréquence → amortisseur ferme (tenue)" },
+      { key: ["electronique","électronique","sans","compromis"], pts: 2, label: "Compromis sans électronique" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises le fonctionnement intelligent du FSD.",
+      good: "Bonne réponse. Précise bien l'état de la soupape pour chaque fréquence.",
+      average: "Tu as un des deux modes. Détaille la haute ET la basse fréquence avec l'état de la soupape.",
+      poor: "À revoir. FSD = soupape parallèle. Haute fréq → ouverte → doux. Basse fréq → fermée → ferme."
+    }
+  },
+  17: { // Fonction principale suspension
+    total: 20,
+    criteria: [
+      { key: ["confort","choc","absorption","occupant"], pts: 5, label: "Confort des occupants / absorption des chocs" },
+      { key: ["contact","sol","adherence","adhérence","securite","sécurité"], pts: 7, label: "Sécurité : roues en contact avec le sol" },
+      { key: ["freinage","acceleration","accélération","transmission"], pts: 4, label: "Transmettre freinage et accélération" },
+      { key: ["virage","roulis","inclinaison","tenue"], pts: 4, label: "Tenue en virage / contrôle de l'inclinaison" },
+    ],
+    comments: {
+      excellent: "Parfait ! Les 3 fonctions principales sont bien identifiées.",
+      good: "Bonne réponse. N'oublie aucune des 3 fonctions : confort, sécurité et tenue de route.",
+      average: "Tu as 1 ou 2 fonctions. La suspension remplit 3 rôles : confort, adhérence, tenue en virage.",
+      poor: "À revoir. Suspension = 3 fonctions : confort (chocs), sécurité (contact sol), tenue en virage."
+    }
+  },
+  18: { // Ressort à pas variable
+    total: 20,
+    criteria: [
+      { key: ["souple","doux","vide","debut","début"], pts: 5, label: "Souple à vide (confort)" },
+      { key: ["raidit","progressif","charge","durcit"], pts: 5, label: "Se raidit progressivement sous charge" },
+      { key: ["confort"], pts: 4, label: "Améliore le confort à vide" },
+      { key: ["tenue","route","charge"], pts: 3, label: "Meilleure tenue de route sous charge" },
+      { key: ["variation","charge","ideal","idéal"], pts: 3, label: "Idéal pour véhicules à variations de charges" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu comprends l'intérêt du pas variable vs linéaire.",
+      good: "Bonne réponse. Explique bien la progressivité : souple → se raidit sous charge.",
+      average: "Tu as l'idée. Distingue bien le comportement à vide (souple) et en charge (raide).",
+      poor: "À revoir. Pas variable = souple à vide (confort) puis se raidit sous charge (tenue de route)."
+    }
+  },
+  19: { // Centre de roulis
+    total: 20,
+    criteria: [
+      { key: ["fictif","instantane","instantané","point"], pts: 5, label: "Point fictif instantané" },
+      { key: ["pivot","tourne","oscille","bascule","caisse"], pts: 5, label: "La caisse pivote autour de ce point" },
+      { key: ["hauteur","geometrie","géométrie","essieu"], pts: 5, label: "Hauteur dépend de la géométrie de l'essieu" },
+      { key: ["virage","stabilite","stabilité","influence"], pts: 5, label: "Influence la stabilité en virage" },
+    ],
+    comments: {
+      excellent: "Parfait ! Définition claire et conséquences bien comprises.",
+      good: "Bonne réponse. Insiste sur le caractère 'instantané' et 'fictif' du point.",
+      average: "Tu as la localisation mais pas assez le rôle dynamique du centre de roulis.",
+      poor: "À revoir. Centre de roulis = point fictif instantané autour duquel la caisse pivote en virage."
+    }
+  },
+  20: { // Silentblocs
+    total: 20,
+    criteria: [
+      { key: ["caoutchouc","metal","métal","manchon"], pts: 4, label: "Manchons caoutchouc-métal" },
+      { key: ["elastique","élastique","deplacement","déplacement","petit"], pts: 4, label: "Petits déplacements élastiques contrôlés" },
+      { key: ["vibration","bruit","isoler","absorb"], pts: 4, label: "Absorbent vibrations et bruits" },
+      { key: ["braquage","elastique","élastique","passif"], pts: 4, label: "Génèrent braquages élastiques passifs" },
+      { key: ["comportement","benefique","bénéfique","maîtrisé"], pts: 4, label: "Déformation maîtrisée bénéfique au comportement" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises les deux rôles des silentblocs : isolation et braquage passif.",
+      good: "Bonne réponse. N'oublie pas que leur déformation génère des braquages élastiques passifs bénéfiques.",
+      average: "Tu connais le rôle d'isolation. Le rôle de génération de braquages élastiques est tout aussi important.",
+      poor: "À revoir. Silentblocs = isolation vibrations/bruits + déformation maîtrisée → braquages passifs bénéfiques."
+    }
+  },
+  21: { // Parallélogramme de Watt
+    total: 20,
+    criteria: [
+      { key: ["2","deux","biellette","biellettes"], pts: 4, label: "2 biellettes latérales" },
+      { key: ["levier","central","fixe","fixé"], pts: 4, label: "Levier central fixé à l'essieu" },
+      { key: ["lateral","latéral","guidage"], pts: 4, label: "Guidage latéral assuré" },
+      { key: ["vertical","lineaire","linéaire","pur"], pts: 5, label: "Mouvement vertical purement linéaire" },
+      { key: ["parasite","sans","deplacement","déplacement"], pts: 3, label: "Sans déplacement latéral parasite" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu as bien compris l'avantage du parallélogramme de Watt.",
+      good: "Bonne réponse. L'avantage clé est le mouvement vertical LINÉAIRE sans déplacement latéral.",
+      average: "Tu as la structure. Insiste sur l'avantage principal : pas de déplacement latéral parasite.",
+      poor: "À revoir. Watt = 2 biellettes + levier central → guidage latéral + mouvement vertical pur sans parasite."
+    }
+  },
+  22: { // Essieu multibras
+    total: 20,
+    criteria: [
+      { key: ["5","cinq","minimum","tirant","biellette"], pts: 5, label: "Minimum 5 tirants" },
+      { key: ["independant","indépendant","degre","degré"], pts: 5, label: "Contrôle indépendant de chaque degré de liberté" },
+      { key: ["braquage","carrossage","chasse"], pts: 5, label: "Braquage, carrossage et chasse contrôlés" },
+      { key: ["sophistique","sophistiqué","performance","haute"], pts: 5, label: "Solution la plus sophistiquée / haute performance" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises la définition et les avantages du multi-link.",
+      good: "Bonne réponse. Cite les 3 degrés de liberté contrôlés : braquage, carrossage et chasse.",
+      average: "Tu as l'idée générale. Précise le nombre minimum de tirants (5) et les degrés contrôlés.",
+      poor: "À revoir. Multi-link = min 5 tirants → contrôle indépendant braquage + carrossage + chasse."
+    }
+  },
+  23: { // Masses non suspendues
+    total: 20,
+    criteria: [
+      { key: ["ressort","suspension","porte","porté"], pts: 4, label: "Non porté par les ressorts/suspension" },
+      { key: ["roue","pneu","frein"], pts: 4, label: "Roues, pneus, freins" },
+      { key: ["moyeu","bras"], pts: 4, label: "Moyeu et bras" },
+      { key: ["legere","légère","leger","léger","moins"], pts: 4, label: "Plus légères = mieux" },
+      { key: ["adherence","adhérence","tenue"], pts: 4, label: "Meilleure adhérence et tenue de route" },
+    ],
+    comments: {
+      excellent: "Parfait ! Définition précise et conséquence bien comprise.",
+      good: "Bonne réponse. Liste tous les éléments : roues, pneus, freins, moyeu et bras.",
+      average: "Tu as la définition. Précise les éléments qui en font partie et l'intérêt de les alléger.",
+      poor: "À revoir. Masses non suspendues = roues + pneus + freins + moyeu + bras. Légères = meilleure adhérence."
+    }
+  },
+  24: { // Différentiel Audi 85%
+    total: 20,
+    criteria: [
+      { key: ["axiale","axial","force"], pts: 5, label: "Forces axiales générées" },
+      { key: ["satellite","planetaire","planétaire"], pts: 4, label: "Application sur satellites et planétaires" },
+      { key: ["embrayage","multidisque","multidisques"], pts: 5, label: "Embrayages multidisques" },
+      { key: ["auto-bloquant","autobloquant","passif","mecanique","mécanique"], pts: 3, label: "Auto-bloquant passif mécanique" },
+      { key: ["couple","grand","fort","proportionnel"], pts: 3, label: "Plus le couple est grand, plus le blocage est fort" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises le principe auto-bloquant passif du différentiel Audi.",
+      good: "Bonne réponse. Explique bien que c'est un effet mécanique PASSIF, sans électronique.",
+      average: "Tu as l'idée. Détaille comment les forces axiales des satellites agissent sur les embrayages.",
+      poor: "À revoir. Forces axiales des satellites → poussent planétaires contre embrayages → blocage proportionnel au couple."
+    }
+  },
+  25: { // Position N boîte de transfert
+    total: 20,
+    criteria: [
+      { key: ["desaccoupl","désaccoupl","neutre","libre"], pts: 6, label: "Arbres totalement désaccouplés en N" },
+      { key: ["remorquer","remorquage"], pts: 6, label: "Permet le remorquage" },
+      { key: ["boite","boîte","vitesse","endommager"], pts: 4, label: "Sans endommager la boîte de vitesses" },
+      { key: ["lubrifiant","vide","tourne"], pts: 4, label: "Les ponts tournent à vide sans lubrifiant" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu comprends l'utilité de la position N pour le remorquage.",
+      good: "Bonne réponse. Explique pourquoi sans N le remorquage serait destructeur pour la boîte.",
+      average: "Tu as l'utilisation principale. Détaille ce qui se passe mécaniquement en N.",
+      poor: "À revoir. Position N = arbres désaccouplés → remorquage possible sans endommager boîte de vitesse."
+    }
+  },
+  26: { // 4RM moteur transversal
+    total: 20,
+    criteria: [
+      { key: ["pompe","huile","transmission","arbre"], pts: 5, label: "Arbre de transmission entraîne pompe à huile" },
+      { key: ["difference","différence","vitesse","vitesses","essieu"], pts: 5, label: "Différence de vitesse entre essieux" },
+      { key: ["pression","embrayage","multidisque"], pts: 5, label: "Pression actionne embrayage multidisques" },
+      { key: ["RCO","electrovanne","électrovanne","gere","gère"], pts: 5, label: "Électrovanne RCO gère le couple transmis" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises la chaîne complète de transmission 4RM sur moteur transversal.",
+      good: "Bonne réponse. Cite les 3 étapes : pompe → pression → embrayage → RCO.",
+      average: "Tu as le principe général. Détaille la séquence complète du système.",
+      poor: "À revoir. Arbre → pompe à huile → différence vitesse → pression → embrayage → électrovanne RCO."
+    }
+  },
+  27: { // Virage sous-virage blocage variable
+    total: 20,
+    criteria: [
+      { key: ["AR","arriere","arrière","train arriere","train arrière"], pts: 8, label: "Train AR reçoit le plus de couple" },
+      { key: ["lent","vitesse","plus lent"], pts: 7, label: "Car c'est le plus lent" },
+      { key: ["effort","important","couple"], pts: 5, label: "Reçoit les efforts les plus importants" },
+    ],
+    comments: {
+      excellent: "Parfait ! Réponse concise et logique bien expliquée.",
+      good: "Bonne réponse. Explique le lien entre vitesse de rotation et couple reçu.",
+      average: "Tu as la bonne réponse (AR) mais le raisonnement physique manque.",
+      poor: "À revoir. Train AR = plus lent en sous-virage → reçoit le plus de couple du différentiel."
+    }
+  },
+  28: { // Rapport court boîte de transfert
+    total: 20,
+    criteria: [
+      { key: ["4:1","4/1","4","rapport"], pts: 6, label: "Rapport 4:1" },
+      { key: ["couple","demultiplie","démultiplie","multiplie"], pts: 6, label: "Démultiplie le couple" },
+      { key: ["franchissement","terrain","difficile"], pts: 4, label: "Pour le franchissement" },
+      { key: ["blocage","differentiel","différentiel","verrou","verrouillage"], pts: 4, label: "Blocage du différentiel central" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu connais le rapport exact et son utilité.",
+      good: "Bonne réponse. Cite le rapport exact 4:1 et le blocage du différentiel central.",
+      average: "Tu as l'utilité. Donne le rapport exact (4:1) pour être complet.",
+      poor: "À revoir. Boîte de transfert franchissement = rapport 4:1 + blocage différentiel central."
+    }
+  },
+  29: { // Différentiel denture frontale Audi
+    total: 20,
+    criteria: [
+      { key: ["asymetrique","asymétrique","repartition","répartition"], pts: 5, label: "Répartition asymétrique du couple" },
+      { key: ["40","60","AV","AR"], pts: 6, label: "40% AV et 60% AR" },
+      { key: ["conique","sans","engrenage"], pts: 5, label: "Sans engrenage conique" },
+      { key: ["axiale","axial","blocage","automatique"], pts: 4, label: "Blocage automatique par forces axiales" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu connais les proportions exactes et le principe de blocage.",
+      good: "Bonne réponse. Donne les pourcentages exacts (40/60) pour être précis.",
+      average: "Tu as le principe asymétrique. Précise les proportions 40% AV / 60% AR.",
+      poor: "À revoir. Denture frontale Audi = 40% AV + 60% AR, sans conique, blocage auto par forces axiales."
+    }
+  },
+  30: { // Survirage ESP + 4RM
+    total: 20,
+    criteria: [
+      { key: ["delestage","délestage","AR","arriere","arrière"], pts: 5, label: "Délestage de l'essieu AR" },
+      { key: ["freine","exterieur","extérieure","roue"], pts: 5, label: "ESP freine la roue AR extérieure" },
+      { key: ["interieur","intérieur","couple","transfert"], pts: 5, label: "Couple transféré vers roue AR intérieure" },
+      { key: ["trajectoire","ramener","sans","decelerer","décélérer"], pts: 5, label: "Retour en trajectoire sans décélérer" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises la synergie ESP + 4RM en survirage.",
+      good: "Bonne réponse. Précise que le véhicule est corrigé SANS décélérer, c'est l'avantage clé.",
+      average: "Tu as le principe de correction. Détaille le rôle combiné du 4RM ET de l'ESP.",
+      poor: "À revoir. Survirage : 4RM déleste AR + ESP freine roue AR ext → couple sur roue int → trajectoire sans décélérer."
+    }
+  },
+  31: { // Convertisseur hydrodynamique ralenti
+    total: 20,
+    criteria: [
+      { key: ["carre","carré","regime","régime","proportionnel"], pts: 7, label: "Couple proportionnel au carré du régime" },
+      { key: ["nul","quasi nul","faible","ralenti"], pts: 7, label: "Quasi nul au ralenti" },
+      { key: ["caler","calage","avantage"], pts: 6, label: "Avantage : moteur ne cale pas" },
+    ],
+    comments: {
+      excellent: "Parfait ! La loi physique et ses conséquences sont bien maîtrisées.",
+      good: "Bonne réponse. Cite explicitement que le couple est proportionnel au CARRÉ du régime.",
+      average: "Tu as la conséquence (ne cale pas). Explique pourquoi physiquement (loi du carré).",
+      poor: "À revoir. Couple ∝ n² → quasi nul au ralenti → moteur ne cale pas en rapport engagé."
+    }
+  },
+  32: { // Shift-lock
+    total: 20,
+    criteria: [
+      { key: ["cle","clé","contact","position"], pts: 5, label: "Clé en position contact" },
+      { key: ["frein","pedale","pédale","enfonce","enfoncé"], pts: 8, label: "Pédale de frein enfoncée" },
+      { key: ["depart","intempestif","involontaire","evite","évite"], pts: 7, label: "Évite les départs intempestifs" },
+    ],
+    comments: {
+      excellent: "Parfait ! Les deux conditions et la raison sont bien identifiées.",
+      good: "Bonne réponse. Les deux conditions (clé + frein) sont toutes les deux nécessaires.",
+      average: "Tu as une des deux conditions. Les deux sont nécessaires simultanément.",
+      poor: "À revoir. Shift-lock = clé en contact ET pédale frein enfoncée → évite départs intempestifs."
+    }
+  },
+  33: { // Point de calage convertisseur
+    total: 20,
+    criteria: [
+      { key: ["chaleur","thermique","converti"], pts: 6, label: "Puissance convertie en chaleur" },
+      { key: ["turbine","tourne pas","bloquee","bloquée","immobile"], pts: 5, label: "Turbine ne tourne pas" },
+      { key: ["couple","maximum","sortie"], pts: 5, label: "Couple de sortie maximum" },
+      { key: ["puissance","nulle","zero","zéro","transmise"], pts: 4, label: "Puissance transmise nulle" },
+    ],
+    comments: {
+      excellent: "Parfait ! Paradoxe bien compris : couple max mais puissance nulle.",
+      good: "Bonne réponse. Insiste sur le paradoxe : couple MAX mais puissance NULLE transmise.",
+      average: "Tu as l'un des effets. Le point de calage = couple max ET puissance nulle simultanément.",
+      poor: "À revoir. Calage = turbine bloquée → toute puissance → chaleur. Couple max mais puissance transmise = 0."
+    }
+  },
+  34: { // Lock-up
+    total: 20,
+    criteria: [
+      { key: ["solidariser","lier","relier","impulseur","turbine"], pts: 6, label: "Solidarise impulseur et turbine" },
+      { key: ["glissement","hydraulique","elimine","élimine"], pts: 6, label: "Élimine le glissement hydraulique" },
+      { key: ["rendement","100","maximum"], pts: 5, label: "Rendement de 100%" },
+      { key: ["torsion","amortisseur","irregularite","irrégularité"], pts: 3, label: "Amortisseur de torsion absorbe les irrégularités" },
+    ],
+    comments: {
+      excellent: "Parfait ! Rôle du lock-up et de l'amortisseur de torsion bien maîtrisés.",
+      good: "Bonne réponse. N'oublie pas l'amortisseur de torsion intégré au lock-up.",
+      average: "Tu as le principe de liaison. Explique ce que ça apporte : rendement 100% sans glissement.",
+      poor: "À revoir. Lock-up = solidarise impulseur + turbine → élimine glissement → rendement 100%."
+    }
+  },
+  35: { // Kickdown
+    total: 20,
+    criteria: [
+      { key: ["retrograde","rétrograde","retrogradage","rétrogradage"], pts: 8, label: "Rétrogradage forcé" },
+      { key: ["inferieur","inférieur","rapport","dessous"], pts: 6, label: "Vers rapport inférieur" },
+      { key: ["couple","potentiel","moteur","puissance"], pts: 6, label: "Pour utiliser tout le potentiel moteur" },
+    ],
+    comments: {
+      excellent: "Parfait ! Réponse concise et précise.",
+      good: "Bonne réponse. Précise que c'est pour utiliser tout le potentiel couple du moteur.",
+      average: "Tu as l'action (rétrograder). Explique pourquoi : maximiser le couple disponible.",
+      poor: "À revoir. Kickdown = rétrogradage forcé vers rapport inférieur pour utiliser tout le couple moteur."
+    }
+  },
+  36: { // BVA 7 vs BVM 5
+    total: 20,
+    criteria: [
+      { key: ["plage","consommation","optimal","optimale","maintenir"], pts: 5, label: "Moteur maintenu dans sa plage optimale" },
+      { key: ["lock-up","lockup","pontage","ferme","convertisseur"], pts: 5, label: "Lock-up ferme le convertisseur en conduite stabilisée" },
+      { key: ["programme","conduite","rapport","ideal","idéal"], pts: 5, label: "Programme sélectionne le rapport idéal" },
+      { key: ["charge","pente","adapte","adapté"], pts: 5, label: "Selon la charge et la pente" },
+    ],
+    comments: {
+      excellent: "Parfait ! Les 3 raisons sont bien identifiées et expliquées.",
+      good: "Bonne réponse. Cite les 3 éléments : plage optimale + lock-up + programme adaptatif.",
+      average: "Tu en as une ou deux. Les 3 raisons ensemble expliquent la meilleure consommation.",
+      poor: "À revoir. 3 raisons : plage moteur optimale + lock-up en stabilisé + programme adaptatif charge/pente."
+    }
+  },
+  37: { // Train planétaire
+    total: 20,
+    criteria: [
+      { key: ["70","35","dent","dents"], pts: 4, label: "Données numériques : 70 et 35 dents" },
+      { key: ["3","trois","demultipli","démultipli"], pts: 6, label: "Résultat : démultiplication de 3" },
+      { key: ["formule","couronne","planétaire","somme"], pts: 6, label: "Formule : (Z couronne + Z planétaire) / Z planétaire" },
+      { key: ["rapport","calcul","resultat","résultat"], pts: 4, label: "Application numérique du calcul" },
+    ],
+    comments: {
+      excellent: "Parfait ! Formule et calcul correctement appliqués.",
+      good: "Bonne réponse. Écris la formule explicitement : (Z couronne + Z planétaire) / Z planétaire.",
+      average: "Tu as le résultat mais la formule doit être explicitée pour un examen.",
+      poor: "À revoir. Formule = (Z couronne + Z planétaire) / Z planétaire = (70+35)/35 = 3."
+    }
+  },
+  38: { // DSG7 rapports impairs
+    total: 20,
+    criteria: [
+      { key: ["primaire","arbre primaire","1","premier","interieur","intérieur"], pts: 12, label: "Arbre primaire 1 (intérieur)" },
+      { key: ["impair","1","3","5","7"], pts: 8, label: "Rapports impairs transmis par cet arbre" },
+    ],
+    comments: {
+      excellent: "Parfait ! Réponse précise et directe.",
+      good: "Bonne réponse. Précise qu'il s'agit de l'arbre INTÉRIEUR (primaire 1).",
+      average: "Tu as l'idée mais manque de précision sur la désignation de l'arbre.",
+      poor: "À revoir. Rapports 1,3,5,7 = arbre primaire 1 (intérieur) de la DSG7."
+    }
+  },
+  39: { // Inconvénient DSG double embrayage
+    total: 20,
+    criteria: [
+      { key: ["pair","impair","sauter","meme","même"], pts: 6, label: "Impossible de sauter pair à pair ou impair à impair" },
+      { key: ["charge","sous charge","interruption"], pts: 5, label: "Sous charge avec interruption de couple" },
+      { key: ["seul","seulement","possible"], pts: 4, label: "Seulement pair à impair possible sans interruption" },
+      { key: ["craquement","bruit","inattendu"], pts: 5, label: "Bruit de craquement aux passages inattendus" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu connais les limites techniques de la boîte DCT.",
+      good: "Bonne réponse. Mentionne aussi le bruit de craquement lors des passages inattendus.",
+      average: "Tu as l'inconvénient principal. Explique pourquoi ce saut de rapport est impossible.",
+      poor: "À revoir. DCT = impossible pair→pair ou impair→impair sous charge. Seul pair↔impair sans interruption."
+    }
+  },
+  40: { // Mécatronique DSG7
+    total: 20,
+    criteria: [
+      { key: ["calculateur","electronique","électronique","unite","unité"], pts: 5, label: "Unité calculateur électronique" },
+      { key: ["hydraulique","distributeur","electrohydraulique","électrohydraulique"], pts: 5, label: "Distributeur électrohydraulique intégré" },
+      { key: ["compact","etanche","étanche","bloc"], pts: 4, label: "Un seul bloc compact et étanche" },
+      { key: ["pression","engagement","embrayage","gere","gère"], pts: 3, label: "Gère pression, engagements et embrayages" },
+      { key: ["moteur","communique","calculateur moteur"], pts: 3, label: "Communique avec le calculateur moteur" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises la définition complète de la mécatronique.",
+      good: "Bonne réponse. N'oublie pas qu'elle regroupe calculateur ET distributeur hydraulique en UN bloc.",
+      average: "Tu as une partie. Insiste sur l'intégration calculateur + hydraulique dans un seul bloc.",
+      poor: "À revoir. Mécatronique = calculateur électronique + distributeur hydraulique en 1 bloc compact étanche."
+    }
+  },
+  41: { // Principe fondamental DCT
+    total: 20,
+    criteria: [
+      { key: ["E1","embrayage 1","impair"], pts: 4, label: "E1 = rapports impairs" },
+      { key: ["E2","embrayage 2","pair"], pts: 4, label: "E2 = rapports pairs + marche AR" },
+      { key: ["preselectionne","présélectionne","prepare","prépare"], pts: 5, label: "Rapport suivant présélectionné" },
+      { key: ["instantane","instantané","interruption","sans"], pts: 4, label: "Passage instantané sans interruption de couple" },
+      { key: ["fermeture","ouverture","simultanement","simultanément"], pts: 3, label: "E1 fermeture + E2 ouverture simultanées" },
+    ],
+    comments: {
+      excellent: "Parfait ! Tu maîtrises le fonctionnement complet du double embrayage.",
+      good: "Bonne réponse. Explique bien la présélection et le passage simultané E1/E2.",
+      average: "Tu as la répartition E1/E2. Explique la présélection qui permet le passage instantané.",
+      poor: "À revoir. E1=impairs, E2=pairs+AR. Rapport suivant présélectionné → passage instantané sans interruption."
+    }
+  },
+  42: { // DSG7 embrayages à sec
+    total: 20,
+    criteria: [
+      { key: ["cisaillement","perte","rendement","faible"], pts: 5, label: "Pas de pertes par cisaillement de l'huile" },
+      { key: ["rendement","meilleur","faible charge","economie","économie"], pts: 5, label: "Meilleur rendement à faible charge" },
+      { key: ["thermique","capacite","capacité","moins"], pts: 5, label: "Moins de capacité thermique" },
+      { key: ["surchauffe","trafic","sport","repete","répété"], pts: 5, label: "Surchauffe possible en trafic intense" },
+    ],
+    comments: {
+      excellent: "Parfait ! Avantages ET inconvénients bien maîtrisés.",
+      good: "Bonne réponse. Cite les deux faces : meilleur rendement MAIS moins de capacité thermique.",
+      average: "Tu as un côté (avantage OU inconvénient). Les deux sont attendus dans une réponse complète.",
+      poor: "À revoir. À sec = moins de pertes → meilleur rendement. MAIS moins de capacité thermique → surchauffe possible."
+    }
+  },
+  43: { // Moteur DC brushless DSG7
+    total: 20,
+    criteria: [
+      { key: ["aimant","permanent","rotor"], pts: 5, label: "Rotor en aimants permanents" },
+      { key: ["6","paire","paires","electro","électro","stator"], pts: 5, label: "6 paires (rotor + stator)" },
+      { key: ["calculateur","mecatronique","mécatronique","communique"], pts: 4, label: "Communication par calculateur mécatronique" },
+      { key: ["usure","sans","fiabilite","fiabilité"], pts: 3, label: "Pas d'usure → fiabilité accrue" },
+      { key: ["vitesse","elevee","élevée","possible"], pts: 3, label: "Vitesses élevées possibles" },
+    ],
+    comments: {
+      excellent: "Parfait ! Les caractéristiques techniques du brushless sont bien maîtrisées.",
+      good: "Bonne réponse. Cite les avantages : pas d'usure + vitesses élevées + fiabilité.",
+      average: "Tu as la structure. Détaille les avantages par rapport à un moteur DC classique.",
+      poor: "À revoir. Brushless = aimants permanents (6 paires) + stator électroaimants. Pas d'usure, rapide, fiable."
+    }
+  }
+};
+
+// Remplace la fonction showOpen dans le JS existant
+function showOpen(q) {
+  document.getElementById('openMode').style.display = 'block';
+  document.getElementById('openTheme').textContent = q.theme;
+  document.getElementById('openQuestion').textContent = q.q;
+  document.getElementById('openInput').value = '';
+  document.getElementById('openInput').disabled = false;
+  document.getElementById('openSubmit').style.display = 'block';
+  document.getElementById('openReveal').classList.remove('show');
+  document.getElementById('openAnswer').innerHTML = '';
+  document.getElementById('openActions').style.display = 'none';
+}
+
+function submitOpen() {
+  stopTimer();
+  const q = currentQuestions[currentIndex];
+  const userAnswer = document.getElementById('openInput').value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  const data = CORRECTION_DATA[q.id];
+  
+  document.getElementById('openInput').disabled = true;
+  document.getElementById('openSubmit').style.display = 'none';
+
+  if (!data) {
+    // fallback basique
+    document.getElementById('openReveal').classList.add('show');
+    document.getElementById('openAnswer').textContent = q.a;
+    document.getElementById('openActions').style.display = 'flex';
+    return;
+  }
+
+  // Calcul du score
+  let earned = 0;
+  let foundItems = [];
+  let missedItems = [];
+
+  data.criteria.forEach(criterion => {
+    const found = criterion.key.some(kw => userAnswer.includes(kw.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")));
+    if (found) { earned += criterion.pts; foundItems.push({ label: criterion.label, pts: criterion.pts }); }
+    else { missedItems.push({ label: criterion.label, pts: criterion.pts }); }
+  });
+
+  const score = Math.min(earned, data.total);
+  const pct = score / data.total;
+
+  // Commentaire prof
+  let comment = '';
+  let grade = '';
+  if (pct >= 0.9) { comment = data.comments.excellent; grade = 'excellent'; }
+  else if (pct >= 0.7) { comment = data.comments.good; grade = 'good'; }
+  else if (pct >= 0.5) { comment = data.comments.average; grade = 'average'; }
+  else { comment = data.comments.poor; grade = 'poor'; }
+
+  const gradeColors = { excellent: '#4be87a', good: '#e8b84b', average: '#e87a4b', poor: '#e84b4b' };
+  const gradeLabels = { excellent: 'Excellent', good: 'Bien', average: 'Passable', poor: 'Insuffisant' };
+
+  // Affichage résultat
+  const revealDiv = document.getElementById('openReveal');
+  revealDiv.classList.add('show');
+  revealDiv.style.borderColor = gradeColors[grade];
+  revealDiv.style.background = gradeColors[grade] + '10';
+
+  document.getElementById('openAnswer').innerHTML = `
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:${gradeColors[grade]};letter-spacing:2px;">${score}/${data.total}</div>
+      <div style="background:${gradeColors[grade]}22;border:1px solid ${gradeColors[grade]}55;color:${gradeColors[grade]};padding:4px 12px;border-radius:20px;font-size:0.85rem;font-weight:700;">${gradeLabels[grade]}</div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:1rem;margin-bottom:1rem;font-style:italic;color:#ccc;line-height:1.6;">💬 <em>${comment}</em></div>
+    ${foundItems.length > 0 ? `
+      <div style="margin-bottom:0.75rem;">
+        <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:#4be87a;margin-bottom:0.5rem;font-weight:700;">✅ Points trouvés</div>
+        ${foundItems.map(i => `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.9rem;"><span>${i.label}</span><span style="color:#4be87a;font-weight:700;font-family:'JetBrains Mono',monospace;">+${i.pts}</span></div>`).join('')}
+      </div>` : ''}
+    ${missedItems.length > 0 ? `
+      <div style="margin-bottom:0.75rem;">
+        <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:#e84b4b;margin-bottom:0.5rem;font-weight:700;">❌ Points manquants</div>
+        ${missedItems.map(i => `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.9rem;color:var(--text-dim);"><span>${i.label}</span><span style="color:#e84b4b;font-family:'JetBrains Mono',monospace;">-${i.pts}</span></div>`).join('')}
+      </div>` : ''}
+    <div style="margin-top:1rem;padding:1rem;background:rgba(75,139,232,0.08);border:1px solid rgba(75,139,232,0.2);border-radius:10px;">
+      <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--accent2);margin-bottom:0.5rem;font-weight:700;">📖 Réponse complète</div>
+      <div style="line-height:1.7;font-size:0.9rem;">${q.a}</div>
+    </div>
+  `;
+
+  // Donner des pièces automatiquement selon le score
+  answered = true;
+  statsData.answered++;
+  if (pct >= 0.5) {
+    const coinsEarned = Math.round((10 * getMultiplier()) * pct);
+    streak++;
+    statsData.correct++;
+    addCoins(coinsEarned);
+  } else {
+    streak = 0;
+  }
+  localStorage.setItem('atStats', JSON.stringify(statsData));
+
+  // Bouton suivant au lieu des boutons correct/faux
+  const actionsDiv = document.getElementById('openActions');
+  actionsDiv.style.display = 'flex';
+  actionsDiv.innerHTML = `<button class="next-btn show" style="display:block;width:100%;margin-top:0;" onclick="nextOpenQuestion()">Question suivante →</button>`;
+}
+
+function nextOpenQuestion() {
+  currentIndex++;
+  showQuestion();
+}
 
