@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoTech Study — Révision Mécanique</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0a0f; --surface:#12121a; --surface2:#1a1a26; --border:#2a2a3f;
+  --accent:#e8b84b; --accent2:#4b8be8; --red:#e84b4b; --green:#4be87a;
+  --text:#e8e8f0; --text-dim:#7a7a9a;
+  --common:#9a9aaa; --rare:#4b8be8; --epic:#a44be8; --legendary:#e8b84b;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(232,184,75,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(232,184,75,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;color:var(--accent);}
+.nav-tabs{display:flex;gap:4px;}
+.nav-tab{padding:8px 20px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all 0.2s;background:transparent;color:var(--text-dim);}
+.nav-tab:hover{color:var(--text);background:var(--surface2);}
+.nav-tab.active{background:var(--accent);color:#000;}
+.nav-coins{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;color:var(--accent);background:rgba(232,184,75,0.1);border:1px solid rgba(232,184,75,0.3);padding:6px 16px;border-radius:30px;transition:all 0.3s;}
+.nav-coins.bump{animation:coinBump 0.4s ease;}
+@keyframes coinBump{0%,100%{transform:scale(1);}50%{transform:scale(1.2);color:#fff;}}
+
+/* FLOATING COIN TOAST */
+.coin-toast{position:fixed;top:70px;right:2rem;z-index:999;background:rgba(232,184,75,0.15);border:1px solid rgba(232,184,75,0.5);color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1rem;padding:8px 18px;border-radius:20px;pointer-events:none;opacity:0;transform:translateY(0);transition:none;}
+.coin-toast.show{animation:toastAnim 1.8s ease forwards;}
+@keyframes toastAnim{0%{opacity:0;transform:translateY(0);}15%{opacity:1;transform:translateY(-8px);}70%{opacity:1;transform:translateY(-14px);}100%{opacity:0;transform:translateY(-24px);}}
+
+/* STREAK FIRE ANIMATION */
+@keyframes fireGrow{0%,100%{transform:scale(1);}50%{transform:scale(1.3);}}
+.streak-badge{background:rgba(232,184,75,0.1);border:1px solid rgba(232,184,75,0.3);padding:6px 14px;border-radius:20px;font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:6px;transition:all 0.3s;}
+.streak-badge.hot{background:rgba(232,100,30,0.2);border-color:rgba(232,100,30,0.6);color:#ff7a30;}
+.streak-badge.fire{background:rgba(232,50,10,0.25);border-color:rgba(232,50,10,0.7);color:#ff4500;}
+.streak-fire{display:inline-block;}
+.streak-fire.animate{animation:fireGrow 0.5s ease;}
+
+/* MAIN */
+main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
+.screen{display:none;padding:2rem;max-width:900px;margin:0 auto;}
+.screen.active{display:block;}
+
+/* HOME */
+.hero{text-align:center;padding:3rem 0 2rem;}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,6rem);letter-spacing:6px;line-height:1;background:linear-gradient(135deg,var(--accent),#fff 60%,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{color:var(--text-dim);margin-top:1rem;font-size:1.1rem;}
+.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:2rem 0;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;text-align:center;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);}
+.stat-number{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--accent);letter-spacing:2px;}
+.stat-label{color:var(--text-dim);font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;margin-top:4px;}
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem;}
+.mode-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2rem 1.5rem;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;}
+.mode-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--accent),transparent);opacity:0;transition:opacity 0.3s;}
+.mode-card:hover{border-color:var(--accent);transform:translateY(-4px);}
+.mode-card:hover::after{opacity:0.05;}
+.mode-icon{font-size:2.5rem;margin-bottom:1rem;display:block;}
+.mode-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:var(--accent);margin-bottom:0.5rem;}
+.mode-desc{color:var(--text-dim);font-size:0.85rem;line-height:1.5;}
+
+/* DIFFICULTY SELECT */
+.difficulty-select{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2rem;margin-bottom:1.5rem;}
+.difficulty-select h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;color:var(--text-dim);margin-bottom:1rem;}
+.diff-btns{display:flex;gap:0.75rem;}
+.diff-btn{flex:1;padding:0.9rem;border-radius:12px;border:2px solid var(--border);background:var(--surface2);cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.9rem;transition:all 0.2s;color:var(--text-dim);}
+.diff-btn:hover{border-color:var(--accent);color:var(--text);}
+.diff-btn.active{color:#000;font-weight:700;}
+.diff-btn.easy.active{background:#4be87a;border-color:#4be87a;}
+.diff-btn.normal.active{background:#e8b84b;border-color:#e8b84b;}
+.diff-btn.hard.active{background:#e84b4b;border-color:#e84b4b;}
+
+/* TIMER */
+.timer-wrap{display:flex;align-items:center;gap:10px;}
+.timer-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1rem;border:3px solid var(--accent);color:var(--accent);transition:all 0.5s;flex-shrink:0;}
+.timer-circle.warning{border-color:#e87a4b;color:#e87a4b;}
+.timer-circle.danger{border-color:var(--red);color:var(--red);animation:timerPulse 0.5s infinite;}
+@keyframes timerPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
+.timer-circle.hidden{opacity:0;pointer-events:none;}
+
+/* THEME SELECT */
+.theme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1.5rem;}
+.theme-btn{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:1rem;}
+.theme-btn:hover{border-color:var(--accent);background:rgba(232,184,75,0.05);}
+.theme-emoji{font-size:2rem;}
+.theme-info h3{font-weight:600;margin-bottom:4px;}
+.theme-info span{color:var(--text-dim);font-size:0.85rem;}
+.all-themes-btn{width:100%;margin-top:1rem;background:linear-gradient(135deg,var(--accent),#f0a030);border:none;border-radius:16px;padding:1.2rem;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;color:#000;cursor:pointer;transition:all 0.2s;}
+.all-themes-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(232,184,75,0.3);}
+
+/* QUIZ HEADER */
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;gap:1rem;}
+.progress-wrap{flex:1;}
+.progress-label{font-size:0.75rem;color:var(--text-dim);margin-bottom:6px;text-align:center;}
+.progress-bar{height:6px;background:var(--surface2);border-radius:10px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:10px;transition:width 0.4s ease;}
+
+/* QUESTION CARD */
+.question-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:2.5rem;position:relative;overflow:hidden;animation:slideIn 0.3s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.question-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent2),var(--accent));}
+.question-theme{font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;color:var(--accent);font-weight:600;margin-bottom:1rem;}
+.question-text{font-size:1.3rem;font-weight:500;line-height:1.6;margin-bottom:2rem;}
+
+/* FLASHCARD */
+.flashcard{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:3rem;text-align:center;min-height:280px;display:flex;flex-direction:column;justify-content:center;align-items:center;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;}
+.flashcard:hover{border-color:var(--accent);}
+.flashcard-q{font-size:1.4rem;font-weight:500;line-height:1.6;}
+.flashcard-a{display:none;color:var(--green);font-size:1.05rem;line-height:1.7;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);text-align:left;}
+.flashcard-a.show{display:block;}
+.flip-hint{color:var(--text-dim);font-size:0.85rem;margin-top:1rem;}
+.flashcard-actions{display:flex;gap:1rem;margin-top:1.5rem;}
+.btn-correct{flex:1;padding:1rem;border-radius:12px;border:1px solid rgba(75,232,122,0.3);cursor:pointer;background:rgba(75,232,122,0.15);color:var(--green);font-size:1rem;font-weight:600;transition:all 0.2s;}
+.btn-correct:hover{background:rgba(75,232,122,0.25);}
+.btn-wrong{flex:1;padding:1rem;border-radius:12px;border:1px solid rgba(232,75,75,0.3);cursor:pointer;background:rgba(232,75,75,0.15);color:var(--red);font-size:1rem;font-weight:600;transition:all 0.2s;}
+.btn-wrong:hover{background:rgba(232,75,75,0.25);}
+
+/* MCQ */
+.options-grid{display:grid;gap:0.75rem;}
+.option-btn{padding:1.1rem 1.5rem;border-radius:14px;border:1px solid var(--border);background:var(--surface2);color:var(--text);text-align:left;cursor:pointer;font-size:0.95rem;font-family:'DM Sans',sans-serif;transition:all 0.2s;display:flex;align-items:flex-start;gap:1rem;line-height:1.5;}
+.option-btn:hover:not(:disabled){border-color:var(--accent2);background:rgba(75,139,232,0.08);}
+.option-btn.correct{border-color:var(--green);background:rgba(75,232,122,0.1);color:var(--green);}
+.option-btn.wrong{border-color:var(--red);background:rgba(232,75,75,0.1);color:var(--red);}
+.option-letter{width:28px;height:28px;border-radius:8px;background:var(--border);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:0.8rem;font-weight:700;flex-shrink:0;margin-top:2px;}
+
+/* OPEN */
+.open-input{width:100%;padding:1.2rem;border-radius:14px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;resize:vertical;min-height:120px;outline:none;transition:border-color 0.2s;}
+.open-input:focus{border-color:var(--accent2);}
+.submit-btn{width:100%;margin-top:1rem;padding:1.1rem;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;font-size:1rem;font-weight:700;font-family:'DM Sans',sans-serif;letter-spacing:1px;transition:all 0.2s;}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(75,139,232,0.3);}
+.answer-reveal{margin-top:1.5rem;padding:1.5rem;border-radius:14px;background:rgba(75,232,122,0.05);border:1px solid rgba(75,232,122,0.2);display:none;}
+.answer-reveal.show{display:block;}
+.answer-reveal h4{color:var(--green);margin-bottom:0.75rem;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;}
+.answer-reveal p{color:var(--text);line-height:1.7;}
+.next-btn{width:100%;margin-top:1rem;padding:1.1rem;border-radius:14px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:none;}
+.next-btn.show{display:block;}
+.next-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* RESULT */
+.result-screen{text-align:center;padding:3rem 0;}
+.result-score{font-family:'Bebas Neue',sans-serif;font-size:6rem;color:var(--accent);letter-spacing:4px;}
+.result-coins{font-family:'JetBrains Mono',monospace;font-size:1.5rem;color:var(--accent);margin:1rem 0;}
+.btn-restart{padding:1rem 3rem;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--accent),#f0a030);color:#000;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;transition:all 0.2s;margin-top:1rem;}
+.btn-restart:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(232,184,75,0.3);}
+
+/* CAISSES */
+.caisses-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:1rem;}
+.caisse-card{background:var(--surface);border:2px solid var(--border);border-radius:24px;padding:2rem;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;}
+.caisse-card:hover:not(.cant-afford){transform:translateY(-6px);}
+.caisse-car{border-color:var(--rare);}
+.caisse-car:hover:not(.cant-afford){box-shadow:0 20px 60px rgba(75,139,232,0.2);}
+.caisse-circuit{border-color:var(--green);}
+.caisse-circuit:hover:not(.cant-afford){box-shadow:0 20px 60px rgba(75,232,122,0.2);}
+.caisse-pilote{border-color:var(--epic);}
+.caisse-pilote:hover:not(.cant-afford){box-shadow:0 20px 60px rgba(164,75,232,0.2);}
+.caisse-surprise{border-color:var(--legendary);}
+.caisse-surprise:hover:not(.cant-afford){box-shadow:0 20px 60px rgba(232,184,75,0.3);}
+.caisse-icon{font-size:3.5rem;margin-bottom:1rem;display:block;}
+.caisse-name{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;margin-bottom:0.5rem;}
+.caisse-car .caisse-name{color:var(--rare);}
+.caisse-circuit .caisse-name{color:var(--green);}
+.caisse-pilote .caisse-name{color:var(--epic);}
+.caisse-surprise .caisse-name{color:var(--legendary);}
+.caisse-desc{color:var(--text-dim);font-size:0.85rem;margin-bottom:1.5rem;}
+.caisse-price{display:inline-flex;align-items:center;gap:6px;background:rgba(232,184,75,0.1);border:1px solid rgba(232,184,75,0.3);padding:8px 20px;border-radius:20px;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);font-size:1rem;}
+.cant-afford{opacity:0.45;cursor:not-allowed;}
+
+/* CASE OPENING */
+.case-opening-overlay{position:fixed;inset:0;z-index:300;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.4s;}
+.case-opening-overlay.show{opacity:1;pointer-events:all;}
+.case-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:6px;color:var(--accent);margin-bottom:3rem;text-align:center;}
+.case-reel-wrap{width:100%;max-width:800px;overflow:hidden;position:relative;}
+.case-reel-wrap::before,.case-reel-wrap::after{content:'';position:absolute;top:0;bottom:0;width:200px;z-index:2;pointer-events:none;}
+.case-reel-wrap::before{left:0;background:linear-gradient(90deg,#000,transparent);}
+.case-reel-wrap::after{right:0;background:linear-gradient(-90deg,#000,transparent);}
+.case-selector-line{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:3px;background:var(--accent);z-index:3;box-shadow:0 0 20px var(--accent);}
+.case-reel{display:flex;gap:8px;padding:1rem 0;will-change:transform;}
+.case-item{flex-shrink:0;width:130px;height:160px;border-radius:16px;border:2px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--surface);font-size:2.5rem;position:relative;overflow:hidden;}
+.case-item.common{border-color:var(--common);}
+.case-item.rare{border-color:var(--rare);}
+.case-item.epic{border-color:var(--epic);}
+.case-item.legendary{border-color:var(--legendary);background:rgba(232,184,75,0.05);}
+.case-item-name{font-size:0.6rem;text-align:center;padding:0 8px;color:var(--text-dim);font-weight:600;}
+.case-item-rarity{font-size:0.55rem;text-transform:uppercase;letter-spacing:1px;font-weight:700;}
+.case-item.common .case-item-rarity{color:var(--common);}
+.case-item.rare .case-item-rarity{color:var(--rare);}
+.case-item.epic .case-item-rarity{color:var(--epic);}
+.case-item.legendary .case-item-rarity{color:var(--legendary);}
+
+/* WIN */
+.win-result{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.5s;backdrop-filter:blur(10px);}
+.win-result.show{opacity:1;pointer-events:all;}
+.win-card{text-align:center;max-width:400px;width:90%;animation:winPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275) both;}
+@keyframes winPop{from{transform:scale(0.5) translateY(40px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+.win-emoji{font-size:6rem;display:block;margin-bottom:1rem;}
+.win-name{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:4px;margin-bottom:0.5rem;}
+.win-name.common{color:var(--common);}
+.win-name.rare{color:var(--rare);}
+.win-name.epic{color:var(--epic);}
+.win-name.legendary{color:var(--legendary);}
+.win-rarity{text-transform:uppercase;letter-spacing:3px;font-size:0.9rem;margin-bottom:2rem;}
+.win-rarity.common{color:var(--common);}
+.win-rarity.rare{color:var(--rare);}
+.win-rarity.epic{color:var(--epic);}
+.win-rarity.legendary{color:var(--legendary);}
+.win-sparkle{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.sparkle{position:absolute;border-radius:50%;animation:sparkleAnim 1.5s ease-out forwards;}
+@keyframes sparkleAnim{0%{transform:scale(0) translate(0,0);opacity:1;}100%{transform:scale(1) translate(var(--tx),var(--ty));opacity:0;}}
+.win-close{padding:1rem 3rem;border-radius:14px;border:none;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;transition:all 0.2s;}
+.win-close.legendary{background:var(--legendary);color:#000;}
+.win-close.epic{background:var(--epic);color:#fff;}
+.win-close.rare{background:var(--rare);color:#fff;}
+.win-close.common{background:var(--surface2);color:var(--text);border:1px solid var(--common);}
+
+/* COLLECTION */
+.collection-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin-top:1rem;}
+.coll-item{background:var(--surface);border:2px solid var(--border);border-radius:16px;padding:1.2rem;text-align:center;transition:all 0.2s;}
+.coll-item:hover{transform:translateY(-4px);}
+.coll-item.common{border-color:rgba(154,154,170,0.4);}
+.coll-item.rare{border-color:rgba(75,139,232,0.5);box-shadow:0 0 15px rgba(75,139,232,0.1);}
+.coll-item.epic{border-color:rgba(164,75,232,0.5);box-shadow:0 0 15px rgba(164,75,232,0.1);}
+.coll-item.legendary{border-color:rgba(232,184,75,0.6);box-shadow:0 0 20px rgba(232,184,75,0.15);}
+.coll-emoji{font-size:2.2rem;display:block;margin-bottom:0.5rem;}
+.coll-name{font-size:0.75rem;font-weight:600;margin-bottom:4px;}
+.coll-rarity{font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;}
+.coll-rarity.common{color:var(--common);}
+.coll-rarity.rare{color:var(--rare);}
+.coll-rarity.epic{color:var(--epic);}
+.coll-rarity.legendary{color:var(--legendary);}
+.coll-count{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-dim);margin-top:4px;}
+.empty-collection{text-align:center;padding:4rem;color:var(--text-dim);grid-column:1/-1;}
+.empty-collection span{font-size:3rem;display:block;margin-bottom:1rem;}
+.filter-tabs{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap;}
+.filter-tab{padding:6px 16px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--text-dim);cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;}
+.filter-tab:hover,.filter-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(232,184,75,0.05);}
+
+/* MISC */
+.screen-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:5px;color:var(--text);margin-bottom:0.5rem;}
+.screen-title span{color:var(--accent);}
+.screen-sub{color:var(--text-dim);margin-bottom:2rem;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid var(--border);color:var(--text-dim);padding:8px 16px;border-radius:10px;cursor:pointer;font-size:0.85rem;transition:all 0.2s;margin-bottom:1.5rem;}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+@media(max-width:600px){
+  .mode-grid,.caisses-grid,.stats-bar{grid-template-columns:1fr;}
+  .theme-grid{grid-template-columns:1fr;}
+  nav{padding:0 1rem;}
+  .nav-logo{font-size:1.2rem;}
+  .diff-btns{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">⚙️ AUTOTECH</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showScreen('home')">Accueil</button>
+    <button class="nav-tab" onclick="showScreen('quiz')">Réviser</button>
+    <button class="nav-tab" onclick="showScreen('caisses')">Caisses</button>
+    <button class="nav-tab" onclick="showScreen('collection')">Collection</button>
+  </div>
+  <div class="nav-coins" id="navCoins">🪙 <span id="coinDisplay">0</span></div>
+</nav>
+
+<div class="coin-toast" id="coinToast"></div>
+
+<main>
+
+<!-- HOME -->
+<div class="screen active" id="screen-home">
+  <div class="hero">
+    <h1>TECHNO AUTO</h1>
+    <p>Maîtrise la mécanique automobile. Gagne des pièces. Ouvre des caisses.</p>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-number" id="statAnswered">0</div><div class="stat-label">Réponses données</div></div>
+    <div class="stat-card"><div class="stat-number" id="statCorrect">0</div><div class="stat-label">Bonnes réponses</div></div>
+    <div class="stat-card"><div class="stat-number" id="statCollection">0</div><div class="stat-label">Cartes collectées</div></div>
+  </div>
+  <div class="mode-grid">
+    <div class="mode-card" onclick="startMode('flashcard')"><span class="mode-icon">🃏</span><div class="mode-title">Flashcards</div><div class="mode-desc">Retourne la carte pour révéler la réponse</div></div>
+    <div class="mode-card" onclick="startMode('mcq')"><span class="mode-icon">🎯</span><div class="mode-title">QCM</div><div class="mode-desc">Choix multiples avec correction immédiate</div></div>
+    <div class="mode-card" onclick="startMode('open')"><span class="mode-icon">✍️</span><div class="mode-title">Question Ouverte</div><div class="mode-desc">Tape ta réponse et compare avec la correction</div></div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="screen-quiz">
+  <div id="themeSelect">
+    <h2 class="screen-title">CHOISIR UN <span>THÈME</span></h2>
+    <p class="screen-sub" id="modeSubtitle">Sélectionne un thème ou lance tout</p>
+
+    <!-- DIFFICULTY -->
+    <div class="difficulty-select">
+      <h3>⏱ DIFFICULTÉ (Timer)</h3>
+      <div class="diff-btns">
+        <button class="diff-btn easy" onclick="setDiff('easy',this)">🟢 Facile — 30s</button>
+        <button class="diff-btn normal active" onclick="setDiff('normal',this)">🟡 Normal — 20s</button>
+        <button class="diff-btn hard" onclick="setDiff('hard',this)">🔴 Difficile — 15s</button>
+        <button class="diff-btn" onclick="setDiff('none',this)">⛔ Sans timer</button>
+      </div>
+    </div>
+
+    <div class="theme-grid" id="themeGrid"></div>
+    <button class="all-themes-btn" onclick="startQuiz('all')">🚀 Tous les thèmes</button>
+  </div>
+
+  <div id="quizContent" style="display:none;">
+    <button class="back-btn" onclick="goBackToMenu()">← Menu</button>
+    <div class="quiz-header">
+      <div class="streak-badge" id="streakBadge"><span class="streak-fire" id="streakFire">🔥</span> x<span id="streakDisplay">1</span></div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span id="qNum">1</span> / <span id="qTotal">1</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      </div>
+      <div class="timer-wrap">
+        <div class="timer-circle hidden" id="timerCircle">--</div>
+        <div class="nav-coins" style="font-size:0.85rem;padding:4px 12px;">🪙 <span id="quizCoins">0</span></div>
+      </div>
+    </div>
+
+    <!-- FLASHCARD -->
+    <div id="flashcardMode" style="display:none;">
+      <div class="flashcard" id="flashcard" onclick="revealFlashcard()">
+        <div class="question-theme" id="fcTheme"></div>
+        <div class="flashcard-q" id="fcQuestion"></div>
+        <div class="flip-hint" id="fcHint">👆 Clique pour révéler la réponse</div>
+        <div class="flashcard-a" id="fcAnswer"></div>
+      </div>
+      <div class="flashcard-actions" id="fcActions" style="display:none;">
+        <button class="btn-wrong" onclick="flashcardAnswer(false)">❌ Je savais pas</button>
+        <button class="btn-correct" onclick="flashcardAnswer(true)">✅ Je savais</button>
+      </div>
+    </div>
+
+    <!-- MCQ -->
+    <div id="mcqMode" style="display:none;">
+      <div class="question-card">
+        <div class="question-theme" id="mcqTheme"></div>
+        <div class="question-text" id="mcqQuestion"></div>
+        <div class="options-grid" id="mcqOptions"></div>
+      </div>
+      <button class="next-btn" id="mcqNext" onclick="nextQuestion()">Suivant →</button>
+    </div>
+
+    <!-- OPEN -->
+    <div id="openMode" style="display:none;">
+      <div class="question-card">
+        <div class="question-theme" id="openTheme"></div>
+        <div class="question-text" id="openQuestion"></div>
+        <textarea class="open-input" id="openInput" placeholder="Tape ta réponse ici..."></textarea>
+        <button class="submit-btn" id="openSubmit" onclick="submitOpen()">Valider ma réponse</button>
+        <div class="answer-reveal" id="openReveal"><h4>✅ Réponse correcte</h4><p id="openAnswer"></p></div>
+      </div>
+      <div class="flashcard-actions" id="openActions" style="display:none;">
+        <button class="btn-wrong" onclick="openAnswerResult(false)">❌ J'avais faux</button>
+        <button class="btn-correct" onclick="openAnswerResult(true)">✅ J'avais juste</button>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div id="resultScreen" style="display:none;" class="result-screen">
+      <div style="font-size:3rem;">🏁</div>
+      <div class="result-score" id="resultScore"></div>
+      <p id="resultMsg" style="color:var(--text-dim);font-size:1.1rem;margin-top:0.5rem;"></p>
+      <div class="result-coins" id="resultCoins"></div>
+      <button class="btn-restart" onclick="goBackToMenu()">← Retour au menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- CAISSES -->
+<div class="screen" id="screen-caisses">
+  <h2 class="screen-title">OUVRIR UNE <span>CAISSE</span></h2>
+  <p class="screen-sub">200 🪙 par caisse — <span id="coinsForCases">0</span> pièces disponibles</p>
+  <div class="caisses-grid" id="caissesGrid"></div>
+</div>
+
+<!-- COLLECTION -->
+<div class="screen" id="screen-collection">
+  <h2 class="screen-title">MA <span>COLLECTION</span></h2>
+  <p class="screen-sub" id="collectionCount">0 cartes collectées</p>
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterCollection('all',this)">Tout</button>
+    <button class="filter-tab" onclick="filterCollection('car',this)">🚗 Voitures</button>
+    <button class="filter-tab" onclick="filterCollection('circuit',this)">🏁 Circuits</button>
+    <button class="filter-tab" onclick="filterCollection('pilot',this)">👨‍🏎️ Pilotes</button>
+    <button class="filter-tab" onclick="filterCollection('legendary',this)">🏆 Légendaires</button>
+  </div>
+  <div class="collection-grid" id="collectionGrid"></div>
+</div>
+
+</main>
+
+<!-- CASE OPENING -->
+<div class="case-opening-overlay" id="caseOpening">
+  <div class="case-title" id="caseOpenTitle">OUVERTURE DE CAISSE</div>
+  <div class="case-reel-wrap">
+    <div class="case-selector-line"></div>
+    <div class="case-reel" id="caseReel"></div>
+  </div>
+</div>
+
+<!-- WIN RESULT -->
+<div class="win-result" id="winResult">
+  <div class="win-sparkle" id="winSparkle"></div>
+  <div class="win-card">
+    <span class="win-emoji" id="winEmoji"></span>
+    <div class="win-name" id="winName"></div>
+    <div class="win-rarity" id="winRarity"></div>
+    <button class="win-close" id="winClose" onclick="closeWin()">Continuer</button>
+  </div>
+</div>
+
+<script>
+// ============ QUESTIONS ============
+const QUESTIONS = [
+  // FIXATION DES ESSIEUX
+  { id:1, theme:"Fixation des essieux", q:"Qu'est-ce qu'un essieu de Dion ?",
+    a:"C'est un essieu rigide reliant les roues mais dont le pont moteur est séparé et lié à la caisse. Il conserve le parallélisme des roues d'un essieu rigide tout en réduisant considérablement les masses non suspendues.",
+    wrong:["C'est un essieu indépendant où chaque roue est reliée à la caisse par des biellettes séparées, permettant un débattement totalement libre.","C'est un essieu rigide classique où le pont moteur est intégré à l'essieu, transmettant la motricité directement aux roues.","C'est un système de suspension à bras tiré, où l'essieu est guidé par un seul bras longitudinal articulé sur la caisse."]
+  },
+  { id:2, theme:"Fixation des essieux", q:"Qu'est-ce que le pompage d'un essieu semi-rigide ?",
+    a:"C'est un déplacement parasite avant-arrière de l'essieu lors de ses débattements verticaux, dû à la géo de son guidage longitudinal. Il peut perturber la direction et provoquer des braquages induits indésirables.",
+    wrong:["C'est l'oscillation verticale de l'essieu lorsqu'il franchit un dos d'âne, provoquant une perte d'adhérence momentanée des deux roues.","C'est le phénomène de rebond de l'essieu après une forte compression, causé par un amortisseur sous-dimensionné pour la masse.","C'est la variation de carrossage des roues lors des débattements, due à la flexion des bras de suspension sous charge latérale."]
+  },
+  { id:3, theme:"Fixation des essieux", q:"Quelle est la différence entre la suspension McPherson et la pseudo McPherson ?",
+    a:"McPherson : le ressort hélicoïdal entoure l'amortisseur (coaxial), très compact, idéal pour l'essieu avant des tractions. Pseudo McPherson : le ressort est positionné séparément sur un bras inférieur, offrant plus de liberté de conception et d'intégration.",
+    wrong:["McPherson utilise un ressort à lames transversal, tandis que la pseudo McPherson utilise un ressort hélicoïdal coaxial autour de l'amortisseur.","Les deux systèmes sont identiques mécaniquement, la différence étant uniquement le matériau des silentblocs utilisés aux points d'articulation.","McPherson est réservé à l'essieu arrière des propulsions, tandis que la pseudo McPherson équipe exclusivement l'essieu avant des tractions."]
+  },
+  { id:4, theme:"Fixation des essieux", q:"Sur un essieu multibras, un braquage élastique passif TOE-IN sous charge provoque quoi ?",
+    a:"Il crée un léger braquage des roues vers l'extérieur du virage, accentuant le sous-virage → comportement sécuritaire, neutre et prévisible. L'inverse (TOE-OUT) génère du survirage (voitures sportives).",
+    wrong:["Il crée un braquage des roues vers l'intérieur du virage, favorisant le survirage et améliorant la réactivité en entrée de courbe.","Il provoque une variation de chasse positive qui alourdit la direction en ligne droite mais améliore le retour au centre après virage.","Il génère un carrossage négatif automatique sous charge qui augmente la surface de contact des pneus extérieurs en virage."]
+  },
+  { id:5, theme:"Fixation des essieux", q:"Qu'est-ce qu'un déport au sol négatif ?",
+    a:"L'axe de pivot coupe le sol à l'extérieur du centre du pneu. En cas de freinage dissymétrique, la force crée un moment qui braque vers le côté freiné → contre-braquage spontané correct → sécurité passive.",
+    wrong:["L'axe de pivot coupe le sol à l'intérieur du centre du pneu, ce qui provoque un braquage vers l'extérieur en cas de freinage d'urgence.","Le centre de la roue se trouve en dessous du niveau de la chaussée, ce qui abaisse le centre de gravité et améliore la tenue de route.","L'axe de pivot et le centre du pneu sont confondus au sol, ce qui annule tout moment de direction lors des freinages asymétriques."]
+  },
+  { id:6, theme:"Fixation des essieux", q:"Qu'est-ce que l'empattement d'un véhicule ?",
+    a:"C'est la distance entre les axes de rotation des essieux AV et AR. Il influe sur la stabilité longitudinale, le rayon de braquage et la répartition des masses.",
+    wrong:["C'est la distance entre les flancs extérieurs des pneumatiques d'un même essieu, déterminant la largeur de voie du véhicule.","C'est la hauteur du centre de gravité par rapport au sol, qui détermine la résistance au roulis en virage et la stabilité dynamique.","C'est la distance entre le pare-chocs avant et le pare-chocs arrière, représentant la longueur totale de la carrosserie du véhicule."]
+  },
+  { id:7, theme:"Fixation des essieux", q:"Qu'est-ce qu'un essieu semi-rigide à profil T ?",
+    a:"Il est souple en torsion (chaque roue peut débattre indépendamment) mais rigide en flexion latérale (maintien du parallélisme). La forme en T crée un CIR qui détermine les braquages induits et le comportement dynamique.",
+    wrong:["Il est rigide en torsion comme un essieu rigide classique, mais son profil en T allège la structure tout en maintenant une rigidité maximale.","Il est souple en flexion latérale, permettant un léger déplacement des roues en virage pour réduire les forces transmises à la caisse.","Son profil en T sert uniquement à intégrer le système de freinage à l'intérieur de la traverse, sans influence sur le comportement dynamique."]
+  },
+  { id:8, theme:"Fixation des essieux", q:"Qu'est-ce qu'un braquage induit élastique ?",
+    a:"C'est une variation involontaire de l'angle de direction d'une roue sous effet des forces de freinage, traction ou charge latérale agissant sur les silentblocs et la géométrie de suspension. Il peut améliorer (sous-virage passif) ou dégrader la stabilité.",
+    wrong:["C'est le braquage volontaire appliqué par le conducteur via le volant, amplifié par le servo-frein hydraulique de la direction assistée.","C'est la variation d'angle de braquage causée par l'usure des pneumatiques, qui modifie progressivement le comportement directionnel du véhicule.","C'est un système actif qui corrige automatiquement la trajectoire en braquant légèrement les roues arrière en sens inverse des roues avant."]
+  },
+
+  // LES SUSPENSIONS
+  { id:9, theme:"Les suspensions", q:"Quelle est la différence principale entre un amortisseur monotube et bitube ?",
+    a:"Monotube : chambre d'azote séparée par piston flottant (20 à 30 bar), aucune cavitation, montage dans tous les sens, meilleur refroidissement. Bitube : chambre concentrique externe (2,5 à 8 bars), moins cher, plus robuste mécaniquement, tige toujours en haut.",
+    wrong:["Monotube : deux chambres concentriques avec huile et gaz mélangés, moins cher. Bitube : chambre unique avec piston flottant à très haute pression.","Monotube : tige toujours en position haute obligatoire, moins cher. Bitube : montage possible dans tous les sens, pression d'azote très élevée.","Monotube : amortissement uniquement en compression. Bitube : amortissement en compression et en détente grâce à deux pistons distincts."]
+  },
+  { id:10, theme:"Les suspensions", q:"Pourquoi les ressorts hélicoïdaux ne peuvent-ils pas guider seuls une roue ?",
+    a:"Ils ne génèrent que des forces dans leur axe et sont incapables de transmettre des forces latérales.",
+    wrong:["Ils sont trop mous pour maintenir l'alignement des roues sous les forces de freinage et d'accélération longitudinales.","Leur raideur progressivement variable rend le contrôle précis de la géométrie de suspension impossible en conditions dynamiques.","Ils se déforment en torsion sous les efforts latéraux, ce qui modifie imprévisiblement le carrossage et la chasse des roues."]
+  },
+  { id:11, theme:"Les suspensions", q:"Que peut provoquer une fréquence de résonance de la suspension à 1 Hz (600 osc/min) ou moins / 1,5 Hz ou plus ?",
+    a:"≤1 Hz peut provoquer des nausées. ≥1,5 Hz peut provoquer des lésions vertébrales. La fréquence doit être choisie selon le véhicule et son usage.",
+    wrong:["≤1 Hz provoque des lésions vertébrales par vibrations trop rapides. ≥1,5 Hz provoque des nausées par oscillations lentes et ample.","≤1 Hz améliore le confort en absorbant les petites irrégularités. ≥1,5 Hz améliore la tenue de route en limitant le roulis de caisse.","≤1 Hz est la plage idéale pour tous les véhicules. ≥1,5 Hz est uniquement utilisé sur les véhicules sportifs de compétition."]
+  },
+  { id:12, theme:"Les suspensions", q:"La barre stabilisatrice (anti-roulis) agit uniquement lors de ?",
+    a:"Débattements opposés des 2 roues d'un même essieu (roulis). Elle ne s'oppose pas aux débattements parallèles. Avantage : durcir le roulis sans durcir la suspension verticale.",
+    wrong:["Débattements parallèles des 2 roues (passage sur dos d'âne), ce qui raidit la suspension verticale tout en laissant libre le roulis de caisse.","Tout type de débattement des roues, qu'il soit symétrique ou opposé, ce qui raidit uniformément la suspension dans toutes les situations.","Freinages brusques uniquement, où elle transfère les forces de décélération vers l'essieu avant pour éviter le plongeon de caisse."]
+  },
+  { id:13, theme:"Les suspensions", q:"Dans un système anti-roulis actif, comment l'inclinaison en virage est-elle corrigée ?",
+    a:"Par des vérins hydrauliques double effet placés en diagonales sur les barres anti-roulis (1/essieu). Un se rétracte et l'autre s'étend → caisse ramenée à l'horizontale. La barre reste rigide en ligne droite (confort).",
+    wrong:["Par des moteurs électriques intégrés aux amortisseurs qui ajustent la hauteur de chaque roue indépendamment selon les capteurs d'accélération latérale.","Par une pompe hydraulique qui modifie la pression dans les ressorts pneumatiques, augmentant la raideur du côté intérieur du virage.","Par des actionneurs électromagnétiques sur les silentblocs qui rigidifient sélectivement les points d'articulation sous charge latérale."]
+  },
+  { id:14, theme:"Les suspensions", q:"Pourquoi un véhicule chargé a-t-il une fréquence propre de résonance plus basse qu'à vide ?",
+    a:"La masse m augmente → f = 1/(2π) × √(k/m) → à raideur constante, f diminue.",
+    wrong:["La charge comprime les ressorts → la raideur effective augmente → f = 1/(2π) × √(k/m) → f augmente donc la fréquence est plus haute.","La charge augmente le frottement dans les amortisseurs → le système est plus amorti → la fréquence de résonance disparaît progressivement.","La charge modifie le centre de gravité → le moment d'inertie augmente → la fréquence de roulis diminue mais pas la fréquence verticale."]
+  },
+  { id:15, theme:"Les suspensions", q:"Comment les butées hydrauliques progressives se distinguent-elles des butées caoutchouc ?",
+    a:"Elles regroupent 3 amortisseurs en 1 : amortisseur principal, butée compression et butée détente. Elles dissipent l'énergie cinétique en chaleur via des orifices calibrés, sans rebond.",
+    wrong:["Elles utilisent un matériau élastomère plus dur que le caoutchouc standard, ce qui augmente la progressivité sans ajouter de fonction d'amortissement.","Elles sont remplies d'air comprimé qui se comprime progressivement, contrairement au caoutchouc qui se déforme de façon linéaire sous charge.","Elles sont thermostatées pour maintenir une raideur constante quelle que soit la température, contrairement au caoutchouc qui durcit par le froid."]
+  },
+  { id:16, theme:"Les suspensions", q:"Comment fonctionne l'amortisseur FSD (Frequency Selective Damping) ?",
+    a:"Il possède une soupape secondaire à flux parallèle. À haute fréquence (vibrations route) : soupape ouverte → amortisseur doux (confort). À basse fréquence (roulis, freinage) : soupape fermée → amortisseur ferme (tenue de route). Compromis sans électronique.",
+    wrong:["Il utilise un capteur électronique de fréquence qui pilote une vanne proportionnelle pour ajuster la viscosité de l'huile en temps réel.","À haute fréquence : soupape fermée → amortisseur ferme. À basse fréquence : soupape ouverte → amortisseur doux. Système piloté électroniquement.","Il repose sur un fluide magnétorhéologique dont la viscosité est contrôlée par un champ magnétique variable selon la fréquence des sollicitations."]
+  },
+  { id:17, theme:"Les suspensions", q:"Quelle est la principale fonction de la suspension ?",
+    a:"Le confort des occupants (absorption des chocs), la sécurité (roues toujours en contact avec le sol pour transmettre freinage et accélération), et la tenue en virage (contrôler l'inclinaison de la caisse).",
+    wrong:["Réduire la consommation de carburant en absorbant les vibrations du moteur et en maintenant une assiette aérodynamique constante à haute vitesse.","Protéger la carrosserie des impacts en absorbant les chocs avant qu'ils n'atteignent la structure de la caisse et les organes mécaniques.","Répartir uniformément le poids du véhicule sur les quatre roues pour optimiser l'usure des pneumatiques et réduire les coûts d'entretien."]
+  },
+  { id:18, theme:"Les suspensions", q:"Quel est l'avantage d'un ressort hélicoïdal à pas variable par rapport à un ressort linéaire ?",
+    a:"Au début souple à vide (confort), puis se raidit progressivement sous charge (tenue de route). Idéal pour les véhicules aux variations de charges importantes.",
+    wrong:["Il est plus léger qu'un ressort linéaire équivalent, réduisant les masses non suspendues et améliorant la réactivité de la suspension aux irrégularités.","Sa raideur constante quelle que soit la charge garantit un comportement parfaitement prévisible et reproductible dans toutes les conditions de conduite.","Il permet d'éliminer la barre anti-roulis car sa raideur variable compense naturellement le transfert de masse latéral en virage."]
+  },
+  { id:19, theme:"Les suspensions", q:"Qu'est-ce que le centre de roulis d'un essieu ?",
+    a:"Un point fictif instantané autour duquel la caisse pivote lors d'un roulis. Sa hauteur dépend de la géométrie de l'essieu et influence fortement la stabilité en virage.",
+    wrong:["C'est le point d'ancrage fixe des barres anti-roulis sur la caisse, autour duquel s'exerce le couple de rappel lors des débattements opposés.","C'est le centre géométrique de l'essieu, situé au milieu de l'entraxe des roues, qui sert de référence pour le réglage du parallélisme.","C'est le point d'application de la force centrifuge sur la caisse en virage, déterminant l'amplitude du transfert de charge latéral."]
+  },
+  { id:20, theme:"Les suspensions", q:"Quel est le rôle des silentblocs dans un essieu ?",
+    a:"Les manchons de caoutchouc-métal permettent de petits déplacements élastiques contrôlés aux points d'articulation. Ils absorbent les vibrations et bruits, et leur déformation maîtrisée génère des braquages élastiques passifs bénéfiques.",
+    wrong:["Ce sont des roulements à billes lubrifiés à vie qui permettent la rotation des bras de suspension sans jeu ni usure sur toute la durée de vie.","Ce sont des coupelles en plastique dur qui guident les ressorts hélicoïdaux et évitent le contact métal-métal entre le ressort et son assise.","Ce sont des joints d'étanchéité en caoutchouc qui protègent les rotules et les cardans des projections d'eau, de sel et de poussière."]
+  },
+  { id:21, theme:"Les suspensions", q:"Quel avantage offre le parallélogramme de Watt sur un essieu rigide ?",
+    a:"Il utilise 2 biellettes latérales articulées sur un levier central fixé à l'essieu. Il assure le guidage latéral tout en permettant un mouvement vertical purement linéaire, sans déplacement latéral parasite.",
+    wrong:["Il remplace la barre Panhard par un seul point d'articulation central qui autorise un léger déplacement latéral contrôlé pour améliorer le confort.","Il utilise 3 biellettes disposées en triangle pour guider l'essieu latéralement et longitudinalement avec une raideur réglable indépendamment.","Il est fixé en un seul point sur la caisse et permet un débattement vertical plus important qu'une barre Panhard pour les véhicules tout-terrain."]
+  },
+  { id:22, theme:"Les suspensions", q:"Un essieu multibras (multi-link) se définit par ?",
+    a:"Minimum 5 tirants permettant de contrôler indépendamment chaque degré de liberté (braquage, carrossage, chasse) sous tous les efforts de conduite. C'est la solution la plus sophistiquée pour les suspensions indépendantes hautes performances.",
+    wrong:["Exactement 4 bras : 2 transversaux et 2 longitudinaux, ce qui suffit à contrôler le carrossage et le parallélisme sous tous les efforts.","Minimum 3 biellettes avec au moins un bras en aluminium forgé pour réduire les masses non suspendues sur les véhicules haute performance.","Un bras unique en forme de L qui guide simultanément les mouvements verticaux et latéraux de la roue grâce à sa géométrie spécifique."]
+  },
+  { id:23, theme:"Les suspensions", q:"Que comprennent les masses non suspendues d'un véhicule ?",
+    a:"Tout ce qui n'est pas porté par les ressorts et suspension : roues, pneus, freins, moyeu et bras. Plus elles sont légères, meilleure est l'adhérence et la tenue de route.",
+    wrong:["La caisse, le moteur et la boîte de vitesses, qui sont directement posés sur le châssis sans isolation des vibrations routières.","Uniquement les pneumatiques et les jantes, car ce sont les seuls éléments en contact direct avec la route sans interposition de ressort.","Le moteur, la boîte et le différentiel, dont le poids agit directement sur les roues sans être filtré par les éléments de suspension."]
+  },
+
+  // TRANSMISSION INTÉGRALE
+  { id:24, theme:"Transmission intégrale", q:"Pourquoi le différentiel Audi à denture frontale peut-il transférer jusqu'à 85% du couple à l'AR ?",
+    a:"Effet mécanique intrinsèque (auto-bloquant passif). Les forces axiales générées par l'application du couple sur des satellites poussent les planétaires contre des embrayages multidisques. Plus le couple est grand, plus le blocage est fort.",
+    wrong:["Un calculateur électronique mesure en permanence le glissement de chaque essieu et commande des électrovannes qui ajustent la pression sur les embrayages.","Un fluide visqueux dans le boîtier de différentiel transmet le couple proportionnellement à la différence de vitesse entre les deux arbres de sortie.","Des aimants permanents dans le différentiel créent une force d'attraction proportionnelle au régime moteur, bloquant progressivement les planétaires."]
+  },
+  { id:25, theme:"Transmission intégrale", q:"Sur un 4RM avec boîte de transfert, à quoi sert principalement la position N ?",
+    a:"En N, les arbres de la boîte de transfert sont totalement désaccouplés → le véhicule peut être remorqué sans endommager la boîte de vitesse ou les ponts tournant à vide sans lubrifiant. Essentiel pour le remorquage longue distance.",
+    wrong:["En N, le couple est distribué à 50/50 entre les essieux AV et AR pour le franchissement en terrain glissant, sans multiplicateur de couple.","En N, les 4 roues sont bloquées mécaniquement ensemble pour maximiser la traction en franchissement extrême de type rock crawling.","En N, la boîte de transfert passe en mode économique en désaccouplant l'essieu AR pour réduire la consommation sur route ouverte."]
+  },
+  { id:26, theme:"Transmission intégrale", q:"Sur un 4RM à moteur transversal, comment le couple est-il transmis à l'essieu AR ?",
+    a:"Un arbre de transmission entraîne en permanence une pompe à huile dans le différentiel arrière. La différence de vitesse entre essieux génère une pression qui actionne l'embrayage multidisques. Une électrovanne RCO gère le couple transmis.",
+    wrong:["Un arbre de Cardan central rigide relie la boîte de vitesses transversale au différentiel arrière avec un rapport fixe de 50% du couple.","Un coupleur visqueux placé entre les deux essieux transfère automatiquement le couple vers l'AR dès qu'un glissement de l'AV est détecté.","Un système de chaîne intérieure dans la boîte de vitesses renvoie le couple vers l'AR via une couronne dentée et un pignon de renvoi."]
+  },
+  { id:27, theme:"Transmission intégrale", q:"En virage stabilisé avec sous-virage, quel essieu reçoit le plus de couple avec un système à blocage variable ?",
+    a:"Le train AR, car c'est le plus lent donc il reçoit les efforts les plus importants.",
+    wrong:["Le train AV, car les roues directrices ont besoin de plus de motricité pour maintenir la trajectoire souhaitée en situation de sous-virage.","Les deux essieux reçoivent exactement le même couple car le système à blocage variable maintient toujours une répartition 50/50 en virage.","Aucun des deux : le système réduit le couple total pour limiter le sous-virage, l'ESP prenant le relais pour corriger la trajectoire."]
+  },
+  { id:28, theme:"Transmission intégrale", q:"La boîte de transfert pour franchissement possède typiquement un rapport court de ?",
+    a:"Le rapport 4:1 qui démultiplie le couple pour du franchissement (vitesse constante ±0,8 km/h). Blocage du différentiel central + verrouillage électrique.",
+    wrong:["Le rapport 2:1 qui double le couple disponible tout en maintenant une vitesse maximale de 30 km/h pour le franchissement en terrain difficile.","Le rapport 6:1 qui permet une démultiplication extrême pour l'escalade de rochers, avec une vitesse maximale théorique de 0,3 km/h.","Le rapport 3:1 qui offre un compromis entre démultiplication du couple et maintien d'une vitesse suffisante sur piste forestière accidentée."]
+  },
+  { id:29, theme:"Transmission intégrale", q:"Que permet le différentiel à denture frontale (satellites cylindriques) d'Audi ?",
+    a:"Une répartition asymétrique (40% AV et 60% AR) sans engrenage conique, avec blocage automatique par force axiales.",
+    wrong:["Une répartition symétrique fixe (50% AV et 50% AR) qui s'adapte automatiquement grâce aux satellites cylindriques à denture hélicoïdale.","Une répartition variable entre 100% AV et 100% AR commandée électroniquement, sans possibilité de blocage mécanique passif du différentiel.","Une répartition 60% AV et 40% AR avec un blocage manuel actionnable par le conducteur via un commutateur au tableau de bord."]
+  },
+  { id:30, theme:"Transmission intégrale", q:"En cas de survirage, comment réagit le couplage ESP + 4RM ?",
+    a:"Délestage de l'essieu AR par le 4RM et l'ESP freine la roue AR extérieure → le couple va sur la roue AR intérieure pour ramener le véhicule dans sa trajectoire, sans décélérer.",
+    wrong:["L'ESP freine les 4 roues simultanément pour réduire la vitesse et le 4RM transfère 100% du couple à l'essieu AV pour stabiliser le véhicule.","Le 4RM transfert tout le couple vers l'AV et l'ESP freine la roue AV intérieure pour créer un couple de lacet qui contre le survirage.","L'ESP coupe l'injection sur plusieurs cylindres pour réduire le couple moteur et le 4RM bloque les différentiels pour rigidifier la transmission."]
+  },
+
+  // BOITES AUTOMATIQUES
+  { id:31, theme:"Boîtes automatiques", q:"Pourquoi le convertisseur hydrodynamique permet-il au moteur de tourner au ralenti sans caler en rapport engagé ?",
+    a:"Le couple transmis est proportionnel au carré du régime → quasi nul au ralenti moteur. Avantage majeur pour l'embrayage.",
+    wrong:["Un embrayage multidisques à commande hydraulique désolidarise automatiquement le moteur de la transmission dès que le régime descend sous 800 tr/min.","Un convertisseur centrifugal ne transmet le couple qu'au-delà d'un régime seuil de 1200 tr/min, permettant au moteur de ralentir librement.","Un fluide magnétorhéologique dans le convertisseur voit sa viscosité chuter au ralenti, supprimant toute transmission de couple à basse vitesse."]
+  },
+  { id:32, theme:"Boîtes automatiques", q:"Le shift-lock conditionne le passage de la position P à une autre position car ?",
+    a:"La clé est en position contact et la pédale de frein est enfoncée → évite les départs intempestifs.",
+    wrong:["Le moteur doit tourner au-dessus de 500 tr/min et le frein à main doit être serré → empêche les manœuvres avec le moteur froid.","La vitesse du véhicule doit être nulle et la ceinture de sécurité bouclée → système de sécurité active obligatoire sur les BVA récentes.","Le niveau d'huile de boîte doit être à température et la porte conducteur doit être fermée → protection contre les sorties accidentelles."]
+  },
+  { id:33, theme:"Boîtes automatiques", q:"Au point de calage d'un convertisseur (turbine bloquée, moteur pleine charge), que se passe-t-il ?",
+    a:"Toute la puissance moteur est convertie en chaleur. La turbine ne tourne pas, le couple de sortie est maximum mais la puissance transmise est nulle.",
+    wrong:["Le rendement est maximum car tout le couple moteur est transmis à la turbine, la chaleur dégagée étant minimale grâce au fluide circulant.","La turbine tourne à la même vitesse que l'impulseur, le convertisseur agit comme un accouplement rigide avec un rendement de 100%.","Le couple de sortie est nul car la turbine bloquée empêche la circulation du fluide, et toute l'énergie est renvoyée vers le réacteur."]
+  },
+  { id:34, theme:"Boîtes automatiques", q:"Le lock-up (embrayage de pontage) du convertisseur a pour but de ?",
+    a:"Solidariser l'impulseur et la turbine pour éliminer le glissement hydraulique → rendement de 100%. L'amortisseur de torsion absorbe les irrégularités du couple moteur.",
+    wrong:["Bloquer mécaniquement le réacteur pour empêcher son contre-rotation et ainsi amplifier le couple de sortie en phase de démarrage.","Déconnecter l'impulseur du moteur thermique pour permettre la récupération d'énergie en décélération vers la batterie hybride du véhicule.","Relier hydrauliquement l'impulseur et le stator pour augmenter l'amplification de couple jusqu'à 3,5 lors des démarrages en côte chargé."]
+  },
+  { id:35, theme:"Boîtes automatiques", q:"Le kickdown dans une BVA provoque quoi ?",
+    a:"Un rétrogradage forcé au rapport inférieur pour utiliser tout le potentiel moteur (couple).",
+    wrong:["Un passage immédiat au rapport le plus court disponible, le 1er, pour maximiser l'accélération quelle que soit la vitesse du véhicule.","Un blocage du convertisseur en mode direct pour maximiser le rendement de transmission et obtenir une accélération optimale sans glissement.","Une augmentation automatique de la pression hydraulique dans les vérins d'embrayage pour accélérer les passages de rapport suivants."]
+  },
+  { id:36, theme:"Boîtes automatiques", q:"Pourquoi une BVA à 7 rapports consomme-t-elle moins qu'une BVM à 5 rapports ?",
+    a:"7 rapports permettent de maintenir le moteur dans sa plage de consommation optimale, le lock-up ferme le convertisseur en conduite stabilisée, et un programme de conduite sélectionne le rapport idéal selon la charge et la pente.",
+    wrong:["La BVA à 7 rapports utilise une huile de boîte de viscosité ultra-faible qui réduit les pertes par frottement de 40% par rapport à une boîte manuelle.","Les 7 pignons sont en acier allégé traité cémentation, réduisant l'inertie de rotation et les pertes mécaniques à haute vitesse de rotation.","La BVA à 7 rapports supprime le besoin de pompe à eau et d'alternateur séparés, ces auxiliaires étant intégrés directement dans la boîte."]
+  },
+  { id:37, theme:"Boîtes automatiques", q:"Dans un train planétaire avec couronne (70 dents) et planétaire moteur (35 dents), quelle est la démultiplication ?",
+    a:"(70+35)/35 = 3 → (Z couronne + Z planétaire) / Z planétaire = rapport de démultiplication.",
+    wrong:["70/35 = 2 → le rapport est simplement le ratio entre le nombre de dents de la couronne et du planétaire moteur, soit 2:1.","(70-35)/35 = 1 → la démultiplication est calculée par la différence de dents divisée par le planétaire, donnant un rapport unitaire.","35/70 = 0,5 → le rapport de transmission est l'inverse du ratio couronnesur planétaire, correspondant à une surmultiplication de 0,5."]
+  },
+
+  // DSG
+  { id:38, theme:"Boîte DSG / Double embrayage", q:"Dans la DSG 7 rapports VAG, les rapports 1, 3, 5 et 7 sont transmis par ?",
+    a:"L'arbre primaire 1 (intérieur).",
+    wrong:["L'arbre secondaire 2 (extérieur) qui gère tous les rapports impairs via un train d'engrenages dédié à faible inertie.","L'arbre de sortie commun aux deux embrayages, qui reçoit alternativement le couple de E1 et E2 selon le rapport engagé.","Le pont différentiel avant, directement relié à l'embrayage E2 qui gère les rapports impairs sur ce modèle spécifique VAG."]
+  },
+  { id:39, theme:"Boîte DSG / Double embrayage", q:"Quel est le principal inconvénient d'une boîte à double embrayage ?",
+    a:"L'impossibilité de sauter d'un rapport pair à un autre rapport pair (ou impair à impair) sous charge. Seul le passage pair à impair ou impair à pair est possible sans interruption de couple. Bruit de craquement aux passages inattendu.",
+    wrong:["La chaleur excessive générée lors des manœuvres lentes en trafic urbain, car les deux embrayages glissent simultanément pendant les phases de rampage.","L'impossibilité de rétrograder plus d'un rapport à la fois, limitant la disponibilité du couple moteur lors des dépassements d'urgence.","Le poids très élevé par rapport à une BVM équivalente, dû à la présence de deux embrayages complets et de deux arbres primaires parallèles."]
+  },
+  { id:40, theme:"Boîte DSG / Double embrayage", q:"Qu'est-ce que la mécatronique d'une DSG 7 VAG ?",
+    a:"L'unité centrale combinant calculateur électrique + distributeur électrohydraulique en un seul bloc compact et étanche. Elle gère la pression, les engagements, adaptations d'usure des embrayages et communique avec le calculateur moteur.",
+    wrong:["C'est le nom du fluide spécial utilisé dans la DSG7 à sec, qui lubrifie les engrenages sans entrer en contact avec les embrayages à sec.","C'est le système de capteurs optiques qui mesure l'usure des embrayages et déclenche automatiquement leur remplacement à intervalles fixes.","C'est l'interface homme-machine du levier de vitesses, comprenant les commandes séquentielles au volant et l'affichage du rapport engagé."]
+  },
+  { id:41, theme:"Boîte DSG / Double embrayage", q:"Quel est le principe fondamental de la boîte à double embrayage ?",
+    a:"E1 = rapports impairs (1,3,5,7), E2 = rapports pairs (2,4,5,6) + marche AR. Pendant la conduite en 3ème (E1 fermée), la 4ème est déjà présélectionnée sur E2. Le passage se fait en instantané, sans interruption de couple.",
+    wrong:["E1 gère la 1ère et la 2ème, E2 gère les rapports 3 à 7. La présélection porte toujours sur le rapport 2 rangs au-dessus du rapport engagé.","E1 et E2 sont tous deux fermés simultanément pendant les passages de rapport, créant une phase de chevauchement pour un transfert de couple progressif.","E1 gère les rapports pairs et E2 les impairs. Pendant la conduite en 4ème (E1), la 3ème est présélectionnée sur E2 pour les rétrogradages rapides."]
+  },
+  { id:42, theme:"Boîte DSG / Double embrayage", q:"Pourquoi la DSG 7 VAG utilise-t-elle des embrayages à sec (vs DSG 6 à bain d'huile) ?",
+    a:"Pas de pertes par cisaillement de l'huile → meilleur rendement à faible charge (économie de carburant). Mais moins de capacité thermique → surchauffe possible en trafic intense ou conduite sportive répétée.",
+    wrong:["Les embrayages à sec sont plus lourds et plus robustes que les embrayages à bain d'huile, ce qui augmente la durabilité sur les véhicules à forte puissance.","Les embrayages à sec permettent des passages de rapport plus rapides car l'absence d'huile réduit la résistance visqueuse lors du desserrage.","Les embrayages à sec fonctionnent à des températures plus élevées sans dégradation, ce qui les rend plus adaptés à la conduite sportive intense."]
+  },
+  { id:43, theme:"Boîte DSG / Double embrayage", q:"Comment le moteur DC brushless de la mécatronique DSG 7 est-il différent du moteur DC classique ?",
+    a:"Son rotor en aimants permanents (6 paires) et son stator d'électroaimants (6 paires). Communication par le calculateur mécatronique → pas d'usure, vitesses élevées possibles, fiabilité accrue.",
+    wrong:["Il utilise des balais en carbone traité qui réduisent l'usure de 90% par rapport aux balais classiques, permettant 500 000 km sans remplacement.","Son rotor est bobiné avec un fil de cuivre de 99,99% de pureté qui réduit la résistance électrique et améliore le rendement de 15%.","Il fonctionne en courant alternatif triphasé converti en interne, ce qui lui permet d'être alimenté directement par le secteur lors du diagnostic."]
+  },
+];
+
+const THEMES = [...new Set(QUESTIONS.map(q => q.theme))];
+
+// ============ ITEMS ============
+const ITEMS = {
+  car:[
+    {name:"Honda Civic Type R",emoji:"🚗",rarity:"common"},{name:"Volkswagen Golf GTI",emoji:"🚙",rarity:"common"},
+    {name:"Peugeot 205 GTI",emoji:"🚘",rarity:"common"},{name:"BMW Série 3 E30",emoji:"🚗",rarity:"common"},
+    {name:"Porsche 911 Carrera",emoji:"🏎️",rarity:"rare"},{name:"Ferrari F40",emoji:"🔴",rarity:"rare"},
+    {name:"Lamborghini Countach",emoji:"🟡",rarity:"rare"},{name:"Audi Quattro Sport",emoji:"⚪",rarity:"rare"},
+    {name:"McLaren F1",emoji:"🏎️",rarity:"epic"},{name:"Ferrari 250 GTO",emoji:"🔴",rarity:"epic"},
+    {name:"Pagani Zonda",emoji:"⚡",rarity:"epic"},
+    {name:"Ferrari F1 2004",emoji:"🏆",rarity:"legendary"},{name:"McLaren MP4/4",emoji:"🌟",rarity:"legendary"},
+    {name:"Red Bull RB19",emoji:"👑",rarity:"legendary"},
+  ],
+  circuit:[
+    {name:"Circuit de Barcelone",emoji:"🏁",rarity:"common"},{name:"Circuit Paul Ricard",emoji:"🏁",rarity:"common"},
+    {name:"Hungaroring",emoji:"🏁",rarity:"common"},
+    {name:"Spa-Francorchamps",emoji:"⛈️",rarity:"rare"},{name:"Suzuka",emoji:"🌀",rarity:"rare"},
+    {name:"Silverstone",emoji:"🇬🇧",rarity:"rare"},{name:"Monza",emoji:"🇮🇹",rarity:"rare"},
+    {name:"Nürburgring Nordschleife",emoji:"🟢",rarity:"epic"},{name:"Monaco",emoji:"🎰",rarity:"epic"},
+    {name:"Pista di Fiorano",emoji:"🔴",rarity:"epic"},
+    {name:"Indianapolis Motor Speedway",emoji:"🏆",rarity:"legendary"},{name:"Laguna Seca",emoji:"🌟",rarity:"legendary"},
+  ],
+  pilot:[
+    {name:"Charles Leclerc",emoji:"👨‍🏎️",rarity:"common"},{name:"Lando Norris",emoji:"🧢",rarity:"common"},
+    {name:"Carlos Sainz",emoji:"👨‍🏎️",rarity:"common"},{name:"George Russell",emoji:"💙",rarity:"common"},
+    {name:"Max Verstappen",emoji:"🦁",rarity:"rare"},{name:"Fernando Alonso",emoji:"🔵",rarity:"rare"},
+    {name:"Lewis Hamilton",emoji:"🌍",rarity:"rare"},{name:"Sebastian Vettel",emoji:"🔴",rarity:"rare"},
+    {name:"Nico Rosberg",emoji:"🏆",rarity:"epic"},{name:"Kimi Räikkönen",emoji:"🧊",rarity:"epic"},
+    {name:"Ayrton Senna",emoji:"🌧️",rarity:"legendary"},{name:"Michael Schumacher",emoji:"👑",rarity:"legendary"},
+    {name:"Jim Clark",emoji:"🌟",rarity:"legendary"},
+  ]
+};
+
+// ============ STATE ============
+let coins = parseInt(localStorage.getItem('atCoins')||'0');
+let collection = JSON.parse(localStorage.getItem('atCollection')||'[]');
+let statsData = JSON.parse(localStorage.getItem('atStats')||'{"answered":0,"correct":0}');
+let currentMode='', currentQuestions=[], currentIndex=0, streak=0, sessionCoins=0, answered=false;
+let timerInterval=null, timerSeconds=0, difficulty='normal';
+const DIFF_TIMES = {easy:30, normal:20, hard:15, none:0};
+const CASE_PRICE = 200;
+
+// ============ COINS ============
+function updateCoinDisplay(){
+  document.getElementById('coinDisplay').textContent = coins;
+  document.getElementById('quizCoins').textContent = sessionCoins;
+  document.getElementById('coinsForCases').textContent = coins;
+  localStorage.setItem('atCoins', coins);
+}
+
+function showCoinToast(amount){
+  const toast = document.getElementById('coinToast');
+  toast.textContent = `+${amount} 🪙`;
+  toast.classList.remove('show');
+  void toast.offsetWidth;
+  toast.classList.add('show');
+  const nav = document.getElementById('navCoins');
+  nav.classList.remove('bump');
+  void nav.offsetWidth;
+  nav.classList.add('bump');
+}
+
+function getMultiplier(){
+  if(streak>=7) return 3;
+  if(streak>=4) return 2;
+  if(streak>=2) return 1.5;
+  return 1;
+}
+
+function addCoins(amount){
+  coins += amount; sessionCoins += amount;
+  updateCoinDisplay();
+  showCoinToast(amount);
+}
+
+function updateStats(){
+  document.getElementById('statAnswered').textContent = statsData.answered;
+  document.getElementById('statCorrect').textContent = statsData.correct;
+  document.getElementById('statCollection').textContent = collection.length;
+  localStorage.setItem('atStats', JSON.stringify(statsData));
+}
+
+// ============ NAV ============
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  const map={home:'accueil',quiz:'réviser',caisses:'caisse',collection:'collection'};
+  document.querySelectorAll('.nav-tab').forEach(t=>{
+    if(t.textContent.toLowerCase().includes(map[name]||name)) t.classList.add('active');
+  });
+  if(name==='caisses') renderCaisses();
+  if(name==='collection') renderCollection('all',null);
+  if(name==='home') updateStats();
+}
+
+// ============ DIFFICULTY ============
+function setDiff(d, btn){
+  difficulty = d;
+  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ============ TIMER ============
+function startTimer(){
+  clearInterval(timerInterval);
+  const secs = DIFF_TIMES[difficulty];
+  const circle = document.getElementById('timerCircle');
+  if(!secs){ circle.classList.add('hidden'); return; }
+  circle.classList.remove('hidden','warning','danger');
+  timerSeconds = secs;
+  circle.textContent = timerSeconds;
+  timerInterval = setInterval(()=>{
+    timerSeconds--;
+    circle.textContent = timerSeconds;
+    if(timerSeconds<=5){ circle.classList.add('danger'); circle.classList.remove('warning'); }
+    else if(timerSeconds<=10){ circle.classList.add('warning'); }
+    if(timerSeconds<=0){ clearInterval(timerInterval); timeOut(); }
+  },1000);
+}
+
+function stopTimer(){ clearInterval(timerInterval); }
+
+function timeOut(){
+  if(answered) return;
+  answered = true;
+  streak = 0;
+  updateStreakBadge();
+  statsData.answered++;
+  localStorage.setItem('atStats', JSON.stringify(statsData));
+  if(currentMode==='mcq'){
+    // Reveal correct
+    const allBtns = document.querySelectorAll('#mcqOptions .option-btn');
+    const q = currentQuestions[currentIndex];
+    allBtns.forEach((b,i)=>{ b.disabled=true; if(i===0) b.classList.add('correct'); });
+    document.getElementById('mcqNext').classList.add('show');
+  } else if(currentMode==='flashcard'){
+    document.getElementById('fcAnswer').classList.add('show');
+    document.getElementById('fcHint').style.display='none';
+    document.getElementById('fcActions').style.display='flex';
+  } else if(currentMode==='open'){
+    submitOpen();
+  }
+}
+
+// ============ STREAK BADGE ============
+function updateStreakBadge(){
+  const badge = document.getElementById('streakBadge');
+  const fire = document.getElementById('streakFire');
+  const disp = document.getElementById('streakDisplay');
+  const mult = getMultiplier();
+  disp.textContent = mult === 1 ? '1' : mult+'';
+  badge.classList.remove('hot','fire');
+  fire.classList.remove('animate');
+  void fire.offsetWidth;
+  if(streak>=7){ badge.classList.add('fire'); fire.textContent='🔥'; }
+  else if(streak>=4){ badge.classList.add('hot'); fire.textContent='🔥'; }
+  else{ fire.textContent='🔥'; }
+  if(streak>0) fire.classList.add('animate');
+}
+
+// ============ QUIZ SETUP ============
+function buildThemeGrid(){
+  const grid = document.getElementById('themeGrid');
+  grid.innerHTML='';
+  const icons={"Fixation des essieux":"⚙️","Les suspensions":"🔧","Transmission intégrale":"🔩","Boîtes automatiques":"⚡","Boîte DSG / Double embrayage":"🎛️"};
+  THEMES.forEach(theme=>{
+    const count = QUESTIONS.filter(q=>q.theme===theme).length;
+    const btn = document.createElement('div');
+    btn.className='theme-btn';
+    btn.innerHTML=`<span class="theme-emoji">${icons[theme]||'📚'}</span><div class="theme-info"><h3>${theme}</h3><span>${count} questions</span></div>`;
+    btn.onclick=()=>startQuiz(theme);
+    grid.appendChild(btn);
+  });
+}
+
+function startMode(mode){
+  currentMode=mode;
+  document.getElementById('modeSubtitle').textContent=
+    mode==='flashcard'?'Mode Flashcards':mode==='mcq'?'Mode QCM':'Mode Question Ouverte';
+  showScreen('quiz');
+  document.getElementById('themeSelect').style.display='block';
+  document.getElementById('quizContent').style.display='none';
+  buildThemeGrid();
+}
+
+function startQuiz(theme){
+  currentQuestions = (theme==='all'?[...QUESTIONS]:QUESTIONS.filter(q=>q.theme===theme))
+    .sort(()=>Math.random()-0.5);
+  currentIndex=0; streak=0; sessionCoins=0; answered=false;
+  document.getElementById('themeSelect').style.display='none';
+  document.getElementById('quizContent').style.display='block';
+  document.getElementById('resultScreen').style.display='none';
+  updateCoinDisplay();
+  showQuestion();
+}
+
+function goBackToMenu(){
+  stopTimer();
+  if(currentIndex>0 && document.getElementById('resultScreen').style.display==='none'){
+    showResult();
+  } else {
+    currentIndex=0;
+    document.getElementById('quizContent').style.display='none';
+    document.getElementById('themeSelect').style.display='block';
+    document.getElementById('resultScreen').style.display='none';
+  }
+}
+
+// ============ QUESTION ============
+function showQuestion(){
+  answered=false;
+  if(currentIndex>=currentQuestions.length){ showResult(); return; }
+  const q=currentQuestions[currentIndex];
+  const total=currentQuestions.length;
+  document.getElementById('qNum').textContent=currentIndex+1;
+  document.getElementById('qTotal').textContent=total;
+  document.getElementById('progressFill').style.width=(currentIndex/total*100)+'%';
+  updateStreakBadge();
+  document.getElementById('flashcardMode').style.display='none';
+  document.getElementById('mcqMode').style.display='none';
+  document.getElementById('openMode').style.display='none';
+  if(currentMode==='flashcard') showFlashcard(q);
+  else if(currentMode==='mcq') showMCQ(q);
+  else showOpen(q);
+  startTimer();
+}
+
+// FLASHCARD
+function showFlashcard(q){
+  document.getElementById('flashcardMode').style.display='block';
+  document.getElementById('fcTheme').textContent=q.theme;
+  document.getElementById('fcQuestion').textContent=q.q;
+  document.getElementById('fcAnswer').textContent=q.a;
+  document.getElementById('fcAnswer').classList.remove('show');
+  document.getElementById('fcHint').style.display='block';
+  document.getElementById('fcActions').style.display='none';
+}
+
+function revealFlashcard(){
+  if(document.getElementById('fcAnswer').classList.contains('show')) return;
+  stopTimer();
+  document.getElementById('fcAnswer').classList.add('show');
+  document.getElementById('fcHint').style.display='none';
+  document.getElementById('fcActions').style.display='flex';
+}
+
+function flashcardAnswer(correct){
+  if(answered) return;
+  answered=true;
+  statsData.answered++;
+  if(correct){
+    streak++; statsData.correct++;
+    addCoins(Math.round(10*getMultiplier()));
+  } else { streak=0; }
+  localStorage.setItem('atStats', JSON.stringify(statsData));
+  setTimeout(()=>{ currentIndex++; showQuestion(); }, 600);
+}
+
+// MCQ
+function showMCQ(q){
+  document.getElementById('mcqMode').style.display='block';
+  document.getElementById('mcqTheme').textContent=q.theme;
+  document.getElementById('mcqQuestion').textContent=q.q;
+  document.getElementById('mcqNext').classList.remove('show');
+  // Use pre-written wrong answers + correct
+  const wrongs = q.wrong.sort(()=>Math.random()-0.5).slice(0,3);
+  const options=[{text:q.a,correct:true},...wrongs.map(w=>({text:w,correct:false}))];
+  options.sort(()=>Math.random()-0.5);
+  const letters=['A','B','C','D'];
+  const grid=document.getElementById('mcqOptions');
+  grid.innerHTML='';
+  options.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option-btn';
+    btn.innerHTML=`<span class="option-letter">${letters[i]}</span><span>${opt.text}</span>`;
+    btn.onclick=()=>selectMCQ(btn,opt.correct,options,grid);
+    grid.appendChild(btn);
+  });
+}
+
+function selectMCQ(btn, correct, options, grid){
+  if(answered) return;
+  answered=true;
+  stopTimer();
+  statsData.answered++;
+  const allBtns=grid.querySelectorAll('.option-btn');
+  allBtns.forEach((b,i)=>{ b.disabled=true; if(options[i].correct) b.classList.add('correct'); });
+  if(correct){ btn.classList.add('correct'); streak++; statsData.correct++; addCoins(Math.round(10*getMultiplier())); }
+  else{ btn.classList.add('wrong'); streak=0; }
+  localStorage.setItem('atStats', JSON.stringify(statsData));
+  document.getElementById('mcqNext').classList.add('show');
+}
+
+function nextQuestion(){ currentIndex++; showQuestion(); }
+
+// OPEN
+function showOpen(q){
+  document.getElementById('openMode').style.display='block';
+  document.getElementById('openTheme').textContent=q.theme;
+  document.getElementById('openQuestion').textContent=q.q;
+  document.getElementById('openInput').value='';
+  document.getElementById('openInput').disabled=false;
+  document.getElementById('openSubmit').style.display='block';
+  document.getElementById('openReveal').classList.remove('show');
+  document.getElementById('openAnswer').textContent=q.a;
+  document.getElementById('openActions').style.display='none';
+}
+
+function submitOpen(){
+  stopTimer();
+  document.getElementById('openInput').disabled=true;
+  document.getElementById('openSubmit').style.display='none';
+  document.getElementById('openReveal').classList.add('show');
+  document.getElementById('openActions').style.display='flex';
+}
+
+function openAnswerResult(correct){
+  if(answered) return;
+  answered=true;
+  statsData.answered++;
+  if(correct){ streak++; statsData.correct++; addCoins(Math.round(10*getMultiplier())); }
+  else{ streak=0; }
+  localStorage.setItem('atStats', JSON.stringify(statsData));
+  document.getElementById('openActions').style.display='none';
+  setTimeout(()=>{ currentIndex++; showQuestion(); }, 600);
+}
+
+// RESULT
+function showResult(){
+  stopTimer();
+  document.getElementById('flashcardMode').style.display='none';
+  document.getElementById('mcqMode').style.display='none';
+  document.getElementById('openMode').style.display='none';
+  document.getElementById('resultScreen').style.display='block';
+  const pct=currentIndex>0?Math.round(statsData.correct/currentIndex*100):0;
+  document.getElementById('resultScore').textContent=`${statsData.correct}/${currentIndex}`;
+  document.getElementById('resultMsg').textContent=pct>=80?'🔥 Excellent !':pct>=60?'👍 Bon travail !':'📖 Continue à réviser !';
+  document.getElementById('resultCoins').textContent=`+${sessionCoins} 🪙 gagnées cette session`;
+  updateStats();
+}
+
+// ============ CAISSES ============
+function renderCaisses(){
+  document.getElementById('coinsForCases').textContent=coins;
+  const grid=document.getElementById('caissesGrid');
+  const caisses=[
+    {type:'car',label:'Voitures',icon:'🚗',desc:'Voitures mythiques de toutes les époques',cls:'caisse-car'},
+    {type:'circuit',label:'Circuits',icon:'🏁',desc:'Circuits légendaires du monde entier',cls:'caisse-circuit'},
+    {type:'pilot',label:'Pilotes',icon:'👨‍🏎️',desc:'Les pilotes les plus emblématiques',cls:'caisse-pilote'},
+    {type:'all',label:'Surprise',icon:'💎',desc:'Mix de tout avec raretés boostées',cls:'caisse-surprise'},
+  ];
+  grid.innerHTML=caisses.map(c=>`
+    <div class="caisse-card ${c.cls} ${coins<CASE_PRICE?'cant-afford':''}" onclick="openCase('${c.type}')">
+      <span class="caisse-icon">${c.icon}</span>
+      <div class="caisse-name">${c.label}</div>
+      <div class="caisse-desc">${c.desc}</div>
+      <div class="caisse-price">🪙 ${CASE_PRICE}</div>
+    </div>`).join('');
+}
+
+function getRandomItem(type){
+  const roll=Math.random()*100;
+  let rarity;
+  if(type==='all'){ rarity=roll<8?'legendary':roll<23?'epic':roll<53?'rare':'common'; }
+  else{ rarity=roll<5?'legendary':roll<15?'epic':roll<40?'rare':'common'; }
+  let pool=type==='all'?[...ITEMS.car,...ITEMS.circuit,...ITEMS.pilot]:ITEMS[type];
+  const byRarity=pool.filter(i=>i.rarity===rarity);
+  const src=byRarity.length>0?byRarity:pool;
+  return {...src[Math.floor(Math.random()*src.length)],rarity};
+}
+
+function openCase(type){
+  if(coins<CASE_PRICE) return;
+  coins-=CASE_PRICE; updateCoinDisplay();
+  const winner=getRandomItem(type);
+  const allItems=type==='all'?[...ITEMS.car,...ITEMS.circuit,...ITEMS.pilot]:ITEMS[type];
+  const reelItems=[];
+  for(let i=0;i<40;i++) reelItems.push(allItems[Math.floor(Math.random()*allItems.length)]);
+  reelItems[35]=winner;
+  const overlay=document.getElementById('caseOpening');
+  const reel=document.getElementById('caseReel');
+  const titles={car:'CAISSE VOITURES',circuit:'CAISSE CIRCUITS',pilot:'CAISSE PILOTES',all:'CAISSE SURPRISE'};
+  document.getElementById('caseOpenTitle').textContent=titles[type]||'OUVERTURE';
+  reel.innerHTML=reelItems.map(item=>`
+    <div class="case-item ${item.rarity}">
+      <span>${item.emoji}</span>
+      <div class="case-item-name">${item.name}</div>
+      <div class="case-item-rarity">${item.rarity}</div>
+    </div>`).join('');
+  overlay.classList.add('show');
+  const itemW=138;
+  const centerOffset=window.innerWidth/2-65;
+  const targetPos=-(35*itemW-centerOffset+Math.random()*60-30);
+  reel.style.transition='none';
+  reel.style.transform='translateX(0)';
+  setTimeout(()=>{
+    reel.style.transition='transform 4s cubic-bezier(0.15,0.85,0.25,1)';
+    reel.style.transform=`translateX(${targetPos}px)`;
+    setTimeout(()=>{
+      overlay.classList.remove('show');
+      collection.push(winner);
+      localStorage.setItem('atCollection',JSON.stringify(collection));
+      showWin(winner);
+    },4500);
+  },100);
+}
+
+function showWin(item){
+  document.getElementById('winEmoji').textContent=item.emoji;
+  document.getElementById('winName').textContent=item.name;
+  document.getElementById('winName').className=`win-name ${item.rarity}`;
+  const rl={common:'Commun',rare:'Rare',epic:'Épique',legendary:'Légendaire'};
+  document.getElementById('winRarity').textContent=rl[item.rarity]||item.rarity;
+  document.getElementById('winRarity').className=`win-rarity ${item.rarity}`;
+  document.getElementById('winClose').className=`win-close ${item.rarity}`;
+  document.getElementById('winResult').classList.add('show');
+  if(item.rarity==='epic'||item.rarity==='legendary'){
+    const sparkle=document.getElementById('winSparkle');
+    sparkle.innerHTML='';
+    const color=item.rarity==='legendary'?'#e8b84b':'#a44be8';
+    for(let i=0;i<24;i++){
+      const s=document.createElement('div');
+      s.className='sparkle';
+      const size=Math.random()*12+6;
+      s.style.cssText=`width:${size}px;height:${size}px;background:${color};left:${Math.random()*100}%;top:${Math.random()*100}%;--tx:${(Math.random()-0.5)*400}px;--ty:${(Math.random()-0.5)*400}px;animation-delay:${Math.random()*0.5}s;animation-duration:${1+Math.random()}s;`;
+      sparkle.appendChild(s);
+    }
+  }
+  updateStats();
+}
+
+function closeWin(){
+  document.getElementById('winResult').classList.remove('show');
+  document.getElementById('winSparkle').innerHTML='';
+  renderCaisses();
+}
+
+// ============ COLLECTION ============
+function renderCollection(filter, btn){
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else document.querySelector('.filter-tab')?.classList.add('active');
+  const grid=document.getElementById('collectionGrid');
+  let items=[...collection];
+  if(filter==='car') items=items.filter(i=>ITEMS.car.find(c=>c.name===i.name));
+  else if(filter==='circuit') items=items.filter(i=>ITEMS.circuit.find(c=>c.name===i.name));
+  else if(filter==='pilot') items=items.filter(i=>ITEMS.pilot.find(c=>c.name===i.name));
+  else if(filter==='legendary') items=items.filter(i=>i.rarity==='legendary');
+  document.getElementById('collectionCount').textContent=`${collection.length} cartes collectées`;
+  if(items.length===0){
+    grid.innerHTML=`<div class="empty-collection"><span>📦</span>Aucune carte ici.<br>Ouvre des caisses pour commencer !</div>`;
+    return;
+  }
+  const grouped={};
+  items.forEach(item=>{ if(!grouped[item.name]) grouped[item.name]={...item,count:0}; grouped[item.name].count++; });
+  const ro={legendary:0,epic:1,rare:2,common:3};
+  const sorted=Object.values(grouped).sort((a,b)=>ro[a.rarity]-ro[b.rarity]);
+  const rl={common:'Commun',rare:'Rare',epic:'Épique',legendary:'Légendaire'};
+  grid.innerHTML=sorted.map(item=>`
+    <div class="coll-item ${item.rarity}">
+      <span class="coll-emoji">${item.emoji}</span>
+      <div class="coll-name">${item.name}</div>
+      <div class="coll-rarity ${item.rarity}">${rl[item.rarity]}</div>
+      ${item.count>1?`<div class="coll-count">x${item.count}</div>`:''}
+    </div>`).join('');
+}
+
+function filterCollection(filter,btn){ renderCollection(filter,btn); }
+
+// ============ INIT ============
+updateCoinDisplay();
+updateStats();
+buildThemeGrid();
+</script>
+</body>
+</html>
