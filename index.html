@@ -238,6 +238,44 @@ main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
 .filter-tab{padding:6px 16px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--text-dim);cursor:pointer;font-size:0.8rem;font-weight:600;transition:all 0.2s;}
 .filter-tab:hover,.filter-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(232,184,75,0.05);}
 
+
+/* POKEDEX */
+.pokedex-tabs{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;}
+.pokedex-stats{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.pokedex-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0.75rem 1.2rem;text-align:center;flex:1;}
+.pokedex-stat-num{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--accent);}
+.pokedex-stat-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);}
+.pokedex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:1rem;margin-top:1rem;}
+.pdx-item{background:var(--surface);border:2px solid var(--border);border-radius:16px;padding:1rem;text-align:center;transition:all 0.2s;position:relative;}
+.pdx-item:hover{transform:translateY(-3px);}
+.pdx-item.locked{filter:grayscale(1);opacity:0.4;}
+.pdx-item.locked .pdx-emoji{filter:brightness(0);}
+.pdx-item.common{border-color:rgba(154,154,170,0.4);}
+.pdx-item.rare{border-color:rgba(75,139,232,0.5);box-shadow:0 0 12px rgba(75,139,232,0.1);}
+.pdx-item.epic{border-color:rgba(164,75,232,0.5);box-shadow:0 0 12px rgba(164,75,232,0.1);}
+.pdx-item.legendary{border-color:rgba(232,184,75,0.6);box-shadow:0 0 18px rgba(232,184,75,0.15);}
+.pdx-item.locked{border-color:var(--border) !important;box-shadow:none !important;}
+.pdx-emoji{font-size:2rem;display:block;margin-bottom:0.5rem;}
+.pdx-name{font-size:0.7rem;font-weight:600;margin-bottom:3px;line-height:1.3;}
+.pdx-rarity{font-size:0.6rem;text-transform:uppercase;letter-spacing:1px;}
+.pdx-rarity.common{color:var(--common);}
+.pdx-rarity.rare{color:var(--rare);}
+.pdx-rarity.epic{color:var(--epic);}
+.pdx-rarity.legendary{color:var(--legendary);}
+.pdx-new{position:absolute;top:-6px;right:-6px;background:var(--green);color:#000;font-size:0.55rem;font-weight:700;padding:2px 6px;border-radius:10px;text-transform:uppercase;letter-spacing:1px;}
+
+/* SELL BUTTON */
+.sell-btn{margin-top:6px;padding:4px 10px;border-radius:8px;border:1px solid rgba(232,184,75,0.3);background:rgba(232,184,75,0.08);color:var(--accent);font-size:0.7rem;font-weight:700;cursor:pointer;transition:all 0.2s;width:100%;}
+.sell-btn:hover{background:rgba(232,184,75,0.2);border-color:var(--accent);}
+
+/* MULTI THEME SELECT */
+.theme-btn.selected{border-color:var(--accent);background:rgba(232,184,75,0.1);}
+.theme-btn .check{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-size:0.75rem;}
+.theme-btn.selected .check{background:var(--accent);border-color:var(--accent);color:#000;}
+.start-selected-btn{width:100%;margin-top:1rem;background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:1.2rem;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:3px;color:var(--text-dim);cursor:pointer;transition:all 0.2s;}
+.start-selected-btn.ready{background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;color:#000;cursor:pointer;}
+.start-selected-btn.ready:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(232,184,75,0.3);}
+
 /* MISC */
 .screen-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:5px;color:var(--text);margin-bottom:0.5rem;}
 .screen-title span{color:var(--accent);}
@@ -307,7 +345,8 @@ main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
     </div>
 
     <div class="theme-grid" id="themeGrid"></div>
-    <button class="all-themes-btn" onclick="startQuiz('all')">🚀 Tous les thèmes</button>
+    <button class="start-selected-btn" id="startSelectedBtn" onclick="startSelectedThemes()">Sélectionne un thème</button>
+    <button class="all-themes-btn" onclick="startQuiz('all')" style="margin-top:0.5rem;">🚀 Tous les thèmes</button>
   </div>
 
   <div id="quizContent" style="display:none;">
@@ -382,14 +421,51 @@ main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
 <div class="screen" id="screen-collection">
   <h2 class="screen-title">MA <span>COLLECTION</span></h2>
   <p class="screen-sub" id="collectionCount">0 cartes collectées</p>
-  <div class="filter-tabs">
-    <button class="filter-tab active" onclick="filterCollection('all',this)">Tout</button>
-    <button class="filter-tab" onclick="filterCollection('car',this)">🚗 Voitures</button>
-    <button class="filter-tab" onclick="filterCollection('circuit',this)">🏁 Circuits</button>
-    <button class="filter-tab" onclick="filterCollection('pilot',this)">👨‍🏎️ Pilotes</button>
-    <button class="filter-tab" onclick="filterCollection('legendary',this)">🏆 Légendaires</button>
+
+  <!-- MODE TABS -->
+  <div class="filter-tabs" style="margin-bottom:1rem;">
+    <button class="filter-tab active" onclick="setCollectionMode('collection',this)">🃏 Ma Collection</button>
+    <button class="filter-tab" onclick="setCollectionMode('pokedex',this)">📖 Pokédex</button>
+    <button class="filter-tab" onclick="setCollectionMode('sell',this)">💰 Vendre doubles</button>
   </div>
-  <div class="collection-grid" id="collectionGrid"></div>
+
+  <!-- COLLECTION VIEW -->
+  <div id="collectionView">
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterCollection('all',this)">Tout</button>
+      <button class="filter-tab" onclick="filterCollection('car',this)">🚗 Voitures</button>
+      <button class="filter-tab" onclick="filterCollection('circuit',this)">🏁 Circuits</button>
+      <button class="filter-tab" onclick="filterCollection('pilot',this)">👨‍🏎️ Pilotes</button>
+      <button class="filter-tab" onclick="filterCollection('legendary',this)">🏆 Légendaires</button>
+    </div>
+    <div class="collection-grid" id="collectionGrid"></div>
+  </div>
+
+  <!-- POKEDEX VIEW -->
+  <div id="pokedexView" style="display:none;">
+    <div class="pokedex-stats" id="pokedexStats"></div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterPokedex('all',this)">Tout</button>
+      <button class="filter-tab" onclick="filterPokedex('car',this)">🚗 Voitures</button>
+      <button class="filter-tab" onclick="filterPokedex('circuit',this)">🏁 Circuits</button>
+      <button class="filter-tab" onclick="filterPokedex('pilot',this)">👨‍🏎️ Pilotes</button>
+    </div>
+    <div class="pokedex-grid" id="pokedexGrid"></div>
+  </div>
+
+  <!-- SELL VIEW -->
+  <div id="sellView" style="display:none;">
+    <div style="background:rgba(232,184,75,0.05);border:1px solid rgba(232,184,75,0.2);border-radius:16px;padding:1rem;margin-bottom:1.5rem;">
+      <div style="font-size:0.85rem;color:var(--text-dim);line-height:1.7;">
+        💡 Vends tes cartes en double pour récupérer des pièces.<br>
+        ⚪ Commun → <b style="color:var(--accent)">20 🪙</b> &nbsp;|&nbsp;
+        🔵 Rare → <b style="color:var(--rare)">50 🪙</b> &nbsp;|&nbsp;
+        🟣 Épique → <b style="color:var(--epic)">150 🪙</b> &nbsp;|&nbsp;
+        🟡 Légendaire → <b style="color:var(--legendary)">400 🪙</b>
+      </div>
+    </div>
+    <div class="collection-grid" id="sellGrid"></div>
+  </div>
 </div>
 
 </main>
@@ -699,7 +775,7 @@ function showScreen(name){
     if(t.textContent.toLowerCase().includes(map[name]||name)) t.classList.add('active');
   });
   if(name==='caisses') renderCaisses();
-  if(name==='collection') renderCollection('all',null);
+  if(name==='collection'){ currentCollectionMode='collection'; document.getElementById('collectionView').style.display='block'; document.getElementById('pokedexView').style.display='none'; document.getElementById('sellView').style.display='none'; renderCollection('all', document.querySelector('#collectionView .filter-tab')); }
   if(name==='home') updateStats();
 }
 
@@ -769,18 +845,64 @@ function updateStreakBadge(){
 }
 
 // ============ QUIZ SETUP ============
+let selectedThemes = new Set();
+
 function buildThemeGrid(){
   const grid = document.getElementById('themeGrid');
   grid.innerHTML='';
+  selectedThemes.clear();
+  updateStartSelectedBtn();
   const icons={"Fixation des essieux":"⚙️","Les suspensions":"🔧","Transmission intégrale":"🔩","Boîtes automatiques":"⚡","Boîte DSG / Double embrayage":"🎛️"};
   THEMES.forEach(theme=>{
     const count = QUESTIONS.filter(q=>q.theme===theme).length;
     const btn = document.createElement('div');
     btn.className='theme-btn';
-    btn.innerHTML=`<span class="theme-emoji">${icons[theme]||'📚'}</span><div class="theme-info"><h3>${theme}</h3><span>${count} questions</span></div>`;
-    btn.onclick=()=>startQuiz(theme);
+    btn.innerHTML=`
+      <span class="theme-emoji">${icons[theme]||'📚'}</span>
+      <div class="theme-info"><h3>${theme}</h3><span>${count} questions</span></div>
+      <div class="check"></div>`;
+    btn.onclick=()=>toggleTheme(theme, btn);
     grid.appendChild(btn);
   });
+}
+
+function toggleTheme(theme, btn){
+  if(selectedThemes.has(theme)){
+    selectedThemes.delete(theme);
+    btn.classList.remove('selected');
+    btn.querySelector('.check').textContent='';
+  } else {
+    selectedThemes.add(theme);
+    btn.classList.add('selected');
+    btn.querySelector('.check').textContent='✓';
+  }
+  updateStartSelectedBtn();
+}
+
+function updateStartSelectedBtn(){
+  const btn = document.getElementById('startSelectedBtn');
+  if(!btn) return;
+  if(selectedThemes.size === 0){
+    btn.textContent = 'Sélectionne un thème';
+    btn.classList.remove('ready');
+  } else {
+    const total = [...selectedThemes].reduce((acc,t)=>acc+QUESTIONS.filter(q=>q.theme===t).length,0);
+    btn.textContent = `▶ Lancer (${selectedThemes.size} thème${selectedThemes.size>1?'s':''} · ${total} questions)`;
+    btn.classList.add('ready');
+  }
+}
+
+function startSelectedThemes(){
+  if(selectedThemes.size === 0) return;
+  const themes = [...selectedThemes];
+  const qs = QUESTIONS.filter(q=>themes.includes(q.theme));
+  currentQuestions = qs.sort(()=>Math.random()-0.5);
+  currentIndex=0; streak=0; sessionCoins=0; answered=false;
+  document.getElementById('themeSelect').style.display='none';
+  document.getElementById('quizContent').style.display='block';
+  document.getElementById('resultScreen').style.display='none';
+  updateCoinDisplay();
+  showQuestion();
 }
 
 function startMode(mode){
@@ -1054,17 +1176,34 @@ function closeWin(){
 }
 
 // ============ COLLECTION ============
+const SELL_PRICES = {common:20, rare:50, epic:150, legendary:400};
+let currentCollectionMode = 'collection';
+
+function setCollectionMode(mode, btn){
+  currentCollectionMode = mode;
+  document.querySelectorAll('#screen-collection > .filter-tabs .filter-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('collectionView').style.display = mode==='collection' ? 'block' : 'none';
+  document.getElementById('pokedexView').style.display = mode==='pokedex' ? 'block' : 'none';
+  document.getElementById('sellView').style.display = mode==='sell' ? 'block' : 'none';
+  if(mode==='collection') renderCollection('all', document.querySelector('#collectionView .filter-tab'));
+  if(mode==='pokedex') renderPokedex('all', document.querySelector('#pokedexView .filter-tab'));
+  if(mode==='sell') renderSell();
+}
+
 function renderCollection(filter, btn){
-  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  const tabs = document.querySelectorAll('#collectionView .filter-tab');
+  tabs.forEach(t=>t.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  else document.querySelector('.filter-tab')?.classList.add('active');
   const grid=document.getElementById('collectionGrid');
   let items=[...collection];
   if(filter==='car') items=items.filter(i=>ITEMS.car.find(c=>c.name===i.name));
   else if(filter==='circuit') items=items.filter(i=>ITEMS.circuit.find(c=>c.name===i.name));
   else if(filter==='pilot') items=items.filter(i=>ITEMS.pilot.find(c=>c.name===i.name));
   else if(filter==='legendary') items=items.filter(i=>i.rarity==='legendary');
-  document.getElementById('collectionCount').textContent=`${collection.length} cartes collectées`;
+  const uniq = new Set(collection.map(i=>i.name));
+  const allItems = [...ITEMS.car,...ITEMS.circuit,...ITEMS.pilot];
+  document.getElementById('collectionCount').textContent=`${uniq.size}/${allItems.length} cartes · ${collection.length} total`;
   if(items.length===0){
     grid.innerHTML=`<div class="empty-collection"><span>📦</span>Aucune carte ici.<br>Ouvre des caisses pour commencer !</div>`;
     return;
@@ -1084,6 +1223,116 @@ function renderCollection(filter, btn){
 }
 
 function filterCollection(filter,btn){ renderCollection(filter,btn); }
+
+// ============ POKÉDEX ============
+function renderPokedex(filter, btn){
+  const tabs = document.querySelectorAll('#pokedexView .filter-tab');
+  tabs.forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+
+  const allItems = [...ITEMS.car,...ITEMS.circuit,...ITEMS.pilot];
+  const owned = new Set(collection.map(i=>i.name));
+
+  let pool = allItems;
+  if(filter==='car') pool = ITEMS.car;
+  else if(filter==='circuit') pool = ITEMS.circuit;
+  else if(filter==='pilot') pool = ITEMS.pilot;
+
+  // Stats
+  const ro={legendary:0,epic:1,rare:2,common:3};
+  const rl={common:'Commun',rare:'Rare',epic:'Épique',legendary:'Légendaire'};
+  const rarColors={common:'var(--common)',rare:'var(--rare)',epic:'var(--epic)',legendary:'var(--legendary)'};
+
+  const statsEl = document.getElementById('pokedexStats');
+  const totalOwned = new Set(collection.map(i=>i.name)).size;
+  statsEl.innerHTML = `
+    <div class="pokedex-stat"><div class="pokedex-stat-num">${totalOwned}/${allItems.length}</div><div class="pokedex-stat-label">Découvertes</div></div>
+    <div class="pokedex-stat"><div class="pokedex-stat-num" style="color:var(--legendary)">${[...owned].filter(n=>allItems.find(i=>i.name===n&&i.rarity==='legendary')).length}/${allItems.filter(i=>i.rarity==='legendary').length}</div><div class="pokedex-stat-label">Légendaires</div></div>
+    <div class="pokedex-stat"><div class="pokedex-stat-num" style="color:var(--epic)">${[...owned].filter(n=>allItems.find(i=>i.name===n&&i.rarity==='epic')).length}/${allItems.filter(i=>i.rarity==='epic').length}</div><div class="pokedex-stat-label">Épiques</div></div>
+    <div class="pokedex-stat"><div class="pokedex-stat-num" style="color:var(--rare)">${[...owned].filter(n=>allItems.find(i=>i.name===n&&i.rarity==='rare')).length}/${allItems.filter(i=>i.rarity==='rare').length}</div><div class="pokedex-stat-label">Rares</div></div>
+  `;
+
+  const sorted = [...pool].sort((a,b)=>ro[a.rarity]-ro[b.rarity]);
+  const grid = document.getElementById('pokedexGrid');
+  grid.innerHTML = sorted.map(item=>{
+    const isOwned = owned.has(item.name);
+    return `
+      <div class="pdx-item ${item.rarity} ${isOwned?'':'locked'}">
+        <span class="pdx-emoji">${item.emoji}</span>
+        <div class="pdx-name">${isOwned ? item.name : '???'}</div>
+        <div class="pdx-rarity ${item.rarity}">${rl[item.rarity]}</div>
+        ${isOwned ? '' : ''}
+      </div>`;
+  }).join('');
+}
+
+function filterPokedex(filter, btn){ renderPokedex(filter, btn); }
+
+// ============ VENDRE DOUBLES ============
+function renderSell(){
+  const grid = document.getElementById('sellGrid');
+  const grouped={};
+  collection.forEach(item=>{ if(!grouped[item.name]) grouped[item.name]={...item,count:0}; grouped[item.name].count++; });
+  const doubles = Object.values(grouped).filter(i=>i.count>1);
+  const ro={legendary:0,epic:1,rare:2,common:3};
+  const rl={common:'Commun',rare:'Rare',epic:'Épique',legendary:'Légendaire'};
+  doubles.sort((a,b)=>ro[a.rarity]-ro[b.rarity]);
+
+  if(doubles.length===0){
+    grid.innerHTML=`<div class="empty-collection"><span>💰</span>Aucun double pour l'instant !<br>Continue d'ouvrir des caisses.</div>`;
+    return;
+  }
+
+  grid.innerHTML = doubles.map(item=>{
+    const price = SELL_PRICES[item.rarity];
+    const sellCount = item.count - 1;
+    const total = price * sellCount;
+    return `
+      <div class="coll-item ${item.rarity}">
+        <span class="coll-emoji">${item.emoji}</span>
+        <div class="coll-name">${item.name}</div>
+        <div class="coll-rarity ${item.rarity}">${rl[item.rarity]}</div>
+        <div class="coll-count">x${item.count} (${sellCount} double${sellCount>1?'s':''})</div>
+        <button class="sell-btn" onclick="sellOne('${item.name}')">Vendre 1 → ${price} 🪙</button>
+        ${sellCount>1?`<button class="sell-btn" onclick="sellAll('${item.name}')" style="margin-top:3px;opacity:0.8;">Tout vendre → ${total} 🪙</button>`:''}
+      </div>`;
+  }).join('');
+}
+
+function sellOne(name){
+  const idx = collection.findIndex(i=>i.name===name);
+  if(idx===-1) return;
+  const item = collection[idx];
+  // Check still have at least 2
+  const count = collection.filter(i=>i.name===name).length;
+  if(count < 2) return;
+  collection.splice(idx, 1);
+  const earned = SELL_PRICES[item.rarity];
+  coins += earned; sessionCoins += earned;
+  updateCoinDisplay();
+  showCoinToast(earned);
+  saveAll();
+  renderSell();
+  updateStats();
+}
+
+function sellAll(name){
+  const count = collection.filter(i=>i.name===name).length;
+  if(count < 2) return;
+  const toSell = count - 1;
+  const item = collection.find(i=>i.name===name);
+  const earned = SELL_PRICES[item.rarity] * toSell;
+  for(let i=0; i<toSell; i++){
+    const idx = collection.findIndex(i=>i.name===name);
+    collection.splice(idx,1);
+  }
+  coins += earned; sessionCoins += earned;
+  updateCoinDisplay();
+  showCoinToast(earned);
+  saveAll();
+  renderSell();
+  updateStats();
+}
 
 
 const CORRECTION_DATA = {
