@@ -414,7 +414,7 @@ main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
         <span class="subject-icon">🔥</span>
         <div class="subject-title">Thermodynamique</div>
         <div class="subject-desc">Théorie — tous examens confondus</div>
-        <div class="subject-count">30 sous-questions · 4 examens</div>
+        <div class="subject-count">54 sous-questions · 4 examens</div>
       </div>
     </div>
   </div>
@@ -908,6 +908,186 @@ const QUESTIONS_THERMO = [
    wrong:["Les molécules ont toutes la même vitesse et la même énergie cinétique à tout instant","La pression est constante quelle que soit la température pour un volume donné","Les molécules rebondissent élastiquement sur les parois sans aucune perte d'énergie"],
    blanks:[{text:"Gaz parfait : molécules sans ___ entre elles et volumes ___ négligeables.",words:["interaction","propres","liaison","molaires","collision"],answers:["interaction","propres"]}]},
 
+  // ============ SOUS-QUESTIONS APPROFONDIES — AVRIL 2026 ============
+
+  // --- CLIQUETIS APPROFONDI ---
+  {id:301,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cliquetis — Définition",
+   q:"Qu'est-ce que le cliquetis exactement ? Comment se produit-il ?",
+   a:"Auto-inflammation en masse du gaz frais (non atteint par le front de flamme) sous l'effet d'une double compression polytropique. Crée une élévation brutale de pression → détonation → bruit aigu → 2ème front de flamme.",
+   profCorrection:"Le cliquetis : auto-inflammation du gaz frais (PT commun) qui n'a pas encore été atteint par le front de flamme. L'auto-inflammation se fait en masse ce qui va créer une élévation brutale de la pression et donc une détonation. Le bruit aigu produit va créer des ondes de pression suite à la propagation du 2ème front de flammes.",
+   wrong:["Inflammation normale du mélange déclenchée par l'étincelle mais avec un léger retard de propagation","Combustion partielle du mélange causée par un manque d'oxygène dans la chambre de combustion","Vibration mécanique des soupapes sous l'effet des variations de pression dans le cylindre"],
+   blanks:[{text:"Le cliquetis = auto-inflammation en ___ du gaz ___ non atteint par le front de flamme.",words:["masse","frais","partie","brûlé","couche"],answers:["masse","frais"]}]},
+
+  {id:302,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cliquetis — Intensité",
+   q:"De quoi dépend l'intensité du cliquetis ?",
+   a:"Il sera d'autant plus fort que la masse d'air frais est grande (remplissage élevé).",
+   profCorrection:"Il sera d'autant plus fort que la masse d'air frais est grande.",
+   wrong:["Il sera d'autant plus fort que la température du liquide de refroidissement est basse","Il sera d'autant plus fort que la vitesse de rotation du moteur est élevée","Il sera d'autant plus fort que la pression d'admission est faible"],
+   blanks:[{text:"Le cliquetis est d'autant plus fort que la masse d'___ ___ est grande.",words:["air","frais","eau","chaud","huile"],answers:["air","frais"]}]},
+
+  {id:303,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cliquetis — Ondes de pression",
+   q:"Quelles sont les 2 conséquences des ondes de pression du cliquetis sur le moteur ?",
+   a:"1. Attaquer et casser la couche limite d'huile → accentue les échanges thermiques avec la paroi\n2. Casser/fragmenter les parois → risque important de surpressions locales",
+   profCorrection:"Conséquences des ondes de pression :\n1. Attaquer et casser la couche limite d'huile ce qui accentue les échanges thermiques avec la paroi\n2. Va casser/fragmenter les parois → risque important de surpressions locales",
+   wrong:["Dilater les segments et coincer le piston + déformer la jupe du piston","Endommager la pompe à huile et provoquer une chute de pression d'huile","Détruire le joint de culasse par surchauffe et provoquer une fuite d'eau"],
+   blanks:[{text:"Ondes de pression → cassent la couche ___ d'huile + risque de ___ des parois.",words:["limite","fragmentation","épaisse","fusion","protection"],answers:["limite","fragmentation"]}]},
+
+  {id:304,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cliquetis — 4 points fragiles",
+   q:"Quels sont les 4 points fragiles du moteur soumis au cliquetis ?",
+   a:"1. Le 1er segment\n2. Le joint de culasse\n3. La soupape\n4. L'isolant de la bougie",
+   profCorrection:"Les 4 points fragiles sont : le 1er segment, le joint de culasse, la soupape, l'isolant de la bougie.",
+   wrong:["Le piston, le vilebrequin, la bielle et le palier de vilbrequin","La chemise, le bloc moteur, le carter d'huile et la pompe à huile","La culasse, le collecteur d'admission, le filtre à air et l'injecteur"],
+   blanks:[{text:"4 points fragiles : 1er ___, joint de ___, soupape et isolant de la ___.",words:["segment","culasse","bougie","cylindre","piston"],answers:["segment","culasse","bougie"]}]},
+
+  {id:305,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cliquetis — Paramètres d'influence",
+   q:"Quels sont les 4 types de paramètres qui influencent le cliquetis ?",
+   a:"1. Paramètres de construction moteur : non-ajustables (chambre de combustion, place bougie, taux de compression)\n2. Paramètres de réglage : ajustables (richesse, avance à l'allumage — min richesse 1,05)\n3. Paramètres de fonctionnement : plus ou moins ajustables (régime, charge, remplissage, T° air admission, T° liquide refroidissement)\n4. Nature du carburant : ajustable",
+   profCorrection:"Les paramètres qui influencent le cliquetis :\n• Construction moteur : non-ajustable (dessin chambre combustion, place bougie, taux de compression)\n• Réglage : richesse, avance à l'allumage (minimum richesse 1,05) — ajustable\n• Fonctionnement : régime, charge, remplissage, T° air d'admission, T° liquide refroidissement — plus ou moins ajustable\n• Nature du carburant : ajustable",
+   wrong:["Uniquement le taux de compression et la nature du carburant","Seulement la richesse du mélange et l'avance à l'allumage","Le type d'huile moteur, la pression de gonflage des pneus et la charge utile"],
+   blanks:[{text:"Paramètres cliquetis : ___ moteur (fixe), ___ (richesse, avance), fonctionnement et nature du carburant.",words:["construction","réglage","dépollution","injection","allumage"],answers:["construction","réglage"]}]},
+
+  {id:306,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cliquetis — Double compression polytropique",
+   q:"Pourquoi le gaz frais subit-il une double compression polytropique lors du cliquetis ?",
+   a:"1ère compression : lors de la montée du piston (compression normale)\n2ème compression : lors de la combustion, les gaz frais sont poussés par le front de flamme dans le fond de la chambre de combustion.\nPolytropique car P(v)ⁿ = constante avec k=n",
+   profCorrection:"Le gaz frais (non atteint par le front de flamme) est soumis à 2 compressions polytropiques, la première intervenant pendant la montée du piston et la seconde pendant la combustion lorsqu'ils sont poussés par le front de la flamme dans le fond de la chambre de combustion.\nPolytropique : P(v)ⁿ = constante avec k=n",
+   wrong:["Une seule compression normale lors de la montée du piston, sans compression supplémentaire","Double compression isobare lors de l'admission et de la combustion simultanément","Double compression isotherme due à la chaleur des parois chaudes agissant sur le gaz frais"],
+   blanks:[{text:"1ère compression : montée du ___. 2ème compression : gaz frais poussés par le ___ de flamme.",words:["piston","front","vilebrequin","fond","segment"],answers:["piston","front"]}]},
+
+  // --- PRÉ-ALLUMAGE APPROFONDI ---
+  {id:307,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Pré-allumage — Mécanisme d'aggravation",
+   q:"Pourquoi le pré-allumage s'aggrave-t-il de lui-même une fois déclenché ?",
+   a:"L'allumage se produisant plus tôt dans le cycle, les températures des parois de la chambre augmentent, en particulier celle du point chaud. L'allumage se fait alors encore plus tôt → phénomène s'accentue → peut provoquer la casse du moteur par serrage ou la fonte du piston.",
+   profCorrection:"L'allumage se produisant plus tôt dans le cycle, les températures des parois de la chambre augmentent, en particulier celle du point chaud. L'allumage se fait alors encore plus tôt, le phénomène s'accentue de plus en plus pouvant provoquer la casse du moteur par serrage ou la fonte du piston.",
+   wrong:["Le pré-allumage ne s'aggrave pas seul, il reste stable jusqu'à ce que le conducteur coupe le moteur","Il s'aggrave car l'essence restante s'auto-enflamme uniquement lors des cycles suivants","Il s'aggrave car la richesse du mélange augmente automatiquement lors des cycles de pré-allumage"],
+   blanks:[{text:"Pré-allumage → parois plus ___ → allumage encore plus ___ → phénomène s'accentue.",words:["chaudes","tôt","froides","tard","lisses"],answers:["chaudes","tôt"]}]},
+
+  {id:308,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Pré-allumage — Localisation",
+   q:"Où le pré-allumage apparaît-il le plus souvent et pourquoi ?",
+   a:"Sur l'isolant de la bougie car c'est l'endroit où la température est la plus élevée et pendant le plus longtemps dans le moteur. La température de peau = aptitude à déclencher du pré-allumage.",
+   profCorrection:"Apparaît le plus souvent sur l'isolant de la bougie car c'est l'endroit où la température est le plus élevée et pendant le plus longtemps dans le moteur. Température de peau = aptitude à déclencher du pré-allumage.",
+   wrong:["Sur le joint de culasse car c'est la pièce la plus exposée aux variations de température","Sur le 1er segment car il est le plus proche des gaz de combustion chauds","Sur la soupape d'échappement car elle est en contact direct avec les gaz brûlés les plus chauds"],
+   blanks:[{text:"Pré-allumage le plus souvent sur l'___ de la bougie → T° la plus ___ et la plus longtemps.",words:["isolant","élevée","électrode","faible","vissage"],answers:["isolant","élevée"]}]},
+
+  // --- RÉ-ALLUMAGE APPROFONDI ---
+  {id:309,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Ré-allumage — 2 types",
+   q:"Quels sont les 2 types de ré-allumage ? Lequel est le plus fréquent ?",
+   a:"1. Par compression (le plus fréquent) : moteur très lent + fort remplissage + parois chaudes → combustion lente = flamme froide (forte pression, faible température)\n2. Par point chaud (le plus rare) : sorte de pré-allumage à très bas régime, point chaud créé par fonctionnement préalable à forte charge",
+   profCorrection:"Ré-allumage par compression (le plus fréquent) : le moteur tourne très lentement, à un très bon remplissage et les gaz sont soumis à une forte compression dans la chambre où les parois sont encore très chaudes → combustion lente appelée flamme froide (forte pression, faible température).\nRé-allumage par point chaud (le plus rare) : sorte de pré-allumage à très bas régime.",
+   wrong:["Par oxydation (le plus fréquent) et par rayonnement (le plus rare)","Par surchauffe (le plus fréquent) et par court-circuit électrique (le plus rare)","Par surcompression (le plus fréquent) et par explosion de carburant résiduel (le plus rare)"],
+   blanks:[{text:"Ré-allumage par ___ (plus fréquent) → flamme ___. Par point ___ (plus rare).",words:["compression","froide","chaud","chaude","détente"],answers:["compression","froide","chaud"]}]},
+
+  {id:310,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Ré-allumage — Remède pratique",
+   q:"Comment éliminer pratiquement le ré-allumage ?",
+   a:"Une fermeture plus complète du papillon ou mieux, un dispositif de coupure d'arrivée d'essence, permettent d'éliminer le ré-allumage.",
+   profCorrection:"Dans la pratique : une fermeture plus complète du papillon ou mieux, un dispositif de coupure d'arrivée d'essence, permettent d'éliminer le ré-allumage.",
+   wrong:["En augmentant le régime moteur pour évacuer la chaleur plus rapidement","En enrichissant le mélange pour refroidir la chambre par effet d'évaporation","En coupant l'allumage électronique et en laissant tourner le moteur à vide"],
+   blanks:[{text:"Remède ré-allumage : fermeture du ___ ou coupure d'arrivée d'___.",words:["papillon","essence","collecteur","air","refroidissement"],answers:["papillon","essence"]}]},
+
+  // --- INDICE D'OCTANE APPROFONDI (correction du bug avril2026) ---
+  {id:311,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Indice d'octane — Définition",
+   q:"Que mesure l'indice d'octane d'un carburant ?",
+   a:"L'indice d'octane exprime la résistance à l'auto-inflammation d'un carburant. Plus l'IO est élevé, mieux le carburant résiste au cliquetis.",
+   profCorrection:"L'indice d'octane exprime la résistance à l'auto-inflammation d'un carburant. La valeur 0 (heptane) est la valeur d'un carburant qui s'auto-enflamme très facilement tandis qu'un indice d'octane de 100 (iso-octane) est un carburant qui résiste bien à l'auto-inflammation.",
+   wrong:["L'indice d'octane mesure le pouvoir calorifique du carburant en MJ/kg","L'indice d'octane mesure la viscosité du carburant à 20°C","L'indice d'octane mesure le taux de soufre présent dans le carburant"],
+   blanks:[{text:"IO = résistance à l'___. Heptane = IO ___. Iso-octane = IO ___.",words:["auto-inflammation","0","100","50","cliquetis"],answers:["auto-inflammation","0","100"]}]},
+
+  {id:312,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Indice d'octane — 2 valeurs",
+   q:"Il existe 2 valeurs d'indice d'octane pour un même carburant. Lesquelles ?",
+   a:"1. L'indice recherche : mesuré en laboratoire sur monocylindre normalisé\n2. L'indice moteur : mesuré sur des essais routiers\nLes tests sont réalisés sur des monocylindres normalisés.",
+   profCorrection:"Il en existe 2 pour un même carburant : un qui a été fait en laboratoire et l'autre qui a été fait sur des essais routiers. Les tests sont réalisés sur des monocylindres normalisés.",
+   wrong:["IO minimum et IO maximum, mesurés à froid et à chaud sur le même monocylindre","IO théorique (calculé) et IO pratique (mesuré sur le véhicule en conditions réelles)","IO de base et IO amélioré, avant et après ajout d'additifs antidétonants"],
+   blanks:[{text:"2 IO : indice ___ (labo) et indice ___ (essais routiers).",words:["recherche","moteur","théorique","pratique","minimum"],answers:["recherche","moteur"]}]},
+
+  {id:313,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Indice d'octane — Calcul",
+   q:"Comment calcule-t-on l'IO d'un carburant contenant 80% d'iso-octane et 20% d'heptane ?",
+   a:"IO = 80. Par définition, l'IO correspond directement au pourcentage d'iso-octane dans le mélange. Heptane = IO 0, Iso-octane = IO 100.",
+   profCorrection:"Un carburant qui comporte 20% d'heptane et 80% d'iso-octane aura par définition un indice d'octane de 80.",
+   wrong:["IO = (80+100)/2 = 90 (moyenne entre les deux composants)","IO = 20 (correspondant au % d'heptane, le composant le moins résistant)","IO = (0,8×100 + 0,2×0)/2 = 40 (calcul pondéré divisé par 2)"],
+   blanks:[{text:"80% iso-octane + 20% heptane → IO = ___.",words:["80","20","60","100","40"],answers:["80"]}]},
+
+  // --- CYCLE DE BEAU DE ROCHAS ---
+  {id:314,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cycle de Beau de Rochas — Structure",
+   q:"De quoi est composé le cycle de Beau de Rochas (Otto) ?",
+   a:"2 adiabatiques + 2 isochores. Apport et perte de chaleur à volume constant. Cycle moteur = horlogique dans le diagramme de Clapeyron.",
+   profCorrection:"Le cycle de Beau de Rochas : apport et perte de chaleur à volume constant. Composé de 2 adiabatiques + 2 isochores. T1 est la + froide et T3 est la + chaude.",
+   wrong:["2 isothermes + 2 adiabatiques (cycle de Carnot)","1 adiabatique + 1 isobare + 1 adiabatique + 1 isochore (cycle Diesel)","2 isobares + 2 isochores (cycle Brayton)"],
+   blanks:[{text:"Beau de Rochas = 2 ___ + 2 ___. Chaleur à volume ___.",words:["adiabatiques","isochores","isobares","constant","variable"],answers:["adiabatiques","isochores","constant"]}]},
+
+  {id:315,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cycle de Beau de Rochas — Rendement",
+   q:"De quoi dépend uniquement le rendement théorique du cycle de Beau de Rochas ?",
+   a:"Il ne dépend que du rapport volumétrique de compression ε. η = 1 - 1/(ε^(γ-1)). Plus ε est grand, plus le rendement est élevé.",
+   profCorrection:"On peut donc affirmer qu'il ne dépend que du rapport volumétrique de compression. η = 1 - 1/(ε^(γ-1)). T1 est la + froide et T3 est la + chaude.",
+   wrong:["Du couple moteur et de la cylindrée totale du moteur","De la pression maximale atteinte en fin de combustion","De la température d'admission et de la nature du carburant utilisé"],
+   blanks:[{text:"η Beau de Rochas = 1 - 1/(ε^(___-1)). Ne dépend que du rapport ___ ε.",words:["γ","volumétrique","2","thermique","isobare"],answers:["γ","volumétrique"]}]},
+
+  {id:316,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cycle de Beau de Rochas — Pression d'admission",
+   q:"Quel est l'effet d'une variation de pression d'admission sur le cycle de Beau de Rochas ?",
+   a:"On ne fait que monter ou descendre le cycle dans le diagramme. Seules les pressions sont multipliées par Pa, les températures et le rendement restent inchangés.",
+   profCorrection:"L'influence de la pression d'admission : on ne fait que le monter ou le descendre donc seules les pressions sont multipliées par Pa, les T° et le rendement restent inchangés.",
+   wrong:["Le rendement augmente proportionnellement à la pression d'admission (turbo = meilleur rendement)","Les températures et pressions augmentent mais le rendement reste identique","Tout le cycle est modifié : pressions, températures et rendement changent simultanément"],
+   blanks:[{text:"↑ pression admission → seules les ___ multipliées par Pa. T° et ___ restent inchangés.",words:["pressions","rendement","volumes","vitesses","couples"],answers:["pressions","rendement"]}]},
+
+  // --- DISSOCIATION MOLÉCULAIRE ---
+  {id:317,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Dissociation moléculaire",
+   q:"Qu'est-ce que la dissociation moléculaire et quelle est la notion de réaction 'gelée' ?",
+   a:"À haute T°, les molécules se brisent → formation de NOx (réaction endothermique). Quand T° diminue, certaines réactions ne fonctionnent plus → elles sont dites 'gelées' → les NOx ne peuvent plus être détruits. Explique l'influence de l'humidité de l'air et de la recirculation des gaz d'échappement.",
+   profCorrection:"La combustion entraîne des T° suffisamment élevées pour briser les molécules : atomes d'azote et d'oxygène s'associent en oxydes d'azote (NOx) → réaction endothermique. Certaines réactions ne fonctionnent plus quand les T° diminuent → 'gelées' → les NOx ne peuvent plus être détruits.",
+   wrong:["La dissociation = séparation des molécules d'eau en H₂ et O₂ sous l'effet de la pression","La dissociation = rupture des liaisons carbone-hydrogène du carburant lors de l'injection","Les réactions gelées = réactions qui ont lieu uniquement à basse température dans le moteur froid"],
+   blanks:[{text:"Dissociation → formation de ___ (réaction endo). Quand T°↓ : réactions ___ → NOx non détruits.",words:["NOx","gelées","CO₂","actives","H₂O"],answers:["NOx","gelées"]}]},
+
+  // --- TRANSFERTS DE CHALEUR ---
+  {id:318,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Transferts de chaleur — 3 types",
+   q:"Quels sont les 3 types de transfert de chaleur ? Donnez une caractéristique de chacun.",
+   a:"1. Conduction : dans la matière ou entre 2 parois en contact\n2. Convection : entre 2 matériaux en mouvement relatif\n3. Rayonnement : à distance → la quantité du transfert dépend de la température (T°)",
+   profCorrection:"Différents types de transfert de chaleur :\n- Conduction : dans la matière ou entre 2 parois\n- Convection : entre 2 matériaux en mouvement relatif\n- Rayonnement : à distance → la quantité du transfert dépend de la T°",
+   wrong:["Absorption, émission et réflexion (lois du rayonnement de Planck)","Évaporation, condensation et sublimation (changements d'état)","Diffusion, osmose et convection forcée (transferts en milieu liquide)"],
+   blanks:[{text:"3 transferts : ___ (dans la matière), ___ (mouvement relatif), rayonnement (à distance).",words:["conduction","convection","diffusion","absorption","émission"],answers:["conduction","convection"]}]},
+
+  // --- GAZ PARFAIT APPROFONDI ---
+  {id:319,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Gaz parfait — Loi",
+   q:"Donnez la loi des gaz parfaits et ses deux formulations.",
+   a:"p·V = n·R·T (avec n = nombre de moles, R = 8,31 J/(mol·K))\np·V = m·r·T (avec m = masse, r = constante spécifique)\nr = cp - cv (relation de Mayer)\nγ = cp/cv (coefficient de Poisson)",
+   profCorrection:"Loi des gaz parfaits : p·V = n·R·T = m·R·T. R = 8,31 J/(mol·K). r = cp - cv. γ = cp/cv.",
+   wrong:["p·V = n·R²·T (avec R au carré) et p·V = m·r²·T","p/V = n·R·T et V/p = m·r·T (formulations inverses)","p·V = n·R·T seulement pour les gaz monoatomiques, pas pour les diatomiques"],
+   blanks:[{text:"Gaz parfait : p·V = n·R·T. R = ___ J/(mol·K). γ = cp/___.",words:["8,31","cv","8,32","cp","0"],answers:["8,31","cv"]}]},
+
+  {id:320,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Gaz parfait — Validité",
+   q:"Dans quelles conditions le modèle du gaz parfait est-il valide ? Et quand est-il moins valide ?",
+   a:"Valide à basse pression et température modérée.\nMoins valide à haute pression ou basse température car les interactions moléculaires et les volumes propres deviennent significatifs.",
+   profCorrection:"Cette hypothèse est réaliste à basse pression et température modérée mais moins valide à haute pression ou basse T° car les interactions moléculaires et les volumes propres deviennent significatifs.",
+   wrong:["Valide uniquement pour les gaz monoatomiques, jamais pour les gaz diatomiques","Valide à haute pression et basse température, moins valide à basse pression","Toujours valide quelles que soient les conditions de pression et de température"],
+   blanks:[{text:"Gaz parfait valide à basse ___ et T° modérée. Moins valide à haute ___ ou basse T°.",words:["pression","pression","température","vitesse","masse"],answers:["pression","pression"]}]},
+
+  // --- COMBUSTION NORMALE APPROFONDIE ---
+  {id:321,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Combustion normale — Caractéristiques",
+   q:"Quelles sont les 3 caractéristiques principales d'une combustion normale ?",
+   a:"1. Réaction chimique exothermique complète : CH + O₂ → CO + CO₂ + H₂O + NOX\n2. Expansions moléculaires du mélange stœchiométrique (~5%)\n3. Vitesse du front de flamme variable : VFF = Veyn + Vdyn",
+   profCorrection:"La combustion normale :\n- Réactions chimiques exothermiques : CH + O₂ → CO + CO₂ + H₂O + NOX\n- Expansions moléculaires\n- Vitesses de front de flammes variables",
+   wrong:["Réaction endothermique, sans expansion moléculaire, à vitesse de flamme constante","Réaction exothermique incomplète produisant du CO et des suies sans expansion moléculaire","Réaction à pression constante, avec implosion moléculaire et front de flamme fixe"],
+   blanks:[{text:"Combustion normale : réaction ___, expansion moléculaire ~5%, vitesse front flamme ___.",words:["exothermique","variable","endothermique","constante","nulle"],answers:["exothermique","variable"]}]},
+
+  {id:322,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Fin de combustion — Gaz d'échappement",
+   q:"Que se passe-t-il en fin de combustion lors de la descente du piston ?",
+   a:"Les pressions et températures diminuent et certaines réactions de combustion sont figées avant d'avoir pu se terminer complètement. On retrouve donc dans les gaz d'échappement des hydrocarbures imbrûlés + du CO₂ + des NOX.",
+   profCorrection:"Lorsque le piston redescend, les pressions et températures des gaz dans la chambre diminuent et certaines réactions de combustion sont figées avant même d'avoir pu se terminer complètement. On retrouve donc dans les gaz d'échappement des hydrocarbures imbrûlés + du CO₂ + des NOX.",
+   wrong:["Toutes les réactions se terminent parfaitement → gaz d'échappement composés uniquement de CO₂ et H₂O","La combustion s'accélère lors de la détente → meilleur rendement et gaz propres","Les NOX sont détruits lors de la descente du piston car la température chute rapidement"],
+   blanks:[{text:"Descente piston → T° et P diminuent → réactions ___ → hydrocarbures ___ dans l'échappement.",words:["figées","imbrûlés","actives","brûlés","stables"],answers:["figées","imbrûlés"]}]},
+
+  // --- 1ER PRINCIPE ---
+  {id:323,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"1er Principe — Cycle complet",
+   q:"Qu'est-ce que le 1er principe de la thermodynamique pour un cycle complet ?",
+   a:"ΔU_cycle = 0 (retour à l'état initial). Donc W_cycle + Q_cycle = 0 → W_cycle = -Q_cycle.",
+   profCorrection:"Pour un cycle complet : ΔU = 0 → W_cycle + Q_cycle = 0 → W_cycle = -Q_cycle.",
+   wrong:["ΔU_cycle = Q_cycle (le travail est toujours nul pour un cycle complet)","W_cycle = Q_cycle (travail égal à la chaleur, sans signe)","ΔU_cycle = W_cycle (la chaleur échangée est toujours nulle pour un cycle)"],
+   blanks:[{text:"Cycle complet : ΔU = ___. Donc W_cycle = -___.",words:["0","Q_cycle","1","W_cycle","ΔU"],answers:["0","Q_cycle"]}]},
+
+  // --- BIELLE-MANIVELLE ---
+  {id:324,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Système bielle-manivelle",
+   q:"Le système bielle-manivelle est-il encore justifié sur un moteur thermique ? Pourquoi ?",
+   a:"Oui, ce système est toujours justifié car simple, robuste et efficace pour convertir le mouvement alternatif du piston en mouvement rotatif de l'arbre moteur.",
+   profCorrection:"Oui ce système est toujours justifié car simple, robuste et efficace pour convertir le mouvement du piston en mouvement rotatif de l'arbre moteur.",
+   wrong:["Non, il est remplacé progressivement par des moteurs linéaires plus efficaces","Oui mais uniquement sur les moteurs diesel, pas sur les moteurs essence","Non, les pertes par frottement le rendent trop inefficace par rapport aux moteurs électriques"],
+   blanks:[{text:"Bielle-manivelle : ___, robuste et efficace pour convertir mouvement ___ en rotatif.",words:["simple","alternatif","complexe","circulaire","oscillant"],answers:["simple","alternatif"]}]},
 ];
 
 // ===================== ITEMS (CAISSES) =====================
