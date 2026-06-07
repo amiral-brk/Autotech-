@@ -414,7 +414,7 @@ main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
         <span class="subject-icon">🔥</span>
         <div class="subject-title">Thermodynamique</div>
         <div class="subject-desc">Théorie — tous examens confondus</div>
-        <div class="subject-count">Questions de théorie</div>
+        <div class="subject-count">30 sous-questions · 4 examens</div>
       </div>
     </div>
   </div>
@@ -680,93 +680,234 @@ const QUESTIONS_MECA = [
 
 // ===================== DATA : THERMODYNAMIQUE =====================
 const QUESTIONS_THERMO = [
-  // JUIN 2020
-  {id:101,subject:'thermo',exam:'juin2020',examLabel:'Juin 2020',theme:"Combustions anormales",
-   q:"Nous avons vu trois types de combustion anormale. Citez-les. Donnez une caractéristique commune aux trois et, pour chacune, une caractéristique la particularisant. (7 pts)",
-   a:"Caractéristique commune : toutes sont des combustions non contrôlées, différentes de la combustion normale.\n\n• Cliquetis : auto-inflammation du gaz frais avant que le front de flamme l'atteigne → bruit métallique.\n• Pré-allumage : inflammation AVANT l'étincelle, causée par un point chaud dans la chambre → montée en pression trop précoce.\n• Ré-allumage : combustion qui se poursuit après la coupure du moteur, causée par des points chauds résiduels.",
-   profCorrection:"Caractéristique commune aux 3 : toutes sont des combustions non contrôlées, différentes de la combustion normale.\n\nCliquetis : auto-inflammation du mélange avant que le front de flamme normal l'atteigne, causant un bruit métallique (détonation).\n\nPré-allumage (allumage retardé) : inflammation du mélange AVANT l'étincelle de la bougie, causée par un point chaud dans la chambre de combustion. Provoque une montée en pression trop précoce.\n\nRé-allumage (allumage spontané) : combustion qui se poursuit après la coupure du moteur, causée par des points chauds résiduels.",
-   wrong:["Le cliquetis, la détonation et la combustion lente","Le pré-allumage, la post-combustion et la combustion incomplète","La détonation, l'auto-inflammation et le calage moteur"],
-   blanks:[{text:"Les 3 types de combustion anormale sont : le ___, le ___ et le ___.",words:["cliquetis","pré-allumage","ré-allumage","détonation","combustion incomplète"],answers:["cliquetis","pré-allumage","ré-allumage"]}]},
+  // ============ JUIN 2020 ============
 
-  {id:102,subject:'thermo',exam:'juin2020',examLabel:'Juin 2020',theme:"Indice d'octane",
-   q:"Pourquoi utilise-t-on préférentiellement des carburants à haut indice d'octane ? (2 pts)",
+  // Q1 : 3 types → découpé en 4 sous-questions
+  {id:101,subject:'thermo',exam:'juin2020',examLabel:'Juin 2020',theme:"Combustions anormales",
+   q:"Quelle est la caractéristique COMMUNE aux 3 types de combustion anormale ?",
+   a:"Toutes sont des combustions non contrôlées, différentes de la combustion normale.",
+   profCorrection:"Caractéristique commune aux 3 : toutes sont des combustions non contrôlées, différentes de la combustion normale.",
+   wrong:["Elles produisent toutes un bruit métallique caractéristique","Elles surviennent toutes avant l'étincelle de la bougie","Elles sont toutes causées par un carburant à faible indice d'octane"],
+   blanks:[{text:"Les 3 combustions anormales sont toutes des combustions non ___, différentes de la combustion ___.",words:["contrôlées","normale","complètes","incomplètes","lentes"],answers:["contrôlées","normale"]}]},
+
+  {id:102,subject:'thermo',exam:'juin2020',examLabel:'Juin 2020',theme:"Combustions anormales — Cliquetis",
+   q:"Qu'est-ce que le cliquetis ? Donnez sa caractéristique particularisante.",
+   a:"Auto-inflammation du gaz frais avant que le front de flamme normal l'atteigne. Se produit PENDANT la combustion normale. Cause un bruit métallique (détonation).",
+   profCorrection:"Cliquetis : auto-inflammation du mélange avant que le front de flamme normal l'atteigne, causant un bruit métallique (détonation). Il survient PENDANT la combustion normale, simultanément au front de flamme.",
+   wrong:["Inflammation du mélange AVANT l'étincelle, causée par un point chaud dans la chambre de combustion","Combustion qui se poursuit après la coupure du moteur, causée par des points chauds résiduels","Retard d'inflammation causant une montée en pression trop tardive dans le cycle"],
+   blanks:[{text:"Le cliquetis = auto-inflammation du gaz ___ avant le front de flamme, causant un bruit ___.",words:["frais","métallique","brûlé","sourd","chaud"],answers:["frais","métallique"]}]},
+
+  {id:103,subject:'thermo',exam:'juin2020',examLabel:'Juin 2020',theme:"Combustions anormales — Pré-allumage",
+   q:"Qu'est-ce que le pré-allumage ? Donnez sa caractéristique particularisante.",
+   a:"Inflammation du mélange AVANT l'étincelle de la bougie, causée par un point chaud dans la chambre de combustion. Provoque une montée en pression trop précoce.",
+   profCorrection:"Pré-allumage (allumage retardé) : inflammation du mélange AVANT l'étincelle de la bougie, causée par un point chaud dans la chambre de combustion. Provoque une montée en pression trop précoce.",
+   wrong:["Auto-inflammation du gaz frais pendant la combustion normale, causant un bruit métallique","Combustion qui se poursuit après la coupure du moteur, causée par des points chauds résiduels","Combustion incomplète laissant des hydrocarbures imbrûlés dans les gaz d'échappement"],
+   blanks:[{text:"Le pré-allumage = inflammation AVANT l'___, causée par un ___ dans la chambre de combustion.",words:["étincelle","point chaud","détente","point froid","combustion"],answers:["étincelle","point chaud"]}]},
+
+  {id:104,subject:'thermo',exam:'juin2020',examLabel:'Juin 2020',theme:"Combustions anormales — Ré-allumage",
+   q:"Qu'est-ce que le ré-allumage (allumage spontané) ? Donnez sa caractéristique particularisante.",
+   a:"Combustion qui se poursuit après la coupure du moteur, causée par des points chauds résiduels.",
+   profCorrection:"Allumage spontané (ré-allumage) : combustion qui se poursuit après la coupure du moteur, causée par des points chauds résiduels.",
+   wrong:["Auto-inflammation du gaz frais pendant la combustion, causant un bruit métallique","Inflammation avant l'étincelle, causée par un point chaud dans la chambre de combustion","Combustion incomplète due à un mélange trop riche en carburant"],
+   blanks:[{text:"Le ré-allumage = combustion qui se poursuit ___ la coupure du moteur, causée par des ___ résiduels.",words:["après","points chauds","avant","dépôts froids","pendant"],answers:["après","points chauds"]}]},
+
+  // Q2 : indice d'octane
+  {id:105,subject:'thermo',exam:'juin2020',examLabel:'Juin 2020',theme:"Indice d'octane",
+   q:"Pourquoi utilise-t-on préférentiellement des carburants à haut indice d'octane ?",
    a:"Car ils résistent mieux à l'auto-inflammation → moins de risque de cliquetis → meilleur rendement et performances accrues.",
    profCorrection:"Car il résiste mieux à l'auto-inflammation, donc moins de risque de cliquetis.\nMeilleur rendement et performances accrues.",
    wrong:["Car ils ont un pouvoir calorifique plus élevé que les carburants ordinaires","Car ils brûlent plus lentement et permettent un meilleur remplissage du cylindre","Car ils produisent moins de CO₂ lors de la combustion complète"],
-   blanks:[{text:"Un carburant à haut indice d'octane résiste mieux à l'___, ce qui réduit le risque de ___.",words:["auto-inflammation","cliquetis","pré-allumage","ré-allumage","combustion"],answers:["auto-inflammation","cliquetis"]}]},
+   blanks:[{text:"Haut IO → résiste mieux à l'___ → moins de risque de ___ → meilleur rendement.",words:["auto-inflammation","cliquetis","pré-allumage","ré-allumage","combustion"],answers:["auto-inflammation","cliquetis"]}]},
 
-  {id:103,subject:'thermo',exam:'juin2020',examLabel:'Juin 2020',theme:"Cycle réel vs théorique",
-   q:"Le cycle réel du moteur essence 4 temps diffère du cycle théorique. Précisez à quoi sont dues ces divergences et représentez schématiquement leurs influences dans un diagramme de Clapeyron. (11 pts)",
-   a:"Causes de divergence :\n• Non-instantanéité de la combustion (S1–S2)\n• Pertes thermiques aux parois pendant combustion (S2+S3) et détente (S4)\n• Ouverture prématurée soupape échappement (S5)\n• Fuites de gaz par segmentation (négligeables moteur chaud)\n• Pertes par pompage aux soupapes (S6)\n• Pertes par frottements mécaniques ou aérodynamiques (↑ avec N)",
-   profCorrection:"Les principales causes de divergence entre cycle réel et cycle théorique sont :\n• Les pertes par non-instantanéité de la combustion (S1 – S2) : la combustion n'est pas instantanée, elle prend du temps.\n• Les pertes thermiques aux parois de la chambre de combustion pendant la combustion (S2 + S3) et pendant la détente (S4).\n• L'ouverture prématurée de la soupape d'échappement (S5) : elle s'ouvre avant le PMB pour faciliter la vidange, entraînant une légère perte de travail.\n• Les fuites de gaz par la segmentation (négligeables moteur chaud / régime élevé).\n• Les pertes par pompage auprès des soupapes (S6).\n• Les pertes par frottements mécaniques ou aérodynamiques (augmentent avec N).",
-   wrong:["Uniquement les fuites de gaz et les pertes par frottements mécaniques","Seulement les pertes thermiques aux parois et la combustion incomplète","Le cliquetis, le pré-allumage et la dissociation moléculaire"],
-   blanks:[{text:"Les pertes par ___ de la combustion sont représentées par S1–S2. L'ouverture ___ de la soupape d'échappement génère une perte S5.",words:["non-instantanéité","prématurée","instantanéité","tardive","complète"],answers:["non-instantanéité","prématurée"]}]},
+  // Q3 : cycle réel — découpé en sous-questions par cause
+  {id:106,subject:'thermo',exam:'juin2020',examLabel:'Juin 2020',theme:"Cycle réel — Non-instantanéité",
+   q:"Quelle est la première cause de divergence entre cycle réel et cycle théorique ? (pertes S1–S2)",
+   a:"Les pertes par non-instantanéité de la combustion (S1–S2) : la combustion n'est pas instantanée, elle prend du temps.",
+   profCorrection:"Les pertes par non-instantanéité de la combustion (S1–S2) : la combustion n'est pas instantanée, elle prend du temps.",
+   wrong:["L'ouverture prématurée de la soupape d'échappement (S5) avant le PMB","Les fuites de gaz par la segmentation, négligeables moteur chaud","Les pertes par frottements mécaniques ou aérodynamiques qui augmentent avec N"],
+   blanks:[{text:"Les pertes S1–S2 = pertes par ___ de la combustion (elle n'est pas ___)",words:["non-instantanéité","instantanée","dissociation","complète","irréversibilité"],answers:["non-instantanéité","instantanée"]}]},
 
-  // JANVIER 2025
-  {id:104,subject:'thermo',exam:'jv2025',examLabel:'Janvier 2025',theme:"Indice d'octane",
+  {id:107,subject:'thermo',exam:'juin2020',examLabel:'Juin 2020',theme:"Cycle réel — Pertes thermiques",
+   q:"Quelles sont les pertes thermiques aux parois dans le cycle réel ? (surfaces S2, S3, S4)",
+   a:"Les pertes thermiques aux parois de la chambre de combustion pendant la combustion (S2+S3) et pendant la détente (S4).",
+   profCorrection:"Les pertes thermiques aux parois de la chambre de combustion pendant la combustion (S2 + S3) et pendant la détente (S4).",
+   wrong:["Les pertes par pompage auprès des soupapes (S6) lors de l'admission et l'échappement","Les fuites de gaz par la segmentation, négligeables quand le moteur est chaud","Les pertes par non-instantanéité de la combustion représentées par la surface S1–S2"],
+   blanks:[{text:"Pertes thermiques : pendant la ___ (S2+S3) et pendant la ___ (S4).",words:["combustion","détente","compression","admission","échappement"],answers:["combustion","détente"]}]},
+
+  {id:108,subject:'thermo',exam:'juin2020',examLabel:'Juin 2020',theme:"Cycle réel — Soupape & fuites",
+   q:"Quelles sont les 3 dernières causes de divergence cycle réel / théorique ? (S5, S6 et frottements)",
+   a:"• Ouverture prématurée de la soupape d'échappement (S5) avant le PMB → légère perte de travail\n• Fuites de gaz par la segmentation (négligeables moteur chaud / régime élevé)\n• Pertes par pompage aux soupapes (S6)\n• Pertes par frottements mécaniques ou aérodynamiques (augmentent avec N)",
+   profCorrection:"• L'ouverture prématurée de la soupape d'échappement (S5) : elle s'ouvre avant le PMB pour faciliter la vidange, entraînant une légère perte de travail.\n• Les fuites de gaz par la segmentation (négligeables moteur chaud / régime élevé).\n• Les pertes par pompage auprès des soupapes (S6).\n• Les pertes par frottements mécaniques ou aérodynamiques (augmentent avec N).",
+   wrong:["Uniquement les fuites de gaz et les pertes par frottements mécaniques","Seulement les pertes thermiques aux parois et la combustion incomplète","La dissociation moléculaire et l'expansion moléculaire lors de la combustion"],
+   blanks:[{text:"L'ouverture ___ de la soupape d'échappement (S5) entraîne une perte de travail. Les pertes par frottements ___ quand N augmente.",words:["prématurée","augmentent","tardive","diminuent","simultanée"],answers:["prématurée","augmentent"]}]},
+
+  // ============ JANVIER 2025 ============
+
+  {id:109,subject:'thermo',exam:'jv2025',examLabel:'Janvier 2025',theme:"Indice d'octane",
    q:"Comment se détermine l'indice d'octane d'un carburant ? (2 pts)",
-   a:"On compare l'inflammabilité du carburant à celle d'un mélange heptane + iso-octane sur un monocylindre normalisé. L'indice d'octane correspond au pourcentage d'iso-octane dans le mélange qui donne la même inflammabilité.",
+   a:"On compare l'inflammabilité du carburant à celle d'un mélange heptane + iso-octane sur un monocylindre normalisé. L'IO = pourcentage d'iso-octane dans le mélange donnant la même inflammabilité.",
    profCorrection:"On compare l'inflammabilité du carburant à celle d'un mélange heptane + iso-octane sur un monocylindre normalisé.\nL'indice d'octane du carburant correspond au pourcentage d'iso-octane dans le mélange qui donne la même inflammabilité.",
    wrong:["On mesure son pouvoir calorifique par combustion en bombe calorimétrique en laboratoire","On calcule son ratio carbone/hydrogène à partir de sa formule chimique","On le détermine par chromatographie gazeuse de ses composants principaux"],
-   blanks:[{text:"L'IO = pourcentage d'___ dans un mélange avec de l'___ donnant la même ___.",words:["iso-octane","heptane","inflammabilité","viscosité","densité"],answers:["iso-octane","heptane","inflammabilité"]}]},
+   blanks:[{text:"IO = % d'___ dans un mélange avec de l'___ donnant la même ___.",words:["iso-octane","heptane","inflammabilité","viscosité","densité"],answers:["iso-octane","heptane","inflammabilité"]}]},
 
-  {id:105,subject:'thermo',exam:'jv2025',examLabel:'Janvier 2025',theme:"Gaz & thermodynamique",
-   q:"Les gaz monoatomiques et diatomiques ont des cv fort différentes. Pourquoi ? (3 pts)",
-   a:"Les gaz diatomiques ont des cv environ 67% plus élevées que les monoatomiques. Car leurs molécules possèdent des degrés de liberté supplémentaires : translation + rotation + oscillation (vibration). Ces degrés de liberté supplémentaires absorbent de l'énergie → cv plus élevée.",
-   profCorrection:"Les gaz diatomiques ont des cv environ 67% plus élevées que les gaz monoatomiques.\nCar leurs molécules possèdent des degrés de liberté supplémentaires : en plus de la translation et rotation (comme les monoatomiques), elles ont aussi des mouvements d'oscillation (vibration). Ces degrés de liberté supplémentaires absorbent de l'énergie, d'où une cv plus élevée.",
-   wrong:["Car les molécules diatomiques sont plus lourdes et nécessitent plus d'énergie pour s'agiter","Car les liaisons covalentes des molécules diatomiques stockent de l'énergie potentielle supplémentaire","Car les gaz diatomiques ont une masse molaire plus élevée qui augmente leur capacité calorifique"],
-   blanks:[{text:"Les gaz diatomiques ont des cv plus élevées car leurs molécules ont des degrés de liberté ___ : translation, rotation et ___.",words:["supplémentaires","oscillation","moins","vibration","chaleur"],answers:["supplémentaires","oscillation"]}]},
+  // Q b : découpé en 2
+  {id:110,subject:'thermo',exam:'jv2025',examLabel:'Janvier 2025',theme:"Gaz monoatomiques vs diatomiques",
+   q:"Les gaz diatomiques ont des cv plus élevées que les monoatomiques. De combien environ ?",
+   a:"Environ 67% plus élevées.",
+   profCorrection:"Les gaz diatomiques ont des cv environ 67% plus élevées que les gaz monoatomiques.",
+   wrong:["Environ 25% plus élevées","Environ 2 fois plus élevées (100%)","Environ 40% plus élevées"],
+   blanks:[{text:"Les gaz diatomiques ont des cv environ ___% plus élevées que les monoatomiques.",words:["67","25","50","100","40"],answers:["67"]}]},
 
-  {id:106,subject:'thermo',exam:'jv2025',examLabel:'Janvier 2025',theme:"Cycle réel vs théorique",
-   q:"Pour le moteur 4 temps à essence, les cycles théorique et réel sont très divergents. Schématisez ces deux cycles et expliquez les causes de ces divergences. (15 pts)",
-   a:"Causes de divergence :\n• Pertes par pompage auprès des soupapes (S6)\n• Non-instantanéité de la combustion (S1–S2)\n• Pertes thermiques aux parois pendant combustion (S2+S3) et détente (S4)\n• Ouverture prématurée de la soupape d'échappement (S5)\n• Fuites de gaz (segmentation/soupape pas étanche) → diminuent quand N et T augmentent\n• Pertes par frottements mécaniques ou aérodynamiques → augmentent quand N augmente",
-   profCorrection:"Les principales causes de divergence sont :\n• Les pertes par pompage auprès des soupapes (S6).\n• La non-instantanéité de la combustion (S1 – S2).\n• Les pertes thermiques aux parois de la chambre de combustion pendant la combustion (S2 + S3) et pendant la détente (S4).\n• L'ouverture prématurée de la soupape d'échappement (S5).\n• Les fuites de gaz car segmentation et/ou soupape pas bien étanche (ces pertes diminuent quand N et la température augmentent).\n• Les pertes par frottement mécanique ou aérodynamique (elles augmentent quand N augmente).",
-   wrong:["Uniquement les fuites de gaz et les pertes par frottements mécaniques","Seulement les pertes thermiques aux parois et la combustion incomplète","Le cliquetis, le pré-allumage et la dissociation moléculaire"],
-   blanks:[{text:"Les fuites de gaz ___ quand N augmente, tandis que les pertes par frottements ___ quand N augmente.",words:["diminuent","augmentent","restent stables","disparaissent"],answers:["diminuent","augmentent"]}]},
+  {id:111,subject:'thermo',exam:'jv2025',examLabel:'Janvier 2025',theme:"Gaz monoatomiques vs diatomiques",
+   q:"Pourquoi les gaz diatomiques ont-ils des cv plus élevées que les monoatomiques ?",
+   a:"Car leurs molécules possèdent des degrés de liberté supplémentaires : en plus de la translation et rotation (comme les monoatomiques), elles ont aussi des mouvements d'oscillation (vibration). Ces degrés supplémentaires absorbent de l'énergie → cv plus élevée.",
+   profCorrection:"Car leurs molécules possèdent des degrés de liberté supplémentaires : en plus de la translation et rotation (comme les monoatomiques), elles ont aussi des mouvements d'oscillation (vibration). Ces degrés de liberté supplémentaires absorbent de l'énergie, d'où une cv plus élevée.",
+   wrong:["Car les molécules diatomiques sont plus lourdes et nécessitent plus d'énergie pour s'agiter thermiquement","Car les liaisons covalentes des molécules diatomiques stockent de l'énergie potentielle supplémentaire","Car les gaz diatomiques ont une masse molaire plus élevée qui augmente leur capacité calorifique"],
+   blanks:[{text:"Les diatomiques ont des degrés de liberté ___ : translation + rotation + ___ (vibration).",words:["supplémentaires","oscillation","identiques","conduction","rayonnement"],answers:["supplémentaires","oscillation"]}]},
 
-  // AVRIL 2026 / Jv 2026 (mêmes questions)
-  {id:107,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Pré-allumage",
-   q:"Expliquez le pré-allumage, ses causes, conséquences et remèdes. (7 pts)",
-   a:"Définition : auto-inflammation des gaz frais AVANT l'étincelle de la bougie.\n\nCauses :\n• Point chaud dans la chambre de combustion (bougie inadaptée, dépôts de suie, érosion soupapes)\n• Le point chaud allume les gaz les + chauds et + comprimés\n\nConséquences :\n• ↑ pression et température → risque d'auto-inflammation accrue\n• Détérioration du piston (segments, joint culasse, soupapes, film d'huile et parois)\n• Risque de fonte du piston ou casse moteur\n\nRemèdes :\n• Carburant à indice d'octane élevé\n• Bougie mieux adaptée (indice thermique)\n• Réglages améliorés (richesse, avance à l'allumage automatique)",
-   profCorrection:"Définition : le pré-allumage = auto-inflammation des gaz frais (mélange air-essence) AVANT l'étincelle de la bougie.\n\nCauses :\n• Présence d'un point chaud dans la chambre de combustion (bougie inadaptée, dépôts de suie, érosion des soupapes, etc.).\n• Le point chaud allume les gaz qui sont les + chauds et les + comprimés (les + proches du point chaud).\n\nConséquences :\n• Augmentation de la pression et de la température → risque d'auto-inflammation accrue.\n• Détérioration du piston (segments, joint de culasse, soupapes, film d'huile et parois).\n• Risque de fonte du piston ou casse moteur.\n\nRemèdes :\n• Usage d'un carburant à indice d'octane élevé.\n• Bougie mieux adaptée (indice thermique).\n• Réglages améliorés (richesse, avance à l'allumage automatique).",
-   wrong:["Le pré-allumage survient pendant la combustion, causé par un excès de richesse du mélange air-essence","Le pré-allumage est causé par une bougie trop froide qui n'ionise pas correctement le mélange","Le pré-allumage est une combustion après la coupure du moteur causée par un dépôt de charbon"],
-   blanks:[{text:"Le pré-allumage = auto-inflammation AVANT l'étincelle, causée par un ___ dans la chambre. Remède : carburant à ___ élevé.",words:["point chaud","indice d'octane","point froid","indice de cétane","court-circuit"],answers:["point chaud","indice d'octane"]}]},
+  // Q c : cycle réel Jv2025 — mêmes sous-questions que juin 2020 mais avec l'étiquette jv2025
+  {id:112,subject:'thermo',exam:'jv2025',examLabel:'Janvier 2025',theme:"Cycle réel — Pompage & non-instantanéité",
+   q:"Pour le moteur 4 temps essence : quelles sont les pertes S6 et S1–S2 dans le cycle réel ?",
+   a:"• Pertes par pompage auprès des soupapes (S6) lors de l'admission et l'échappement\n• Non-instantanéité de la combustion (S1–S2) : combustion non instantanée",
+   profCorrection:"• Les pertes par pompage auprès des soupapes (S6).\n• La non-instantanéité de la combustion (S1 – S2).",
+   wrong:["Les fuites de gaz par segmentation (S6) et les pertes par frottements aérodynamiques (S1-S2)","Les pertes thermiques aux parois (S6) et l'ouverture prématurée de la soupape (S1-S2)","La dissociation moléculaire (S6) et l'expansion moléculaire (S1-S2)"],
+   blanks:[{text:"S6 = pertes par ___ aux soupapes. S1–S2 = ___ de la combustion.",words:["pompage","non-instantanéité","frottement","dissociation","fuites"],answers:["pompage","non-instantanéité"]}]},
 
-  {id:108,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cycle de Otto",
-   q:"Le cycle de Otto néglige au moins 3 phénomènes. Lesquels ? Quelles sont les quatre conséquences importantes de ces 3 négligences ? (7 pts)",
-   a:"3 phénomènes négligés :\n• La variation des cp et cv avec la température\n• La dissociation moléculaire\n• L'expansion moléculaire\n\n4 conséquences (paramètres dont l'influence est ignorée) :\n• La richesse du mélange\n• L'humidité de l'air\n• La recirculation des gaz d'échappement\n• La nature du carburant",
-   profCorrection:"Le cycle de Otto néglige 3 phénomènes :\n• La variation des cp et cv avec la température (Otto les considère constantes).\n• La dissociation moléculaire.\n• L'expansion moléculaire.\n\nCes 3 négligences empêchent la prise en compte de l'influence sur le fonctionnement du moteur de 4 paramètres importants :\n• La richesse du mélange.\n• L'humidité de l'air.\n• La recirculation des gaz d'échappement.\n• La nature du carburant.",
-   wrong:["Les fuites de gaz, les pertes par pompage et le cliquetis","La variation de pression, la condensation et les pertes thermiques","La combustion incomplète, la recirculation des gaz et les pertes par frottement"],
-   blanks:[{text:"Otto néglige : la variation des ___, la ___ moléculaire et l'expansion moléculaire.",words:["cp et cv","dissociation","pressions","association","températures"],answers:["cp et cv","dissociation"]}]},
+  {id:113,subject:'thermo',exam:'jv2025',examLabel:'Janvier 2025',theme:"Cycle réel — Fuites & frottements",
+   q:"Pour le cycle réel : comment évoluent les fuites de gaz et les pertes par frottements avec N ?",
+   a:"• Fuites de gaz (segmentation/soupape pas étanche) : diminuent quand N et la température augmentent\n• Pertes par frottements mécaniques ou aérodynamiques : augmentent quand N augmente",
+   profCorrection:"• Les fuites de gaz car segmentation et/ou soupape pas bien étanche (ces pertes diminuent quand N et la température augmentent).\n• Les pertes par frottement mécanique ou aérodynamique (elles augmentent quand N augmente).",
+   wrong:["Fuites de gaz : augmentent avec N. Pertes par frottements : diminuent avec N","Fuites de gaz : constantes quel que soit N. Pertes par frottements : constantes également","Fuites de gaz : disparaissent à chaud. Pertes par frottements : disparaissent à haute vitesse"],
+   blanks:[{text:"Fuites de gaz ___ quand N↑. Pertes par frottements ___ quand N↑.",words:["diminuent","augmentent","restent stables","disparaissent"],answers:["diminuent","augmentent"]}]},
 
-  {id:109,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Gaz & thermodynamique",
-   q:"Il existe deux types de forces d'interaction entre molécules d'un gaz. Citez-les et précisez leurs caractéristiques respectives. (6 pts)",
-   a:"2 types de forces d'interaction entre molécules d'un gaz coexistent :\n• Forces de Van Der Waals : attractives, intensité ∝ d⁻⁷ (d = interdistance entre 2 molécules)\n• Forces de Pauli : répulsives, intensité ∝ d⁻¹³",
-   profCorrection:"2 types de forces d'interaction entre molécules d'un gaz coexistent :\n• Forces de Van Der Waals : attractives, dont l'intensité varie en fonction de d⁻⁷ (d = interdistance entre 2 molécules).\n• Forces de Pauli : répulsives, dont l'intensité varie en fonction de d⁻¹³.",
-   wrong:["Forces de Coulomb (attractives, ∝ d⁻²) et forces de Lorentz (répulsives, ∝ d⁻⁶)","Forces gravitationnelles (∝ d⁻²) et forces électromagnétiques (∝ d⁻⁴)","Forces de Van Der Waals (répulsives, ∝ d⁻⁷) et forces de Pauli (attractives, ∝ d⁻¹³)"],
-   blanks:[{text:"Forces de Van Der Waals : ___, intensité ∝ d⁻⁷. Forces de Pauli : ___, intensité ∝ d⁻¹³.",words:["attractives","répulsives","nulles","constantes"],answers:["attractives","répulsives"]}]},
+  // ============ AVRIL 2026 ============
 
-  // Jv 2026 = mêmes questions qu'avril 2026
-  {id:110,subject:'thermo',exam:'jv2026',examLabel:'Janvier 2026',theme:"Pré-allumage",
-   q:"Expliquez le pré-allumage, ses causes, conséquences et remèdes. (7 pts)",
-   a:"Définition : auto-inflammation des gaz frais AVANT l'étincelle de la bougie.\n\nCauses :\n• Point chaud dans la chambre de combustion (bougie inadaptée, dépôts de suie, érosion soupapes)\n• Le point chaud allume les gaz les + chauds et + comprimés\n\nConséquences :\n• ↑ pression et température → risque d'auto-inflammation accrue\n• Détérioration du piston (segments, joint culasse, soupapes, film d'huile et parois)\n• Risque de fonte du piston ou casse moteur\n\nRemèdes :\n• Carburant à indice d'octane élevé\n• Bougie mieux adaptée (indice thermique)\n• Réglages améliorés (richesse, avance à l'allumage automatique)",
-   profCorrection:"Définition : le pré-allumage = auto-inflammation des gaz frais (mélange air-essence) AVANT l'étincelle de la bougie.\n\nCauses :\n• Présence d'un point chaud dans la chambre de combustion (bougie inadaptée, dépôts de suie, érosion des soupapes, etc.).\n• Le point chaud allume les gaz qui sont les + chauds et les + comprimés.\n\nConséquences :\n• Augmentation de la pression et de la température → risque d'auto-inflammation accrue.\n• Détérioration du piston (segments, joint de culasse, soupapes, film d'huile et parois).\n• Risque de fonte du piston ou casse moteur.\n\nRemèdes :\n• Usage d'un carburant à indice d'octane élevé.\n• Bougie mieux adaptée (indice thermique).\n• Réglages améliorés (richesse, avance à l'allumage automatique).",
-   wrong:["Le pré-allumage survient pendant la combustion, causé par un excès de richesse","Le pré-allumage est causé par une bougie trop froide","Le pré-allumage est une combustion après la coupure du moteur"],
-   blanks:[{text:"Le pré-allumage = auto-inflammation AVANT l'étincelle, causée par un ___ dans la chambre. Remède : carburant à ___ élevé.",words:["point chaud","indice d'octane","point froid","indice de cétane","court-circuit"],answers:["point chaud","indice d'octane"]}]},
+  // Q1 Pré-allumage → 3 sous-questions
+  {id:114,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Pré-allumage — Définition & causes",
+   q:"Définissez le pré-allumage et citez ses causes.",
+   a:"Définition : auto-inflammation des gaz frais (mélange air-essence) AVANT l'étincelle de la bougie.\n\nCauses :\n• Point chaud dans la chambre de combustion (bougie inadaptée, dépôts de suie, érosion soupapes...)\n• Le point chaud allume les gaz les + chauds et + comprimés (les + proches du point chaud)",
+   profCorrection:"Définition : le pré-allumage = auto-inflammation des gaz frais (mélange air-essence) AVANT l'étincelle de la bougie.\n\nCauses :\n• Présence d'un point chaud dans la chambre de combustion (bougie inadaptée, dépôts de suie, érosion des soupapes, etc.).\n• Le point chaud allume les gaz qui sont les + chauds et les + comprimés (les + proches du point chaud).",
+   wrong:["Auto-inflammation PENDANT la combustion, causée par un excès de richesse du mélange","Auto-inflammation APRÈS la coupure, causée par des dépôts de carbone sur les pistons","Inflammation retardée causée par une bougie trop froide ne créant pas d'étincelle correcte"],
+   blanks:[{text:"Pré-allumage = auto-inflammation AVANT l'___, causée par un ___ dans la chambre.",words:["étincelle","point chaud","détente","point froid","allumage"],answers:["étincelle","point chaud"]}]},
 
-  {id:111,subject:'thermo',exam:'jv2026',examLabel:'Janvier 2026',theme:"Cycle de Otto",
-   q:"Le cycle de Otto néglige au moins 3 phénomènes. Lesquels ? Quelles sont les quatre conséquences importantes de ces 3 négligences ? (7 pts)",
-   a:"3 phénomènes négligés :\n• La variation des cp et cv avec la température\n• La dissociation moléculaire\n• L'expansion moléculaire\n\n4 conséquences :\n• La richesse du mélange\n• L'humidité de l'air\n• La recirculation des gaz d'échappement\n• La nature du carburant",
-   profCorrection:"Le cycle de Otto néglige 3 phénomènes :\n• La variation des cp et cv avec la température (Otto les considère constantes).\n• La dissociation moléculaire.\n• L'expansion moléculaire.\n\nCes 3 négligences empêchent la prise en compte de l'influence sur le fonctionnement du moteur de 4 paramètres importants :\n• La richesse du mélange.\n• L'humidité de l'air.\n• La recirculation des gaz d'échappement.\n• La nature du carburant.",
-   wrong:["Les fuites de gaz, les pertes par pompage et le cliquetis","La variation de pression, la condensation et les pertes thermiques","La combustion incomplète, la recirculation des gaz et les pertes par frottement"],
-   blanks:[{text:"Otto néglige : la variation des ___, la ___ moléculaire et l'expansion moléculaire.",words:["cp et cv","dissociation","pressions","association","températures"],answers:["cp et cv","dissociation"]}]},
+  {id:115,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Pré-allumage — Conséquences",
+   q:"Quelles sont les conséquences du pré-allumage ?",
+   a:"• Augmentation de la pression et de la température → risque d'auto-inflammation accrue\n• Détérioration du piston (segments, joint de culasse, soupapes, film d'huile et parois)\n• Risque de fonte du piston ou casse moteur",
+   profCorrection:"Conséquences :\n• Augmentation de la pression et de la température → risque d'auto-inflammation accrue.\n• Détérioration du piston (segments, joint de culasse, soupapes, film d'huile et parois).\n• Risque de fonte du piston ou casse moteur.",
+   wrong:["Bruit métallique et légère perte de puissance sans conséquences mécaniques graves","Augmentation du rendement thermique due à l'allumage anticipé du mélange","Réduction de la consommation de carburant par optimisation du cycle"],
+   blanks:[{text:"Pré-allumage → ↑ pression et ___ → risque de fonte du ___ ou casse moteur.",words:["température","piston","carburant","vitesse","couple"],answers:["température","piston"]}]},
 
-  {id:112,subject:'thermo',exam:'jv2026',examLabel:'Janvier 2026',theme:"Gaz & thermodynamique",
-   q:"Il existe deux types de forces d'interaction entre molécules d'un gaz. Citez-les et précisez leurs caractéristiques respectives. (6 pts)",
-   a:"2 types de forces d'interaction coexistent :\n• Forces de Van Der Waals : attractives, intensité ∝ d⁻⁷\n• Forces de Pauli : répulsives, intensité ∝ d⁻¹³",
-   profCorrection:"2 types de forces d'interaction entre molécules d'un gaz coexistent :\n• Forces de Van Der Waals : attractives, dont l'intensité varie en fonction de d⁻⁷ (d = interdistance entre 2 molécules).\n• Forces de Pauli : répulsives, dont l'intensité varie en fonction de d⁻¹³.",
-   wrong:["Forces de Coulomb (attractives) et forces de Lorentz (répulsives)","Forces gravitationnelles et forces électromagnétiques","Forces de Van Der Waals (répulsives) et forces de Pauli (attractives)"],
-   blanks:[{text:"Forces de Van Der Waals : ___, intensité ∝ d⁻⁷. Forces de Pauli : ___, intensité ∝ d⁻¹³.",words:["attractives","répulsives","nulles","constantes"],answers:["attractives","répulsives"]}]},
+  {id:116,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Pré-allumage — Remèdes",
+   q:"Quels sont les remèdes contre le pré-allumage ?",
+   a:"• Usage d'un carburant à indice d'octane élevé\n• Bougie mieux adaptée (indice thermique)\n• Réglages améliorés (richesse, avance à l'allumage automatique)",
+   profCorrection:"Remèdes :\n• Usage d'un carburant à indice d'octane élevé.\n• Bougie mieux adaptée (indice thermique).\n• Réglages améliorés (richesse, avance à l'allumage automatique).",
+   wrong:["Augmenter le taux de compression et enrichir le mélange en carburant","Retarder l'allumage au maximum et diminuer le taux de compression","Utiliser un carburant à faible indice d'octane et réduire la richesse"],
+   blanks:[{text:"Remèdes : carburant à ___ élevé + bougie mieux ___ + réglages améliorés.",words:["indice d'octane","adaptée","indice de cétane","usée","bas"],answers:["indice d'octane","adaptée"]}]},
+
+  // Q2 Otto → 2 sous-questions
+  {id:117,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cycle de Otto — 3 phénomènes négligés",
+   q:"Le cycle de Otto néglige au moins 3 phénomènes. Lesquels ?",
+   a:"1. La variation des cp et cv avec la température (Otto les considère constantes)\n2. La dissociation moléculaire\n3. L'expansion moléculaire",
+   profCorrection:"Le cycle de Otto néglige 3 phénomènes :\n• La variation des cp et cv avec la température (Otto les considère constantes).\n• La dissociation moléculaire.\n• L'expansion moléculaire.",
+   wrong:["Les fuites de gaz, les pertes par pompage et le cliquetis","La variation de pression, la condensation et les pertes thermiques aux parois","La combustion incomplète, la recirculation des gaz et les pertes par frottement"],
+   blanks:[{text:"Otto néglige : variation des ___ avec T°, ___ moléculaire et expansion moléculaire.",words:["cp et cv","dissociation","pressions","association","températures"],answers:["cp et cv","dissociation"]}]},
+
+  {id:118,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cycle de Otto — 4 conséquences",
+   q:"Quelles sont les 4 conséquences importantes des 3 négligences du cycle de Otto ?",
+   a:"Ces 3 négligences empêchent la prise en compte de l'influence sur le fonctionnement du moteur de 4 paramètres importants :\n• La richesse du mélange\n• L'humidité de l'air\n• La recirculation des gaz d'échappement\n• La nature du carburant",
+   profCorrection:"Ces 3 négligences empêchent la prise en compte de l'influence sur le fonctionnement du moteur de 4 paramètres importants :\n• La richesse du mélange.\n• L'humidité de l'air.\n• La recirculation des gaz d'échappement.\n• La nature du carburant.",
+   wrong:["Le rendement, la puissance, le couple et la consommation spécifique du moteur","Le cliquetis, le pré-allumage, le ré-allumage et les fuites de gaz par segmentation","Les pertes par pompage, friction, thermiques et les fuites de gaz"],
+   blanks:[{text:"4 paramètres ignorés : la ___ du mélange, l'___ de l'air, la recirculation des gaz et la nature du carburant.",words:["richesse","humidité","pression","température","densité"],answers:["richesse","humidité"]}]},
+
+  // Q3 Forces → 2 sous-questions
+  {id:119,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Forces moléculaires — Van Der Waals",
+   q:"Quelles sont les caractéristiques des forces de Van Der Waals ?",
+   a:"Forces de Van Der Waals : attractives, dont l'intensité varie en fonction de d⁻⁷ (d = interdistance entre 2 molécules).",
+   profCorrection:"Forces de Van Der Waals : attractives, dont l'intensité varie en fonction de d⁻⁷ (d = interdistance entre 2 molécules).",
+   wrong:["Répulsives, dont l'intensité varie en fonction de d⁻¹³","Attractives, dont l'intensité varie en fonction de d⁻¹³","Répulsives, dont l'intensité varie en fonction de d⁻⁷"],
+   blanks:[{text:"Van Der Waals : ___, intensité ∝ d⁻___.",words:["attractives","7","répulsives","13","nulles"],answers:["attractives","7"]}]},
+
+  {id:120,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Forces moléculaires — Pauli",
+   q:"Quelles sont les caractéristiques des forces de Pauli ?",
+   a:"Forces de Pauli : répulsives, dont l'intensité varie en fonction de d⁻¹³ (d = interdistance entre 2 molécules).",
+   profCorrection:"Forces de Pauli : répulsives, dont l'intensité varie en fonction de d⁻¹³.",
+   wrong:["Attractives, dont l'intensité varie en fonction de d⁻⁷","Répulsives, dont l'intensité varie en fonction de d⁻⁷","Attractives, dont l'intensité varie en fonction de d⁻¹³"],
+   blanks:[{text:"Pauli : ___, intensité ∝ d⁻___.",words:["répulsives","13","attractives","7","nulles"],answers:["répulsives","13"]}]},
+
+  // ============ JANVIER 2026 (mêmes questions qu'avril 2026) ============
+
+  {id:121,subject:'thermo',exam:'jv2026',examLabel:'Janvier 2026',theme:"Pré-allumage — Définition & causes",
+   q:"Définissez le pré-allumage et citez ses causes.",
+   a:"Définition : auto-inflammation des gaz frais AVANT l'étincelle de la bougie.\n\nCauses :\n• Point chaud dans la chambre de combustion (bougie inadaptée, dépôts de suie, érosion soupapes)\n• Le point chaud allume les gaz les + chauds et + comprimés",
+   profCorrection:"Définition : le pré-allumage = auto-inflammation des gaz frais (mélange air-essence) AVANT l'étincelle de la bougie.\n\nCauses :\n• Présence d'un point chaud dans la chambre de combustion (bougie inadaptée, dépôts de suie, érosion des soupapes, etc.).\n• Le point chaud allume les gaz qui sont les + chauds et les + comprimés.",
+   wrong:["Auto-inflammation PENDANT la combustion, causée par un excès de richesse du mélange","Auto-inflammation APRÈS la coupure, causée par des dépôts de carbone sur les pistons","Inflammation retardée causée par une bougie trop froide"],
+   blanks:[{text:"Pré-allumage = auto-inflammation AVANT l'___, causée par un ___ dans la chambre.",words:["étincelle","point chaud","détente","point froid","allumage"],answers:["étincelle","point chaud"]}]},
+
+  {id:122,subject:'thermo',exam:'jv2026',examLabel:'Janvier 2026',theme:"Pré-allumage — Conséquences",
+   q:"Quelles sont les conséquences du pré-allumage ?",
+   a:"• Augmentation de la pression et de la température → risque d'auto-inflammation accrue\n• Détérioration du piston (segments, joint de culasse, soupapes, film d'huile et parois)\n• Risque de fonte du piston ou casse moteur",
+   profCorrection:"Conséquences :\n• Augmentation de la pression et de la température → risque d'auto-inflammation accrue.\n• Détérioration du piston (segments, joint de culasse, soupapes, film d'huile et parois).\n• Risque de fonte du piston ou casse moteur.",
+   wrong:["Bruit métallique et légère perte de puissance sans conséquences mécaniques graves","Augmentation du rendement thermique due à l'allumage anticipé","Réduction de la consommation de carburant par optimisation du cycle"],
+   blanks:[{text:"Pré-allumage → ↑ pression et ___ → risque de fonte du ___ ou casse moteur.",words:["température","piston","carburant","vitesse","couple"],answers:["température","piston"]}]},
+
+  {id:123,subject:'thermo',exam:'jv2026',examLabel:'Janvier 2026',theme:"Pré-allumage — Remèdes",
+   q:"Quels sont les remèdes contre le pré-allumage ?",
+   a:"• Carburant à indice d'octane élevé\n• Bougie mieux adaptée (indice thermique)\n• Réglages améliorés (richesse, avance à l'allumage automatique)",
+   profCorrection:"Remèdes :\n• Usage d'un carburant à indice d'octane élevé.\n• Bougie mieux adaptée (indice thermique).\n• Réglages améliorés (richesse, avance à l'allumage automatique).",
+   wrong:["Augmenter le taux de compression et enrichir le mélange","Retarder l'allumage et diminuer le taux de compression","Utiliser un carburant à faible indice d'octane et fermer le papillon"],
+   blanks:[{text:"Remèdes : carburant à ___ élevé + bougie mieux ___ + réglages améliorés.",words:["indice d'octane","adaptée","indice de cétane","usée","bas"],answers:["indice d'octane","adaptée"]}]},
+
+  {id:124,subject:'thermo',exam:'jv2026',examLabel:'Janvier 2026',theme:"Cycle de Otto — 3 phénomènes négligés",
+   q:"Le cycle de Otto néglige au moins 3 phénomènes. Lesquels ?",
+   a:"1. La variation des cp et cv avec la température\n2. La dissociation moléculaire\n3. L'expansion moléculaire",
+   profCorrection:"Le cycle de Otto néglige 3 phénomènes :\n• La variation des cp et cv avec la température (Otto les considère constantes).\n• La dissociation moléculaire.\n• L'expansion moléculaire.",
+   wrong:["Les fuites de gaz, les pertes par pompage et le cliquetis","La variation de pression, la condensation et les pertes thermiques aux parois","La combustion incomplète, la recirculation des gaz et les pertes par frottement"],
+   blanks:[{text:"Otto néglige : variation des ___ avec T°, ___ moléculaire et expansion moléculaire.",words:["cp et cv","dissociation","pressions","association","températures"],answers:["cp et cv","dissociation"]}]},
+
+  {id:125,subject:'thermo',exam:'jv2026',examLabel:'Janvier 2026',theme:"Cycle de Otto — 4 conséquences",
+   q:"Quelles sont les 4 conséquences importantes des 3 négligences du cycle de Otto ?",
+   a:"4 paramètres dont l'influence est ignorée :\n• La richesse du mélange\n• L'humidité de l'air\n• La recirculation des gaz d'échappement\n• La nature du carburant",
+   profCorrection:"Ces 3 négligences empêchent la prise en compte de l'influence sur le fonctionnement du moteur de 4 paramètres importants :\n• La richesse du mélange.\n• L'humidité de l'air.\n• La recirculation des gaz d'échappement.\n• La nature du carburant.",
+   wrong:["Le rendement, la puissance, le couple et la consommation spécifique","Le cliquetis, le pré-allumage, le ré-allumage et les fuites de gaz","Les pertes par pompage, friction, thermiques et les fuites de gaz"],
+   blanks:[{text:"4 paramètres ignorés : la ___ du mélange, l'___ de l'air, la recirculation des gaz et la nature du carburant.",words:["richesse","humidité","pression","température","densité"],answers:["richesse","humidité"]}]},
+
+  {id:126,subject:'thermo',exam:'jv2026',examLabel:'Janvier 2026',theme:"Forces moléculaires — Van Der Waals",
+   q:"Quelles sont les caractéristiques des forces de Van Der Waals ?",
+   a:"Forces de Van Der Waals : attractives, intensité ∝ d⁻⁷ (d = interdistance entre 2 molécules).",
+   profCorrection:"Forces de Van Der Waals : attractives, dont l'intensité varie en fonction de d⁻⁷ (d = interdistance entre 2 molécules).",
+   wrong:["Répulsives, intensité ∝ d⁻¹³","Attractives, intensité ∝ d⁻¹³","Répulsives, intensité ∝ d⁻⁷"],
+   blanks:[{text:"Van Der Waals : ___, intensité ∝ d⁻___.",words:["attractives","7","répulsives","13","nulles"],answers:["attractives","7"]}]},
+
+  {id:127,subject:'thermo',exam:'jv2026',examLabel:'Janvier 2026',theme:"Forces moléculaires — Pauli",
+   q:"Quelles sont les caractéristiques des forces de Pauli ?",
+   a:"Forces de Pauli : répulsives, intensité ∝ d⁻¹³ (d = interdistance entre 2 molécules).",
+   profCorrection:"Forces de Pauli : répulsives, dont l'intensité varie en fonction de d⁻¹³.",
+   wrong:["Attractives, intensité ∝ d⁻⁷","Répulsives, intensité ∝ d⁻⁷","Attractives, intensité ∝ d⁻¹³"],
+   blanks:[{text:"Pauli : ___, intensité ∝ d⁻___.",words:["répulsives","13","attractives","7","nulles"],answers:["répulsives","13"]}]},
+
+  // ============ FAUX EXAM POUR ENTRAINEMENT LIBRE ============
+  // Questions communes pour "tous les examens mélangés"
+  {id:201,subject:'thermo',exam:'juin2020',examLabel:'Révision générale',theme:"Combustion normale",
+   q:"Quelles sont les caractéristiques d'une combustion normale ?",
+   a:"• Réaction chimique exothermique : CH + O₂ → CO + CO₂ + H₂O + NOX\n• Complète, sans CO ni suie\n• Bon rendement énergétique\n• Flamme stable avec peu ou pas de fumée",
+   profCorrection:"Combustion normale :\n• Réaction chimique exothermique : CH + O₂ → CO + CO₂ + H₂O + NOX\n• Expansions moléculaires\n• Complète, sans CO ni suie\n• Bon rendement énergétique\n• Flamme stable avec peu ou pas de fumée",
+   wrong:["Incomplète, produisant du CO et des suies avec un mauvais rendement","Explosive, produisant uniquement du CO₂ sans autres sous-produits","Lente et progressive, sans dégagement de chaleur notable"],
+   blanks:[{text:"Combustion normale : ___, sans CO ni suie, bon rendement, flamme ___.",words:["complète","stable","incomplète","instable","lente"],answers:["complète","stable"]}]},
+
+  {id:202,subject:'thermo',exam:'jv2025',examLabel:'Révision générale',theme:"Indice d'octane",
+   q:"L'heptane a un IO = 0 et l'iso-octane IO = 100. Un carburant à 80% iso-octane et 20% heptane a quel IO ?",
+   a:"IO = 80. Par définition, l'IO correspond au pourcentage d'iso-octane dans le mélange.",
+   profCorrection:"Un carburant qui comporte 20% d'heptane et 80% d'iso-octane aura par définition un indice d'octane de 80.",
+   wrong:["IO = 60 (moyenne pondérée des deux composants)","IO = 20 (correspondant au pourcentage d'heptane)","IO = 100 car la présence d'iso-octane est suffisante pour atteindre le maximum"],
+   blanks:[{text:"80% iso-octane + 20% heptane → IO = ___.",words:["80","20","60","100","50"],answers:["80"]}]},
+
+  {id:203,subject:'thermo',exam:'avril2026',examLabel:'Révision générale',theme:"Gaz parfait",
+   q:"Sur quelle hypothèse principale repose le modèle du gaz parfait ?",
+   a:"Les molécules sont sans interaction entre elles et leurs volumes propres sont négligeables. Valide à basse pression et température modérée.",
+   profCorrection:"Le modèle du gaz parfait repose sur l'hypothèse que les molécules de gaz sont sans interaction entre elles et que leurs volumes propres sont négligeables. Cette hypothèse est réaliste à basse pression et température modérée.",
+   wrong:["Les molécules ont toutes la même vitesse et la même énergie cinétique à tout instant","La pression est constante quelle que soit la température pour un volume donné","Les molécules rebondissent élastiquement sur les parois sans aucune perte d'énergie"],
+   blanks:[{text:"Gaz parfait : molécules sans ___ entre elles et volumes ___ négligeables.",words:["interaction","propres","liaison","molaires","collision"],answers:["interaction","propres"]}]},
+
 ];
 
 // ===================== ITEMS (CAISSES) =====================
