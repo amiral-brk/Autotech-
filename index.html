@@ -886,8 +886,12 @@ function showScreen(name){
 // ===================== SUBJECT / MODE FLOW =====================
 function selectSubject(subj){
   currentSubject=subj;
+  // Switch to quiz screen without triggering showSubjectSelect
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('screen-quiz').classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>{ if(t.textContent.toLowerCase().includes('réviser')) t.classList.add('active'); });
   showModeSelect();
-  showScreen('quiz');
 }
 
 function showSubjectSelect(){
