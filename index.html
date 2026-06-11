@@ -9,6 +9,7 @@
 :root {
   --bg:#0a0a0f; --surface:#12121a; --surface2:#1a1a26; --border:#2a2a3f;
   --accent:#e8b84b; --accent2:#4b8be8; --red:#e84b4b; --green:#4be87a;
+  --pneu:#3fd6c8;
   --text:#e8e8f0; --text-dim:#7a7a9a;
   --common:#9a9aaa; --rare:#4b8be8; --epic:#a44be8; --legendary:#e8b84b;
 }
@@ -55,7 +56,7 @@ main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);}
 .stat-number{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--accent);letter-spacing:2px;}
 .stat-label{color:var(--text-dim);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;margin-top:4px;}
-.subject-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:1rem;}
+.subject-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;margin-top:1rem;}
 .subject-card{background:var(--surface);border:2px solid var(--border);border-radius:24px;padding:2.5rem 2rem;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;}
 .subject-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s;}
 .subject-card.meca{border-color:rgba(75,139,232,0.4);}
@@ -66,14 +67,20 @@ main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
 .subject-card.thermo::before{background:linear-gradient(135deg,rgba(232,75,75,0.08),transparent);}
 .subject-card.thermo:hover{border-color:#e84b4b;transform:translateY(-6px);box-shadow:0 20px 60px rgba(232,75,75,0.2);}
 .subject-card.thermo:hover::before{opacity:1;}
+.subject-card.pneu{border-color:rgba(63,214,200,0.4);}
+.subject-card.pneu::before{background:linear-gradient(135deg,rgba(63,214,200,0.08),transparent);}
+.subject-card.pneu:hover{border-color:var(--pneu);transform:translateY(-6px);box-shadow:0 20px 60px rgba(63,214,200,0.2);}
+.subject-card.pneu:hover::before{opacity:1;}
 .subject-icon{font-size:3.5rem;margin-bottom:1rem;display:block;}
 .subject-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:0.5rem;}
 .subject-card.meca .subject-title{color:var(--accent2);}
 .subject-card.thermo .subject-title{color:#e87a4b;}
+.subject-card.pneu .subject-title{color:var(--pneu);}
 .subject-desc{color:var(--text-dim);font-size:0.85rem;line-height:1.5;}
 .subject-count{display:inline-block;margin-top:1rem;font-family:'JetBrains Mono',monospace;font-size:0.75rem;padding:4px 12px;border-radius:20px;}
 .subject-card.meca .subject-count{background:rgba(75,139,232,0.15);color:var(--accent2);}
 .subject-card.thermo .subject-count{background:rgba(232,75,75,0.15);color:#e87a4b;}
+.subject-card.pneu .subject-count{background:rgba(63,214,200,0.15);color:var(--pneu);}
 
 /* MODE GRID */
 .mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem;}
@@ -338,6 +345,7 @@ main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
 .subject-badge{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.7rem;padding:3px 10px;border-radius:20px;margin-bottom:0.5rem;}
 .subject-badge.meca{background:rgba(75,139,232,0.15);color:var(--accent2);border:1px solid rgba(75,139,232,0.3);}
 .subject-badge.thermo{background:rgba(232,122,75,0.15);color:#e87a4b;border:1px solid rgba(232,122,75,0.3);}
+.subject-badge.pneu{background:rgba(63,214,200,0.15);color:var(--pneu);border:1px solid rgba(63,214,200,0.3);}
 
 @media(max-width:600px){
   .mode-grid{grid-template-columns:1fr;}
@@ -393,6 +401,12 @@ main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
       <div class="subject-desc">Combustions, cycles moteurs, indice d'octane et thermodynamique appliquée</div>
       <div class="subject-count">Questions théorie · 4 examens</div>
     </div>
+    <div class="subject-card pneu" onclick="selectSubject('pneu')">
+      <span class="subject-icon">⚙️</span>
+      <div class="subject-title">Pneumatique</div>
+      <div class="subject-desc">Logique combinatoire, technologie air comprimé et applications auto (freinage, dessicateur)</div>
+      <div class="subject-count">29 questions · 3 thèmes</div>
+    </div>
   </div>
 </div>
 
@@ -414,7 +428,13 @@ main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
         <span class="subject-icon">🔥</span>
         <div class="subject-title">Thermodynamique</div>
         <div class="subject-desc">Théorie — tous examens confondus</div>
-        <div class="subject-count">54 sous-questions · 4 examens</div>
+        <div class="subject-count">30 sous-questions · 4 examens</div>
+      </div>
+      <div class="subject-card pneu" onclick="selectSubject('pneu')">
+        <span class="subject-icon">⚙️</span>
+        <div class="subject-title">Pneumatique</div>
+        <div class="subject-desc">Logique, technologie air comprimé, applications auto</div>
+        <div class="subject-count">29 questions · 3 thèmes</div>
       </div>
     </div>
   </div>
@@ -427,24 +447,24 @@ main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
     <div class="mode-grid" id="modeGrid"></div>
   </div>
 
-  <!-- THÈME SELECT (Meca) -->
+  <!-- THÈME SELECT (Meca / Pneu) -->
   <div id="themeSelectPane" style="display:none;">
     <button class="back-btn" onclick="backToModeSelect()">← Mode</button>
-    <div class="subject-badge meca">🔧 Mécanique</div>
+    <div class="subject-badge meca" id="themePaneBadge">🔧 Mécanique</div>
     <h2 class="screen-title">CHOISIR UN <span>THÈME</span></h2>
     <p class="screen-sub" id="modeSubtitle"></p>
     <div class="difficulty-select">
       <h3>⏱ DIFFICULTÉ (Timer)</h3>
-      <div class="diff-btns">
-        <button class="diff-btn easy" onclick="setDiff('easy',this)">🟢 Facile 30s</button>
-        <button class="diff-btn normal active" onclick="setDiff('normal',this)">🟡 Normal 20s</button>
-        <button class="diff-btn hard" onclick="setDiff('hard',this)">🔴 Difficile 15s</button>
+      <div class="diff-btns" id="themeDiffBtns">
+        <button class="diff-btn easy" id="themeDiffEasy" onclick="setDiff('easy',this)">🟢 Facile 30s</button>
+        <button class="diff-btn normal active" id="themeDiffNormal" onclick="setDiff('normal',this)">🟡 Normal 20s</button>
+        <button class="diff-btn hard" id="themeDiffHard" onclick="setDiff('hard',this)">🔴 Difficile 15s</button>
         <button class="diff-btn" onclick="setDiff('none',this)">⛔ Sans</button>
       </div>
     </div>
     <div class="theme-grid" id="themeGrid"></div>
     <button class="start-selected-btn" id="startSelectedBtn" onclick="startSelectedThemes()">Sélectionne un thème</button>
-    <button class="all-themes-btn" onclick="startQuizMeca('all')" style="margin-top:0.5rem;">🚀 Tous les thèmes</button>
+    <button class="all-themes-btn" onclick="startQuizThemed('all')" style="margin-top:0.5rem;">🚀 Tous les thèmes</button>
   </div>
 
   <!-- EXAM SELECT (Thermo) -->
@@ -491,8 +511,9 @@ main{padding-top:80px;min-height:100vh;position:relative;z-index:1;}
         <div class="flashcard-a" id="fcAnswer"></div>
       </div>
       <div class="flashcard-actions" id="fcActions" style="display:none;">
-        <button class="btn-wrong" onclick="flashcardAnswer(false)">❌ Je savais pas</button>
-        <button class="btn-correct" onclick="flashcardAnswer(true)">✅ Je savais</button>
+        <button class="btn-wrong" onclick="flashcardGrade('rate')">❌ Je savais pas</button>
+        <button class="btn-correct" id="fcPartialBtn" onclick="flashcardGrade('partiel')" style="display:none;flex:1;padding:0.9rem;border-radius:12px;border:1px solid rgba(232,184,75,0.4);background:rgba(232,184,75,0.12);color:var(--accent);font-size:0.95rem;font-weight:600;">⚡ À moitié</button>
+        <button class="btn-correct" onclick="flashcardGrade('bon')">✅ Je savais</button>
       </div>
     </div>
 
@@ -908,187 +929,219 @@ const QUESTIONS_THERMO = [
    wrong:["Les molécules ont toutes la même vitesse et la même énergie cinétique à tout instant","La pression est constante quelle que soit la température pour un volume donné","Les molécules rebondissent élastiquement sur les parois sans aucune perte d'énergie"],
    blanks:[{text:"Gaz parfait : molécules sans ___ entre elles et volumes ___ négligeables.",words:["interaction","propres","liaison","molaires","collision"],answers:["interaction","propres"]}]},
 
-  // ============ SOUS-QUESTIONS APPROFONDIES — AVRIL 2026 ============
-
-  // --- CLIQUETIS APPROFONDI ---
-  {id:301,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cliquetis — Définition",
-   q:"Qu'est-ce que le cliquetis exactement ? Comment se produit-il ?",
-   a:"Auto-inflammation en masse du gaz frais (non atteint par le front de flamme) sous l'effet d'une double compression polytropique. Crée une élévation brutale de pression → détonation → bruit aigu → 2ème front de flamme.",
-   profCorrection:"Le cliquetis : auto-inflammation du gaz frais (PT commun) qui n'a pas encore été atteint par le front de flamme. L'auto-inflammation se fait en masse ce qui va créer une élévation brutale de la pression et donc une détonation. Le bruit aigu produit va créer des ondes de pression suite à la propagation du 2ème front de flammes.",
-   wrong:["Inflammation normale du mélange déclenchée par l'étincelle mais avec un léger retard de propagation","Combustion partielle du mélange causée par un manque d'oxygène dans la chambre de combustion","Vibration mécanique des soupapes sous l'effet des variations de pression dans le cylindre"],
-   blanks:[{text:"Le cliquetis = auto-inflammation en ___ du gaz ___ non atteint par le front de flamme.",words:["masse","frais","partie","brûlé","couche"],answers:["masse","frais"]}]},
-
-  {id:302,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cliquetis — Intensité",
-   q:"De quoi dépend l'intensité du cliquetis ?",
-   a:"Il sera d'autant plus fort que la masse d'air frais est grande (remplissage élevé).",
-   profCorrection:"Il sera d'autant plus fort que la masse d'air frais est grande.",
-   wrong:["Il sera d'autant plus fort que la température du liquide de refroidissement est basse","Il sera d'autant plus fort que la vitesse de rotation du moteur est élevée","Il sera d'autant plus fort que la pression d'admission est faible"],
-   blanks:[{text:"Le cliquetis est d'autant plus fort que la masse d'___ ___ est grande.",words:["air","frais","eau","chaud","huile"],answers:["air","frais"]}]},
-
-  {id:303,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cliquetis — Ondes de pression",
-   q:"Quelles sont les 2 conséquences des ondes de pression du cliquetis sur le moteur ?",
-   a:"1. Attaquer et casser la couche limite d'huile → accentue les échanges thermiques avec la paroi\n2. Casser/fragmenter les parois → risque important de surpressions locales",
-   profCorrection:"Conséquences des ondes de pression :\n1. Attaquer et casser la couche limite d'huile ce qui accentue les échanges thermiques avec la paroi\n2. Va casser/fragmenter les parois → risque important de surpressions locales",
-   wrong:["Dilater les segments et coincer le piston + déformer la jupe du piston","Endommager la pompe à huile et provoquer une chute de pression d'huile","Détruire le joint de culasse par surchauffe et provoquer une fuite d'eau"],
-   blanks:[{text:"Ondes de pression → cassent la couche ___ d'huile + risque de ___ des parois.",words:["limite","fragmentation","épaisse","fusion","protection"],answers:["limite","fragmentation"]}]},
-
-  {id:304,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cliquetis — 4 points fragiles",
-   q:"Quels sont les 4 points fragiles du moteur soumis au cliquetis ?",
-   a:"1. Le 1er segment\n2. Le joint de culasse\n3. La soupape\n4. L'isolant de la bougie",
-   profCorrection:"Les 4 points fragiles sont : le 1er segment, le joint de culasse, la soupape, l'isolant de la bougie.",
-   wrong:["Le piston, le vilebrequin, la bielle et le palier de vilbrequin","La chemise, le bloc moteur, le carter d'huile et la pompe à huile","La culasse, le collecteur d'admission, le filtre à air et l'injecteur"],
-   blanks:[{text:"4 points fragiles : 1er ___, joint de ___, soupape et isolant de la ___.",words:["segment","culasse","bougie","cylindre","piston"],answers:["segment","culasse","bougie"]}]},
-
-  {id:305,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cliquetis — Paramètres d'influence",
-   q:"Quels sont les 4 types de paramètres qui influencent le cliquetis ?",
-   a:"1. Paramètres de construction moteur : non-ajustables (chambre de combustion, place bougie, taux de compression)\n2. Paramètres de réglage : ajustables (richesse, avance à l'allumage — min richesse 1,05)\n3. Paramètres de fonctionnement : plus ou moins ajustables (régime, charge, remplissage, T° air admission, T° liquide refroidissement)\n4. Nature du carburant : ajustable",
-   profCorrection:"Les paramètres qui influencent le cliquetis :\n• Construction moteur : non-ajustable (dessin chambre combustion, place bougie, taux de compression)\n• Réglage : richesse, avance à l'allumage (minimum richesse 1,05) — ajustable\n• Fonctionnement : régime, charge, remplissage, T° air d'admission, T° liquide refroidissement — plus ou moins ajustable\n• Nature du carburant : ajustable",
-   wrong:["Uniquement le taux de compression et la nature du carburant","Seulement la richesse du mélange et l'avance à l'allumage","Le type d'huile moteur, la pression de gonflage des pneus et la charge utile"],
-   blanks:[{text:"Paramètres cliquetis : ___ moteur (fixe), ___ (richesse, avance), fonctionnement et nature du carburant.",words:["construction","réglage","dépollution","injection","allumage"],answers:["construction","réglage"]}]},
-
-  {id:306,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cliquetis — Double compression polytropique",
-   q:"Pourquoi le gaz frais subit-il une double compression polytropique lors du cliquetis ?",
-   a:"1ère compression : lors de la montée du piston (compression normale)\n2ème compression : lors de la combustion, les gaz frais sont poussés par le front de flamme dans le fond de la chambre de combustion.\nPolytropique car P(v)ⁿ = constante avec k=n",
-   profCorrection:"Le gaz frais (non atteint par le front de flamme) est soumis à 2 compressions polytropiques, la première intervenant pendant la montée du piston et la seconde pendant la combustion lorsqu'ils sont poussés par le front de la flamme dans le fond de la chambre de combustion.\nPolytropique : P(v)ⁿ = constante avec k=n",
-   wrong:["Une seule compression normale lors de la montée du piston, sans compression supplémentaire","Double compression isobare lors de l'admission et de la combustion simultanément","Double compression isotherme due à la chaleur des parois chaudes agissant sur le gaz frais"],
-   blanks:[{text:"1ère compression : montée du ___. 2ème compression : gaz frais poussés par le ___ de flamme.",words:["piston","front","vilebrequin","fond","segment"],answers:["piston","front"]}]},
-
-  // --- PRÉ-ALLUMAGE APPROFONDI ---
-  {id:307,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Pré-allumage — Mécanisme d'aggravation",
-   q:"Pourquoi le pré-allumage s'aggrave-t-il de lui-même une fois déclenché ?",
-   a:"L'allumage se produisant plus tôt dans le cycle, les températures des parois de la chambre augmentent, en particulier celle du point chaud. L'allumage se fait alors encore plus tôt → phénomène s'accentue → peut provoquer la casse du moteur par serrage ou la fonte du piston.",
-   profCorrection:"L'allumage se produisant plus tôt dans le cycle, les températures des parois de la chambre augmentent, en particulier celle du point chaud. L'allumage se fait alors encore plus tôt, le phénomène s'accentue de plus en plus pouvant provoquer la casse du moteur par serrage ou la fonte du piston.",
-   wrong:["Le pré-allumage ne s'aggrave pas seul, il reste stable jusqu'à ce que le conducteur coupe le moteur","Il s'aggrave car l'essence restante s'auto-enflamme uniquement lors des cycles suivants","Il s'aggrave car la richesse du mélange augmente automatiquement lors des cycles de pré-allumage"],
-   blanks:[{text:"Pré-allumage → parois plus ___ → allumage encore plus ___ → phénomène s'accentue.",words:["chaudes","tôt","froides","tard","lisses"],answers:["chaudes","tôt"]}]},
-
-  {id:308,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Pré-allumage — Localisation",
-   q:"Où le pré-allumage apparaît-il le plus souvent et pourquoi ?",
-   a:"Sur l'isolant de la bougie car c'est l'endroit où la température est la plus élevée et pendant le plus longtemps dans le moteur. La température de peau = aptitude à déclencher du pré-allumage.",
-   profCorrection:"Apparaît le plus souvent sur l'isolant de la bougie car c'est l'endroit où la température est le plus élevée et pendant le plus longtemps dans le moteur. Température de peau = aptitude à déclencher du pré-allumage.",
-   wrong:["Sur le joint de culasse car c'est la pièce la plus exposée aux variations de température","Sur le 1er segment car il est le plus proche des gaz de combustion chauds","Sur la soupape d'échappement car elle est en contact direct avec les gaz brûlés les plus chauds"],
-   blanks:[{text:"Pré-allumage le plus souvent sur l'___ de la bougie → T° la plus ___ et la plus longtemps.",words:["isolant","élevée","électrode","faible","vissage"],answers:["isolant","élevée"]}]},
-
-  // --- RÉ-ALLUMAGE APPROFONDI ---
-  {id:309,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Ré-allumage — 2 types",
-   q:"Quels sont les 2 types de ré-allumage ? Lequel est le plus fréquent ?",
-   a:"1. Par compression (le plus fréquent) : moteur très lent + fort remplissage + parois chaudes → combustion lente = flamme froide (forte pression, faible température)\n2. Par point chaud (le plus rare) : sorte de pré-allumage à très bas régime, point chaud créé par fonctionnement préalable à forte charge",
-   profCorrection:"Ré-allumage par compression (le plus fréquent) : le moteur tourne très lentement, à un très bon remplissage et les gaz sont soumis à une forte compression dans la chambre où les parois sont encore très chaudes → combustion lente appelée flamme froide (forte pression, faible température).\nRé-allumage par point chaud (le plus rare) : sorte de pré-allumage à très bas régime.",
-   wrong:["Par oxydation (le plus fréquent) et par rayonnement (le plus rare)","Par surchauffe (le plus fréquent) et par court-circuit électrique (le plus rare)","Par surcompression (le plus fréquent) et par explosion de carburant résiduel (le plus rare)"],
-   blanks:[{text:"Ré-allumage par ___ (plus fréquent) → flamme ___. Par point ___ (plus rare).",words:["compression","froide","chaud","chaude","détente"],answers:["compression","froide","chaud"]}]},
-
-  {id:310,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Ré-allumage — Remède pratique",
-   q:"Comment éliminer pratiquement le ré-allumage ?",
-   a:"Une fermeture plus complète du papillon ou mieux, un dispositif de coupure d'arrivée d'essence, permettent d'éliminer le ré-allumage.",
-   profCorrection:"Dans la pratique : une fermeture plus complète du papillon ou mieux, un dispositif de coupure d'arrivée d'essence, permettent d'éliminer le ré-allumage.",
-   wrong:["En augmentant le régime moteur pour évacuer la chaleur plus rapidement","En enrichissant le mélange pour refroidir la chambre par effet d'évaporation","En coupant l'allumage électronique et en laissant tourner le moteur à vide"],
-   blanks:[{text:"Remède ré-allumage : fermeture du ___ ou coupure d'arrivée d'___.",words:["papillon","essence","collecteur","air","refroidissement"],answers:["papillon","essence"]}]},
-
-  // --- INDICE D'OCTANE APPROFONDI (correction du bug avril2026) ---
-  {id:311,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Indice d'octane — Définition",
-   q:"Que mesure l'indice d'octane d'un carburant ?",
-   a:"L'indice d'octane exprime la résistance à l'auto-inflammation d'un carburant. Plus l'IO est élevé, mieux le carburant résiste au cliquetis.",
-   profCorrection:"L'indice d'octane exprime la résistance à l'auto-inflammation d'un carburant. La valeur 0 (heptane) est la valeur d'un carburant qui s'auto-enflamme très facilement tandis qu'un indice d'octane de 100 (iso-octane) est un carburant qui résiste bien à l'auto-inflammation.",
-   wrong:["L'indice d'octane mesure le pouvoir calorifique du carburant en MJ/kg","L'indice d'octane mesure la viscosité du carburant à 20°C","L'indice d'octane mesure le taux de soufre présent dans le carburant"],
-   blanks:[{text:"IO = résistance à l'___. Heptane = IO ___. Iso-octane = IO ___.",words:["auto-inflammation","0","100","50","cliquetis"],answers:["auto-inflammation","0","100"]}]},
-
-  {id:312,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Indice d'octane — 2 valeurs",
-   q:"Il existe 2 valeurs d'indice d'octane pour un même carburant. Lesquelles ?",
-   a:"1. L'indice recherche : mesuré en laboratoire sur monocylindre normalisé\n2. L'indice moteur : mesuré sur des essais routiers\nLes tests sont réalisés sur des monocylindres normalisés.",
-   profCorrection:"Il en existe 2 pour un même carburant : un qui a été fait en laboratoire et l'autre qui a été fait sur des essais routiers. Les tests sont réalisés sur des monocylindres normalisés.",
-   wrong:["IO minimum et IO maximum, mesurés à froid et à chaud sur le même monocylindre","IO théorique (calculé) et IO pratique (mesuré sur le véhicule en conditions réelles)","IO de base et IO amélioré, avant et après ajout d'additifs antidétonants"],
-   blanks:[{text:"2 IO : indice ___ (labo) et indice ___ (essais routiers).",words:["recherche","moteur","théorique","pratique","minimum"],answers:["recherche","moteur"]}]},
-
-  {id:313,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Indice d'octane — Calcul",
-   q:"Comment calcule-t-on l'IO d'un carburant contenant 80% d'iso-octane et 20% d'heptane ?",
-   a:"IO = 80. Par définition, l'IO correspond directement au pourcentage d'iso-octane dans le mélange. Heptane = IO 0, Iso-octane = IO 100.",
-   profCorrection:"Un carburant qui comporte 20% d'heptane et 80% d'iso-octane aura par définition un indice d'octane de 80.",
-   wrong:["IO = (80+100)/2 = 90 (moyenne entre les deux composants)","IO = 20 (correspondant au % d'heptane, le composant le moins résistant)","IO = (0,8×100 + 0,2×0)/2 = 40 (calcul pondéré divisé par 2)"],
-   blanks:[{text:"80% iso-octane + 20% heptane → IO = ___.",words:["80","20","60","100","40"],answers:["80"]}]},
-
-  // --- CYCLE DE BEAU DE ROCHAS ---
-  {id:314,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cycle de Beau de Rochas — Structure",
-   q:"De quoi est composé le cycle de Beau de Rochas (Otto) ?",
-   a:"2 adiabatiques + 2 isochores. Apport et perte de chaleur à volume constant. Cycle moteur = horlogique dans le diagramme de Clapeyron.",
-   profCorrection:"Le cycle de Beau de Rochas : apport et perte de chaleur à volume constant. Composé de 2 adiabatiques + 2 isochores. T1 est la + froide et T3 est la + chaude.",
-   wrong:["2 isothermes + 2 adiabatiques (cycle de Carnot)","1 adiabatique + 1 isobare + 1 adiabatique + 1 isochore (cycle Diesel)","2 isobares + 2 isochores (cycle Brayton)"],
-   blanks:[{text:"Beau de Rochas = 2 ___ + 2 ___. Chaleur à volume ___.",words:["adiabatiques","isochores","isobares","constant","variable"],answers:["adiabatiques","isochores","constant"]}]},
-
-  {id:315,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cycle de Beau de Rochas — Rendement",
-   q:"De quoi dépend uniquement le rendement théorique du cycle de Beau de Rochas ?",
-   a:"Il ne dépend que du rapport volumétrique de compression ε. η = 1 - 1/(ε^(γ-1)). Plus ε est grand, plus le rendement est élevé.",
-   profCorrection:"On peut donc affirmer qu'il ne dépend que du rapport volumétrique de compression. η = 1 - 1/(ε^(γ-1)). T1 est la + froide et T3 est la + chaude.",
-   wrong:["Du couple moteur et de la cylindrée totale du moteur","De la pression maximale atteinte en fin de combustion","De la température d'admission et de la nature du carburant utilisé"],
-   blanks:[{text:"η Beau de Rochas = 1 - 1/(ε^(___-1)). Ne dépend que du rapport ___ ε.",words:["γ","volumétrique","2","thermique","isobare"],answers:["γ","volumétrique"]}]},
-
-  {id:316,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Cycle de Beau de Rochas — Pression d'admission",
-   q:"Quel est l'effet d'une variation de pression d'admission sur le cycle de Beau de Rochas ?",
-   a:"On ne fait que monter ou descendre le cycle dans le diagramme. Seules les pressions sont multipliées par Pa, les températures et le rendement restent inchangés.",
-   profCorrection:"L'influence de la pression d'admission : on ne fait que le monter ou le descendre donc seules les pressions sont multipliées par Pa, les T° et le rendement restent inchangés.",
-   wrong:["Le rendement augmente proportionnellement à la pression d'admission (turbo = meilleur rendement)","Les températures et pressions augmentent mais le rendement reste identique","Tout le cycle est modifié : pressions, températures et rendement changent simultanément"],
-   blanks:[{text:"↑ pression admission → seules les ___ multipliées par Pa. T° et ___ restent inchangés.",words:["pressions","rendement","volumes","vitesses","couples"],answers:["pressions","rendement"]}]},
-
-  // --- DISSOCIATION MOLÉCULAIRE ---
-  {id:317,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Dissociation moléculaire",
-   q:"Qu'est-ce que la dissociation moléculaire et quelle est la notion de réaction 'gelée' ?",
-   a:"À haute T°, les molécules se brisent → formation de NOx (réaction endothermique). Quand T° diminue, certaines réactions ne fonctionnent plus → elles sont dites 'gelées' → les NOx ne peuvent plus être détruits. Explique l'influence de l'humidité de l'air et de la recirculation des gaz d'échappement.",
-   profCorrection:"La combustion entraîne des T° suffisamment élevées pour briser les molécules : atomes d'azote et d'oxygène s'associent en oxydes d'azote (NOx) → réaction endothermique. Certaines réactions ne fonctionnent plus quand les T° diminuent → 'gelées' → les NOx ne peuvent plus être détruits.",
-   wrong:["La dissociation = séparation des molécules d'eau en H₂ et O₂ sous l'effet de la pression","La dissociation = rupture des liaisons carbone-hydrogène du carburant lors de l'injection","Les réactions gelées = réactions qui ont lieu uniquement à basse température dans le moteur froid"],
-   blanks:[{text:"Dissociation → formation de ___ (réaction endo). Quand T°↓ : réactions ___ → NOx non détruits.",words:["NOx","gelées","CO₂","actives","H₂O"],answers:["NOx","gelées"]}]},
-
-  // --- TRANSFERTS DE CHALEUR ---
-  {id:318,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Transferts de chaleur — 3 types",
-   q:"Quels sont les 3 types de transfert de chaleur ? Donnez une caractéristique de chacun.",
-   a:"1. Conduction : dans la matière ou entre 2 parois en contact\n2. Convection : entre 2 matériaux en mouvement relatif\n3. Rayonnement : à distance → la quantité du transfert dépend de la température (T°)",
-   profCorrection:"Différents types de transfert de chaleur :\n- Conduction : dans la matière ou entre 2 parois\n- Convection : entre 2 matériaux en mouvement relatif\n- Rayonnement : à distance → la quantité du transfert dépend de la T°",
-   wrong:["Absorption, émission et réflexion (lois du rayonnement de Planck)","Évaporation, condensation et sublimation (changements d'état)","Diffusion, osmose et convection forcée (transferts en milieu liquide)"],
-   blanks:[{text:"3 transferts : ___ (dans la matière), ___ (mouvement relatif), rayonnement (à distance).",words:["conduction","convection","diffusion","absorption","émission"],answers:["conduction","convection"]}]},
-
-  // --- GAZ PARFAIT APPROFONDI ---
-  {id:319,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Gaz parfait — Loi",
-   q:"Donnez la loi des gaz parfaits et ses deux formulations.",
-   a:"p·V = n·R·T (avec n = nombre de moles, R = 8,31 J/(mol·K))\np·V = m·r·T (avec m = masse, r = constante spécifique)\nr = cp - cv (relation de Mayer)\nγ = cp/cv (coefficient de Poisson)",
-   profCorrection:"Loi des gaz parfaits : p·V = n·R·T = m·R·T. R = 8,31 J/(mol·K). r = cp - cv. γ = cp/cv.",
-   wrong:["p·V = n·R²·T (avec R au carré) et p·V = m·r²·T","p/V = n·R·T et V/p = m·r·T (formulations inverses)","p·V = n·R·T seulement pour les gaz monoatomiques, pas pour les diatomiques"],
-   blanks:[{text:"Gaz parfait : p·V = n·R·T. R = ___ J/(mol·K). γ = cp/___.",words:["8,31","cv","8,32","cp","0"],answers:["8,31","cv"]}]},
-
-  {id:320,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Gaz parfait — Validité",
-   q:"Dans quelles conditions le modèle du gaz parfait est-il valide ? Et quand est-il moins valide ?",
-   a:"Valide à basse pression et température modérée.\nMoins valide à haute pression ou basse température car les interactions moléculaires et les volumes propres deviennent significatifs.",
-   profCorrection:"Cette hypothèse est réaliste à basse pression et température modérée mais moins valide à haute pression ou basse T° car les interactions moléculaires et les volumes propres deviennent significatifs.",
-   wrong:["Valide uniquement pour les gaz monoatomiques, jamais pour les gaz diatomiques","Valide à haute pression et basse température, moins valide à basse pression","Toujours valide quelles que soient les conditions de pression et de température"],
-   blanks:[{text:"Gaz parfait valide à basse ___ et T° modérée. Moins valide à haute ___ ou basse T°.",words:["pression","pression","température","vitesse","masse"],answers:["pression","pression"]}]},
-
-  // --- COMBUSTION NORMALE APPROFONDIE ---
-  {id:321,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Combustion normale — Caractéristiques",
-   q:"Quelles sont les 3 caractéristiques principales d'une combustion normale ?",
-   a:"1. Réaction chimique exothermique complète : CH + O₂ → CO + CO₂ + H₂O + NOX\n2. Expansions moléculaires du mélange stœchiométrique (~5%)\n3. Vitesse du front de flamme variable : VFF = Veyn + Vdyn",
-   profCorrection:"La combustion normale :\n- Réactions chimiques exothermiques : CH + O₂ → CO + CO₂ + H₂O + NOX\n- Expansions moléculaires\n- Vitesses de front de flammes variables",
-   wrong:["Réaction endothermique, sans expansion moléculaire, à vitesse de flamme constante","Réaction exothermique incomplète produisant du CO et des suies sans expansion moléculaire","Réaction à pression constante, avec implosion moléculaire et front de flamme fixe"],
-   blanks:[{text:"Combustion normale : réaction ___, expansion moléculaire ~5%, vitesse front flamme ___.",words:["exothermique","variable","endothermique","constante","nulle"],answers:["exothermique","variable"]}]},
-
-  {id:322,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Fin de combustion — Gaz d'échappement",
-   q:"Que se passe-t-il en fin de combustion lors de la descente du piston ?",
-   a:"Les pressions et températures diminuent et certaines réactions de combustion sont figées avant d'avoir pu se terminer complètement. On retrouve donc dans les gaz d'échappement des hydrocarbures imbrûlés + du CO₂ + des NOX.",
-   profCorrection:"Lorsque le piston redescend, les pressions et températures des gaz dans la chambre diminuent et certaines réactions de combustion sont figées avant même d'avoir pu se terminer complètement. On retrouve donc dans les gaz d'échappement des hydrocarbures imbrûlés + du CO₂ + des NOX.",
-   wrong:["Toutes les réactions se terminent parfaitement → gaz d'échappement composés uniquement de CO₂ et H₂O","La combustion s'accélère lors de la détente → meilleur rendement et gaz propres","Les NOX sont détruits lors de la descente du piston car la température chute rapidement"],
-   blanks:[{text:"Descente piston → T° et P diminuent → réactions ___ → hydrocarbures ___ dans l'échappement.",words:["figées","imbrûlés","actives","brûlés","stables"],answers:["figées","imbrûlés"]}]},
-
-  // --- 1ER PRINCIPE ---
-  {id:323,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"1er Principe — Cycle complet",
-   q:"Qu'est-ce que le 1er principe de la thermodynamique pour un cycle complet ?",
-   a:"ΔU_cycle = 0 (retour à l'état initial). Donc W_cycle + Q_cycle = 0 → W_cycle = -Q_cycle.",
-   profCorrection:"Pour un cycle complet : ΔU = 0 → W_cycle + Q_cycle = 0 → W_cycle = -Q_cycle.",
-   wrong:["ΔU_cycle = Q_cycle (le travail est toujours nul pour un cycle complet)","W_cycle = Q_cycle (travail égal à la chaleur, sans signe)","ΔU_cycle = W_cycle (la chaleur échangée est toujours nulle pour un cycle)"],
-   blanks:[{text:"Cycle complet : ΔU = ___. Donc W_cycle = -___.",words:["0","Q_cycle","1","W_cycle","ΔU"],answers:["0","Q_cycle"]}]},
-
-  // --- BIELLE-MANIVELLE ---
-  {id:324,subject:'thermo',exam:'avril2026',examLabel:'Avril 2026 (Dispense)',theme:"Système bielle-manivelle",
-   q:"Le système bielle-manivelle est-il encore justifié sur un moteur thermique ? Pourquoi ?",
-   a:"Oui, ce système est toujours justifié car simple, robuste et efficace pour convertir le mouvement alternatif du piston en mouvement rotatif de l'arbre moteur.",
-   profCorrection:"Oui ce système est toujours justifié car simple, robuste et efficace pour convertir le mouvement du piston en mouvement rotatif de l'arbre moteur.",
-   wrong:["Non, il est remplacé progressivement par des moteurs linéaires plus efficaces","Oui mais uniquement sur les moteurs diesel, pas sur les moteurs essence","Non, les pertes par frottement le rendent trop inefficace par rapport aux moteurs électriques"],
-   blanks:[{text:"Bielle-manivelle : ___, robuste et efficace pour convertir mouvement ___ en rotatif.",words:["simple","alternatif","complexe","circulaire","oscillant"],answers:["simple","alternatif"]}]},
 ];
+
+// ===================== DATA : PNEUMATIQUE =====================
+const QUESTIONS_PNEU = [
+
+  // ---------- THÈME 1 : LOGIQUE COMBINATOIRE ----------
+  {id:301,subject:'pneu',theme:"Logique combinatoire",
+   q:"Quelles sont les fonctions logiques de base à 1 entrée (OUI et NON) ?",
+   a:"OUI (identité / recopie) : S = a, la sortie recopie l'entrée. NON (inverseur / complément) : S = ā, la sortie est l'inverse de l'entrée.",
+   profCorrection:"OUI (identité) : S = a — la sortie vaut exactement l'entrée.\nNON (inverseur) : S = ā — la sortie est le complément de l'entrée (1→0, 0→1).",
+   wrong:["OUI : S = ā (inverse l'entrée) · NON : S = a (recopie l'entrée)","OUI : S = a+1 (toujours vrai) · NON : S = a.0 (toujours faux)","OUI et NON sont identiques, les deux recopient simplement l'entrée a"],
+   blanks:[{text:"La fonction OUI recopie l'entrée : S = ___. La fonction NON inverse l'entrée : S = ___.",words:["a","ā","1","0","a+b"],answers:["a","ā"]}]},
+
+  {id:302,subject:'pneu',theme:"Logique combinatoire",
+   q:"Différence entre la fonction ET (AND) et la fonction OU (OR) ?",
+   a:"ET : S = a.b — la sortie vaut 1 seulement si TOUTES les entrées valent 1. OU : S = a+b — la sortie vaut 1 si AU MOINS UNE entrée vaut 1.",
+   profCorrection:"Fonction ET (produit logique) : S = a.b. Sortie à 1 uniquement si toutes les entrées sont à 1.\nFonction OU (somme logique) : S = a+b. Sortie à 1 dès qu'au moins une entrée est à 1.",
+   wrong:["ET : S à 1 si au moins une entrée à 1 · OU : S à 1 si toutes les entrées à 1","ET : S = a+b · OU : S = a.b (les notations sont inversées)","ET et OU donnent la même table de vérité, seule la notation change"],
+   blanks:[{text:"ET : sortie à 1 si ___ les entrées sont à 1 (S = a.___ b). OU : sortie à 1 si ___ une entrée est à 1.",words:["toutes","au moins","point","aucune","plus"],answers:["toutes","point","au moins"]}]},
+
+  {id:303,subject:'pneu',theme:"Logique combinatoire",
+   q:"Qu'est-ce que la fonction OU exclusif (XOR) ?",
+   a:"S = a⊕b = a.b̄ + ā.b. La sortie vaut 1 si les deux entrées sont DIFFÉRENTES, et 0 si elles sont identiques. C'est le détecteur de différence / d'inégalité.",
+   profCorrection:"OU exclusif (XOR) : S = a⊕b = a.b̄ + ā.b.\nLa sortie est à 1 uniquement quand les entrées sont différentes (01 ou 10), et à 0 quand elles sont égales (00 ou 11).",
+   wrong:["S = a.b : la sortie est à 1 quand les deux entrées sont identiques et à 1","S = a+b : la sortie est à 1 dès qu'au moins une entrée est à 1","Le OU exclusif est à 1 quand les deux entrées valent 1 simultanément"],
+   blanks:[{text:"Le OU exclusif vaut 1 quand les entrées sont ___ : S = a.b̄ + ___.b. Il vaut 0 si elles sont ___.",words:["différentes","ā","identiques","égales","a"],answers:["différentes","ā","identiques"]}]},
+
+  {id:304,subject:'pneu',theme:"Logique combinatoire",
+   q:"Que sont les fonctions ET-NON (NAND) et OU-NON (NOR) ?",
+   a:"ET-NON (NAND) : S = ¬(a.b) — c'est un ET suivi d'un inverseur. OU-NON (NOR) : S = ¬(a+b) — c'est un OU suivi d'un inverseur. Ce sont des fonctions universelles (on peut tout construire avec).",
+   profCorrection:"ET-NON (NAND) : S = (a.b)‾ — sortie inverse de la fonction ET.\nOU-NON (NOR) : S = (a+b)‾ — sortie inverse de la fonction OU.\nCe sont des portes universelles : NAND ou NOR seuls suffisent à réaliser toute fonction logique.",
+   wrong:["NAND : S = a.b (un simple ET) · NOR : S = a+b (un simple OU)","NAND : S = ā.b̄ · NOR : S = ā+b̄ (chaque entrée est inversée séparément)","NAND et NOR ne s'appliquent qu'à une seule entrée comme l'inverseur"],
+   blanks:[{text:"Le ET-NON est un ET suivi d'un ___ : S = (a.b)‾. Le OU-NON est un ___ suivi d'un inverseur.",words:["inverseur","OU","ET","ressort","amplificateur"],answers:["inverseur","OU"]}]},
+
+  {id:305,subject:'pneu',theme:"Logique combinatoire",
+   q:"En quoi consiste la fonction INHIBITION ?",
+   a:"S = a.b̄ : la sortie recopie l'entrée a, SAUF si l'entrée d'inhibition b est active (b=1), auquel cas la sortie est forcée à 0. b « interdit » le passage de a.",
+   profCorrection:"Inhibition : S = a.b̄.\nLe signal a passe vers la sortie tant que l'entrée d'inhibition b est à 0. Dès que b = 1, la sortie est bloquée (forcée à 0), quelle que soit la valeur de a.",
+   wrong:["S = a+b̄ : la sortie est à 1 sauf si a et b sont tous deux à 0","S = a.b : la sortie ne passe que si les deux entrées sont actives","L'inhibition force toujours la sortie à 1 quelle que soit l'entrée a"],
+   blanks:[{text:"Inhibition : S = a.___ . Le signal a passe sauf si l'entrée d'inhibition b vaut ___, qui force la sortie à ___.",words:["b̄","1","0","ā","b"],answers:["b̄","1","0"]}]},
+
+  {id:306,subject:'pneu',theme:"Logique combinatoire",
+   q:"Énoncez les deux lois de De Morgan.",
+   a:"Loi 1 : (a.b)‾ = ā + b̄ (le complément d'un produit = somme des compléments). Loi 2 : (a+b)‾ = ā.b̄ (le complément d'une somme = produit des compléments).",
+   profCorrection:"De Morgan :\n• (a.b)‾ = ā + b̄ — la négation d'un ET devient un OU des négations.\n• (a+b)‾ = ā.b̄ — la négation d'un OU devient un ET des négations.\nEn pratique : on « casse la barre » et on change l'opérateur (. ↔ +).",
+   wrong:["(a.b)‾ = ā.b̄ et (a+b)‾ = ā+b̄ (on inverse les variables sans changer l'opérateur)","(a.b)‾ = a+b et (a+b)‾ = a.b (on change juste l'opérateur sans inverser)","De Morgan ne s'applique qu'aux fonctions à une seule variable"],
+   blanks:[{text:"De Morgan : (a.b)‾ = ā ___ b̄ et (a+b)‾ = ā ___ b̄. On casse la barre et on change l'___.",words:["+",".","opérateur","variable","=","ressort"],answers:["+",".","opérateur"]}]},
+
+  {id:307,subject:'pneu',theme:"Logique combinatoire",
+   q:"À quoi sert le tableau de Karnaugh et quelle est sa règle d'adjacence ?",
+   a:"Il sert à simplifier graphiquement une fonction logique. Les cases sont disposées en code de Gray (un seul bit change entre deux cases voisines), ce qui rend adjacentes les cases différant d'une variable. On regroupe les 1 (ou les 0) en blocs de 2ⁿ cases (1, 2, 4, 8...) les plus grands possibles ; chaque groupe élimine les variables qui changent.",
+   profCorrection:"Le tableau de Karnaugh simplifie une équation logique sans calcul algébrique lourd.\nLes lignes/colonnes suivent le code de Gray (un seul bit change à la fois) → les cases voisines ne diffèrent que d'une variable.\nOn regroupe les 1 (forme disjonctive) ou les 0 (forme conjonctive) en paquets de 2ⁿ cases, aussi grands que possible. Dans chaque groupe, les variables qui changent d'état disparaissent ; restent celles qui sont constantes.",
+   wrong:["Le tableau de Karnaugh sert à mesurer la pression d'air dans un circuit pneumatique","Les cases suivent l'ordre binaire naturel (00,01,10,11) et on regroupe par 3 cases","Karnaugh sert à tracer la courbe de compression d'un gaz en fonction du volume"],
+   blanks:[{text:"Karnaugh utilise le code de ___ (un seul ___ change entre cases voisines). On regroupe les 1 par paquets de ___ cases.",words:["Gray","bit","2ⁿ","Boole","3","octet"],answers:["Gray","bit","2ⁿ"]}]},
+
+  {id:308,subject:'pneu',theme:"Logique combinatoire",
+   q:"Différence entre forme canonique disjonctive et forme canonique conjonctive ?",
+   a:"Disjonctive (somme de produits) : on regroupe les 1 du tableau → Y = somme de termes ET. Conjonctive (produit de sommes) : on regroupe les 0 → Y = produit de termes OU. La plus simple des deux est celle qui donne le moins de termes/variables.",
+   profCorrection:"Forme disjonctive (somme de produits, SOP) : obtenue en regroupant les « 1 ». Résultat = OU de termes ET.\nForme conjonctive (produit de sommes, POS) : obtenue en regroupant les « 0 ». Résultat = ET de termes OU.\nOn retient la forme la plus simple (moins de portes/variables) pour le câblage.",
+   wrong:["Disjonctive : on regroupe les 0 · Conjonctive : on regroupe les 1 (c'est l'inverse)","Disjonctive = produit de sommes · Conjonctive = somme de produits","Les deux formes donnent toujours strictement le même nombre de termes"],
+   blanks:[{text:"La forme disjonctive regroupe les ___ (somme de produits). La forme conjonctive regroupe les ___ (produit de ___).",words:["1","0","sommes","produits","2"],answers:["1","0","sommes"]}]},
+
+  {id:309,subject:'pneu',theme:"Logique combinatoire",examLabel:"Juin 2021 — Q1",
+   q:"Examen Q1 — Karnaugh 4 variables. Mintermes : a.b.c̄.d̄ + a.b̄.c̄.d̄ + ā.b̄.c̄.d + a.b̄.c̄.d + a.b.c.d + a.b̄.c.d + a.b.c.d̄ + a.b̄.c.d̄ = 1. Donne la forme canonique disjonctive (regroupement des 1).",
+   a:"Réponse-clé : Y = a + b̄.c̄.d  ⚠️ PIÈGE : cette forme n'est exacte QUE si le minterme a.b.c̄.d (1101) est aussi un 1 (9ᵉ minterme). Avec STRICTEMENT les 8 mintermes ci-dessus, « a » couvre aussi la case 1101 (qui vaut 0) → la forme exacte minimale est alors Y = a.d̄ + a.c + b̄.c̄.d. Erreur étudiant fréquente confondue ici : la copie « a.d̄ + b̄.c̄.d + a.c » est en réalité juste pour 8 mintermes.",
+   profCorrection:"Cases à 1 : {1, 8, 9, 10, 11, 12, 14, 15} (a est le bit de poids fort, d le poids faible).\n\n▶ FORME DU CORRIGÉ : Y = a + b̄.c̄.d.\nElle suppose que la case 1101 (a.b.c̄.d, minterme 13) vaut aussi 1 — soit un 9ᵉ minterme, soit un « don't care ». Dans ce cas « a » couvre toute la moitié a=1 (8→15) + b̄.c̄.d couvre la case isolée 0001.\n\n▶ FORME EXACTE pour les 8 mintermes seuls : Y = a.d̄ + a.c + b̄.c̄.d.\nLe groupe « a » seul est interdit car la case 1101 (=0) y tomberait. On prend alors a.d̄ (8,10,12,14), a.c (10,11,14,15) et b̄.c̄.d (1,9).\n\n⚠️ La copie étudiant « a.d̄ + b̄.c̄.d + a.c » correspond donc à la forme exacte 8-mintermes (elle est juste), pas à une faute — la « faute » n'apparaît que si on attendait Y = a (avec la case 1101 sous-entendue à 1). Vérifie l'énoncé officiel pour savoir si la case 1101 est bien un minterme.",
+   wrong:["Y = a.b + c.d : il suffit de regrouper les coins opposés du tableau","Y = ā + b.c.d̄ : on regroupe la moitié a=0 et la case restante","Y = b̄.c̄ + a.b : deux groupes de quatre cases suffisent toujours"],
+   blanks:[{text:"Corrigé : Y = a + b̄.c̄.d (si la case 1101 vaut ___). Forme exacte 8 mintermes : Y = a.___ + a.c + b̄.c̄.d.",words:["1","d̄","0","b","d"],answers:["1","d̄"]}]},
+
+  {id:310,subject:'pneu',theme:"Logique combinatoire",examLabel:"Juin 2021 — Q1d",
+   q:"Examen Q1d — Entre la forme disjonctive et la forme conjonctive de ce Karnaugh, laquelle est la plus simple ?",
+   a:"La forme canonique DISJONCTIVE est la plus simple (moins de termes et de variables que le produit de sommes obtenu à partir des 0 des colonnes ab=00 et 01). Réponse attendue : disjonctive.",
+   profCorrection:"La forme disjonctive est la plus simple → réponse : DISJONCTIVE.\nLa conjonctive (produit de sommes construit à partir des 0 des colonnes ab=00 et ab=01) comporte davantage de facteurs, donc plus de portes au câblage.",
+   wrong:["La conjonctive est la plus simple car elle n'utilise que des sommes","Les deux formes ont rigoureusement la même complexité, on choisit au hasard","La forme la plus simple est toujours la conjonctive en logique pneumatique"],
+   blanks:[{text:"La forme la plus simple ici est la forme ___ (moins de termes que le ___ de sommes).",words:["disjonctive","produit","conjonctive","somme","double"],answers:["disjonctive","produit"]}]},
+
+  {id:311,subject:'pneu',theme:"Logique combinatoire",examLabel:"Juin 2021 — Q2",
+   q:"Examen Q2 — Simplifie mathématiquement : Y = a.b + a.b̄ + (a+b).(ā.b̄)‾",
+   a:"Y = a + b. Étapes : (ā.b̄)‾ = a + b (De Morgan), donc (a+b).(a+b) = (a+b). On a alors Y = a.b + a.b̄ + (a+b) = a.(b+b̄) + a + b = a + a + b = a + b.",
+   profCorrection:"Y = a.b + a.b̄ + (a+b).(ā.b̄)‾\n\n1) De Morgan : (ā.b̄)‾ = a + b.\n2) Donc (a+b).(a+b) = (a+b).\n3) Y = a.b + a.b̄ + (a+b).\n4) a.b + a.b̄ = a.(b+b̄) = a.\n5) Y = a + (a+b) = a + b.\n\nRésultat : Y = a + b → réalisé par une simple porte OU (≥1) avec entrées a et b.",
+   wrong:["Y = a.b : seuls les termes communs aux deux entrées subsistent","Y = ā + b̄ : on applique De Morgan à l'ensemble de l'expression","Y = a.b + b : le terme (a+b) se simplifie en b uniquement"],
+   blanks:[{text:"Par De Morgan (ā.b̄)‾ = ___ . Après simplification, Y = ___ , réalisée par une porte ___.",words:["a + b","a + b","OU","ET","a.b"],answers:["a + b","a + b","OU"]}]},
+
+  {id:312,subject:'pneu',theme:"Logique combinatoire",
+   q:"Quelles propriétés algébriques permettent de simplifier une équation logique ?",
+   a:"Idempotence (a+a=a ; a.a=a), complémentarité (a+ā=1 ; a.ā=0), éléments neutres/absorbants (a+0=a, a.1=a, a+1=1, a.0=0), absorption (a+a.b=a ; a.(a+b)=a), distributivité, et De Morgan. On factorise puis on élimine les termes complémentaires.",
+   profCorrection:"Propriétés clés :\n• Complémentarité : a+ā = 1 ; a.ā = 0.\n• Idempotence : a+a = a ; a.a = a.\n• Neutres/absorbants : a+0=a, a.1=a, a+1=1, a.0=0.\n• Absorption : a + a.b = a ; a.(a+b) = a.\n• Distributivité + De Morgan.\nLa méthode : factoriser (b+b̄)=1, repérer les termes complémentaires qui s'annulent, puis absorber.",
+   wrong:["a+ā = 0 et a.ā = 1 (la complémentarité donne ces valeurs)","a+a = 2a et a.a = a² (les variables logiques se cumulent)","La distributivité n'existe pas en algèbre de Boole, seul De Morgan s'applique"],
+   blanks:[{text:"Complémentarité : a + ā = ___ et a.ā = ___ . Absorption : a + a.b = ___ .",words:["1","0","a","b","ā"],answers:["1","0","a"]}]},
+
+  // ---------- THÈME 2 : TECHNOLOGIE ----------
+  {id:313,subject:'pneu',theme:"Technologie",
+   q:"Pourquoi faut-il assécher l'air comprimé dans une installation pneumatique ?",
+   a:"L'air aspiré contient de l'humidité. Comprimé puis refroidi, cet air se condense en eau dans les réservoirs, conduits et organes. L'eau provoque corrosion, gel, lessivage des lubrifiants et dysfonctionnements des vérins/distributeurs. On l'assèche pour fiabiliser le circuit.",
+   profCorrection:"L'air atmosphérique contient de la vapeur d'eau. Lors de la compression puis du refroidissement, cette vapeur se condense (l'air froid retient moins d'humidité que l'air chaud).\nL'eau ainsi formée cause : corrosion, gel en hiver, entraînement/lessivage de l'huile, grippage des organes. D'où la nécessité de sécher l'air (sécheur/dessicateur, purgeurs).",
+   wrong:["Pour augmenter la pression de service du circuit en supprimant l'air sec","Parce que l'eau améliore la lubrification mais refroidit trop les vérins","Pour rendre l'air plus dense et donc augmenter la force des vérins"],
+   blanks:[{text:"L'air comprimé puis ___ condense son humidité en ___ , qui provoque corrosion et ___ .",words:["refroidi","eau","gel","chauffé","huile"],answers:["refroidi","eau","gel"]}]},
+
+  {id:314,subject:'pneu',theme:"Technologie",
+   q:"Énoncez la loi de Boyle-Mariotte.",
+   a:"À température constante, le produit pression × volume d'une masse de gaz est constant : P.V = constante. Donc si on comprime (V diminue), la pression augmente proportionnellement.",
+   profCorrection:"Loi de Boyle-Mariotte (transformation isotherme) : à température constante, P.V = constante, soit P₁.V₁ = P₂.V₂.\nQuand le volume diminue, la pression augmente dans le même rapport.",
+   wrong:["À volume constant, P/T = constante : la pression suit la température","P.V = constante uniquement si la pression reste constante","Le produit P.T est constant quel que soit le volume du gaz"],
+   blanks:[{text:"Boyle-Mariotte : à ___ constante, P.V = ___ . Si V diminue, P ___.",words:["température","constante","augmente","pression","diminue"],answers:["température","constante","augmente"]}]},
+
+  {id:315,subject:'pneu',theme:"Technologie",
+   q:"Énoncez la loi de Gay-Lussac (et Charles) pour les gaz.",
+   a:"À volume constant, la pression est proportionnelle à la température absolue : P/T = constante (Gay-Lussac). À pression constante, le volume est proportionnel à la température : V/T = constante (Charles). Combinées avec Boyle : P.V/T = constante.",
+   profCorrection:"• Gay-Lussac (V constant) : P/T = constante → la pression croît avec la température absolue (en kelvin).\n• Charles (P constante) : V/T = constante.\n• Loi combinée des gaz parfaits : P.V/T = constante (= n.R).",
+   wrong:["À volume constant, P.T = constante : la pression baisse quand T monte","Le volume est inversement proportionnel à la température à pression constante","La température n'a aucune influence sur la pression d'un gaz enfermé"],
+   blanks:[{text:"Gay-Lussac : à volume constant, P/T = ___ . La température doit être en ___ . Loi combinée : P.V/___ = constante.",words:["constante","kelvin","T","celsius","P"],answers:["constante","kelvin","T"]}]},
+
+  {id:316,subject:'pneu',theme:"Technologie",
+   q:"Différence entre compression isotherme, adiabatique et polytropique ?",
+   a:"Isotherme : T constante (chaleur évacuée au fur et à mesure), P.V = cte, travail minimal — cas idéal lent. Adiabatique : aucun échange de chaleur, P.Vᵞ = cte, forte montée en température, travail maximal — cas idéal rapide. Polytropique : cas réel intermédiaire, P.Vⁿ = cte avec 1 < n < γ.",
+   profCorrection:"• Isotherme : température maintenue constante (toute la chaleur est évacuée). P.V = cte. Travail de compression minimal. Compression lente idéale.\n• Adiabatique : aucun échange thermique avec l'extérieur. P.Vᵞ = cte (γ = cp/cv). La température monte fortement. Travail maximal. Compression rapide idéale.\n• Polytropique : compression réelle, intermédiaire. P.Vⁿ = cte avec 1 < n < γ.",
+   wrong:["Isotherme : pas d'échange de chaleur · Adiabatique : température constante (définitions inversées)","Les trois compressions suivent toutes P.V = cte, seul le débit change","La polytropique correspond à n > γ, au-delà de l'adiabatique"],
+   blanks:[{text:"Isotherme : ___ constante, P.V = cte. Adiabatique : aucun échange de ___ , P.Vᵞ = cte. Polytropique : 1 < n < ___ .",words:["température","chaleur","γ","pression","volume"],answers:["température","chaleur","γ"]}]},
+
+  {id:317,subject:'pneu',theme:"Technologie",
+   q:"Quel est le rôle du filtre dans un circuit pneumatique ?",
+   a:"Le filtre retient les impuretés solides (poussières, particules, calamine) et sépare une partie de l'eau condensée présente dans l'air comprimé, pour protéger les organes en aval (distributeurs, vérins). Une cuve avec purge récupère les condensats.",
+   profCorrection:"Le filtre épure l'air comprimé : il arrête les particules solides (poussières, oxydes, copeaux) et, par effet centrifuge/déflecteur, sépare une partie de l'eau qui tombe dans la cuve. La purge (manuelle ou automatique) évacue les condensats. But : protéger distributeurs et vérins.",
+   wrong:["Le filtre augmente la pression de l'air en le comprimant une seconde fois","Le filtre injecte de l'huile dans l'air pour lubrifier le circuit","Le filtre réchauffe l'air pour éviter toute condensation en aval"],
+   blanks:[{text:"Le filtre retient les ___ solides et sépare l'___ dans sa cuve, évacuée par la ___ .",words:["impuretés","eau","purge","huile","pression"],answers:["impuretés","eau","purge"]}]},
+
+  {id:318,subject:'pneu',theme:"Technologie",
+   q:"À quoi sert le détendeur-régulateur de pression ?",
+   a:"Il abaisse la pression du réseau à une valeur réglée et la maintient stable en aval malgré les variations de débit ou de pression amont. Il garantit une pression de travail constante pour les actionneurs. Souvent équipé d'un manomètre.",
+   profCorrection:"Le détendeur-régulateur fixe et stabilise la pression d'utilisation. Il réduit la pression du réseau jusqu'à la valeur de consigne et la maintient constante en aval, quelles que soient les fluctuations de débit ou de pression amont. Un manomètre affiche la pression réglée.",
+   wrong:["Il augmente la pression du réseau pour les vérins de forte puissance","Il filtre l'eau et les impuretés contenues dans l'air comprimé","Il transforme l'air comprimé en mouvement de rotation continu"],
+   blanks:[{text:"Le détendeur-régulateur ___ la pression réseau à une consigne et la maintient ___ en aval, lue sur un ___ .",words:["abaisse","constante","manomètre","augmente","variable"],answers:["abaisse","constante","manomètre"]}]},
+
+  {id:319,subject:'pneu',theme:"Technologie",
+   q:"Quel est le rôle du lubrificateur, et que regroupe l'ensemble FRL ?",
+   a:"Le lubrificateur injecte un fin brouillard d'huile dans l'air comprimé pour lubrifier les organes mobiles en aval (joints, pistons de vérins, tiroirs de distributeurs) et réduire l'usure. L'ensemble FRL = Filtre + Régulateur (détendeur) + Lubrificateur, le groupe de conditionnement d'air placé en tête d'installation.",
+   profCorrection:"Le lubrificateur ajoute un brouillard d'huile dosé à l'air comprimé : il lubrifie les pièces en mouvement (vérins, distributeurs), limitant frottement et usure.\nL'unité FRL (Filtre–Régulateur–Lubrificateur) conditionne l'air à l'entrée de l'installation : épuration, mise à pression de travail, puis lubrification.",
+   wrong:["Le lubrificateur retire l'huile de l'air pour le rendre parfaitement sec","FRL = Frein–Réservoir–Lubrificateur, un sous-ensemble du circuit de freinage","Le lubrificateur sert à refroidir l'air avant son entrée dans les vérins"],
+   blanks:[{text:"Le lubrificateur injecte un brouillard d'___ pour réduire l'usure. FRL = ___ + Régulateur + ___ .",words:["huile","Filtre","Lubrificateur","eau","Frein"],answers:["huile","Filtre","Lubrificateur"]}]},
+
+  {id:320,subject:'pneu',theme:"Technologie",
+   q:"Différence entre un vérin simple effet et un vérin double effet ?",
+   a:"Simple effet : l'air n'agit que dans un sens (course motrice) ; le retour est assuré par un ressort de rappel (ou la charge). Une seule entrée d'air. Double effet : l'air agit dans les DEUX sens (sortie ET rentrée de la tige) via deux orifices d'alimentation ; effort moteur disponible dans les deux directions.",
+   profCorrection:"• Vérin simple effet : alimenté d'un seul côté. L'air pousse le piston dans un sens (travail) ; le retour se fait par un ressort de rappel. Économe en air mais effort utile dans un seul sens.\n• Vérin double effet : deux orifices. L'air pousse alternativement de part et d'autre du piston → effort moteur à l'aller comme au retour. Plus polyvalent.",
+   wrong:["Simple effet : l'air agit dans les deux sens · Double effet : retour par ressort (définitions inversées)","Simple effet et double effet diffèrent seulement par le diamètre de la tige","Le double effet n'a qu'un orifice et le simple effet en a deux"],
+   blanks:[{text:"Le vérin simple effet revient par un ___ de rappel ; le double effet est alimenté des ___ côtés et donne un effort dans les ___ sens.",words:["ressort","deux","deux","un","ressort"],answers:["ressort","deux","deux"]}]},
+
+  {id:321,subject:'pneu',theme:"Technologie",
+   q:"Comment calcule-t-on la force (poussée) développée par un vérin ?",
+   a:"F = P × S, avec P la pression effective et S la surface du piston. À la sortie de tige : S = π.D²/4 (D = alésage). À la rentrée, la tige occupe de la place : section annulaire S = π.(D²−d²)/4 (d = diamètre tige) → force de retour plus faible. On applique un rendement (~0,85–0,95) pour les frottements.",
+   profCorrection:"Force théorique : F = P.S.\n• Course sortie (poussée) : S = π.D²/4 → F_sortie = P.π.D²/4.\n• Course rentrée (traction) : section annulaire S' = π.(D²−d²)/4 → F_rentrée plus faible car la tige réduit la surface utile.\nForce réelle = F théorique × rendement (≈ 0,85 à 0,95) pour tenir compte des frottements des joints.",
+   wrong:["F = P/S : la force est inversement proportionnelle à la surface du piston","La force de rentrée est plus grande que celle de sortie car la tige aide","F = P + S : on additionne simplement pression et surface"],
+   blanks:[{text:"Poussée d'un vérin : F = P × ___ . À la sortie S = π.D²/___ ; à la rentrée la section est ___ (à cause de la tige).",words:["S","4","annulaire","2","pleine"],answers:["S","4","annulaire"]}]},
+
+  {id:322,subject:'pneu',theme:"Technologie",
+   q:"Comment estime-t-on la consommation d'air d'un vérin double effet ?",
+   a:"Par cycle, le volume d'air balayé = surface × course (aller + retour), ramené aux conditions atmosphériques en le multipliant par le rapport de compression (P_absolue / P_atmosphérique). On multiplie ensuite par le nombre de cycles par minute pour obtenir le débit (Nl/min). La section annulaire du retour réduit légèrement le volume retour.",
+   profCorrection:"Consommation = volume balayé × taux de compression × cadence.\n• Volume balayé par cycle (double effet) ≈ S.course (aller) + S'.course (retour).\n• On le ramène à l'air libre : × (P_abs/P_atm), soit (p_relative + 1)/1.\n• × nombre de cycles/min → débit en litres normaux/min (Nl/min).\nCe débit dimensionne le compresseur et les conduites.",
+   wrong:["La consommation ne dépend que du diamètre, pas de la course ni de la pression","On divise le volume balayé par la pression pour obtenir la consommation","La consommation est nulle pour un vérin double effet car l'air est recyclé"],
+   blanks:[{text:"Consommation = volume ___ × taux de ___ × nombre de ___ par minute.",words:["balayé","compression","cycles","comprimé","tiges"],answers:["balayé","compression","cycles"]}]},
+
+  {id:323,subject:'pneu',theme:"Technologie",
+   q:"À quoi sert un distributeur et que signifie la notation « 5/2 » ?",
+   a:"Le distributeur dirige et commute l'air comprimé vers les orifices d'un actionneur (il joue le rôle d'aiguillage/interrupteur de l'air). La notation n/m : n = nombre d'orifices, m = nombre de positions. Un 5/2 a 5 orifices et 2 positions (typique pour piloter un vérin double effet) ; un 3/2 a 3 orifices et 2 positions.",
+   profCorrection:"Le distributeur est l'organe de commande qui oriente l'air vers les chambres du vérin et met à l'échappement l'autre chambre. Il « aiguille » le débit.\nNotation orifices/positions : un distributeur a/b → a orifices, b positions.\n• 3/2 : 3 orifices, 2 positions (commande vérin simple effet).\n• 5/2 : 5 orifices, 2 positions (commande vérin double effet).",
+   wrong:["5/2 signifie une pression de 5 bars maintenue pendant 2 secondes","Le premier chiffre est le nombre de positions, le second le nombre d'orifices","Un distributeur sert uniquement à filtrer l'air, pas à l'aiguiller"],
+   blanks:[{text:"Le distributeur ___ l'air vers l'actionneur. Dans « 5/2 », 5 = nombre d'___ et 2 = nombre de ___ .",words:["dirige","orifices","positions","filtre","bars"],answers:["dirige","orifices","positions"]}]},
+
+  // ---------- THÈME 3 : APPLICATIONS AUTO ----------
+  {id:324,subject:'pneu',theme:"Applications auto",examLabel:"Examen — Q3a",
+   q:"Examen Q3a — Quel est le rôle du dessicateur (sécheur d'air) sur un poids lourd ?",
+   a:"Assécher l'air comprimé fourni par le compresseur, afin d'éviter la condensation d'eau dans le circuit (réservoirs, conduits, cylindres de frein) lorsque l'air chaud se refroidit. Il protège ainsi le système de freinage pneumatique de la corrosion, du gel et des dysfonctionnements.",
+   profCorrection:"Le dessicateur assèche l'air échauffé par le compresseur afin d'éviter la condensation de l'eau qu'il contient lors du refroidissement dans les réservoirs, conduits, cylindres de frein, etc. Air sec = pas d'eau dans le circuit → pas de corrosion, pas de gel, freinage fiable.",
+   wrong:["Refroidir l'air pour augmenter la pression de freinage du poids lourd","Ajouter de l'huile dans l'air pour lubrifier les cylindres de frein","Augmenter le débit d'air vers les réservoirs en supprimant les pertes de charge"],
+   blanks:[{text:"Le dessicateur ___ l'air du compresseur pour éviter la ___ d'eau lors du ___ dans les réservoirs et cylindres de frein.",words:["assèche","condensation","refroidissement","comprime","chauffage"],answers:["assèche","condensation","refroidissement"]}]},
+
+  {id:325,subject:'pneu',theme:"Applications auto",examLabel:"Examen — Q3a",
+   q:"Examen Q3a — Annote le schéma du dessicateur : que représentent les repères 1, 3, 4, 5, 21 et 22 ?",
+   a:"1 = Arrivée d'air (en provenance du compresseur) · 3 = Drain d'évacuation de l'eau · 4 = Commande de régulation · 5 = Échappement du régulateur · 21 = Sortie vers les réservoirs · 22 = Sortie vers le réservoir de régénération.",
+   profCorrection:"Annotation du dessicateur :\n1 — Arrivée d'air (provenant du compresseur)\n3 — Drain d'évacuation de l'eau\n4 — Commande de régulation\n5 — Échappement du régulateur\n21 — Sortie vers les réservoirs\n22 — Sortie vers le réservoir de régénération",
+   wrong:["1 = sortie vers réservoirs · 3 = arrivée d'air · 5 = drain d'évacuation de l'eau","21 = arrivée du compresseur · 22 = commande de régulation · 4 = échappement","1 = échappement régulateur · 3 = sortie régénération · 4 = drain d'eau"],
+   blanks:[{text:"Repère 1 = ___ d'air (compresseur). Repère 3 = drain d'évacuation de l'___ . Repère 22 = sortie vers le réservoir de ___ .",words:["Arrivée","eau","régénération","sortie","huile"],answers:["Arrivée","eau","régénération"]}]},
+
+  {id:326,subject:'pneu',theme:"Applications auto",examLabel:"Examen — Q3b",
+   q:"Examen Q3b — Explique le fonctionnement du dessicateur (séchage et régénération).",
+   a:"Un déshydratant (dessiccant) absorbe le condensat de l'air qui le traverse. À chaque phase de décharge, la valve de drainage au fond s'ouvre et le condensat est évacué. La cartouche se régénère en faisant passer de l'air sec issu d'un réservoir dédié (régénération) à contre-courant. Une valve de protection s'ouvre si la pression dépasse ~14,3 bars, et une valve de remplissage raccordée au circuit complète l'ensemble.",
+   profCorrection:"Le dessicateur contient un déshydratant qui absorbe le condensat. À chaque phase de décharge, la valve de drainage au fond s'ouvre et le condensat est vidangé. On réalise en même temps le séchage/régénération de la masse déshydratante à l'aide de l'air d'un réservoir dédié (réservoir de régénération), ce qui empêche l'eau de geler dans les valves de drainage (un serpentin de chauffage au fond peut être prévu). Le dessicateur possède une valve de protection qui s'ouvre si la pression du système dépasse ≈ 14,3 bars, et une valve de remplissage raccordée au dessicateur via un circuit.",
+   wrong:["Il chauffe l'air en permanence pour évaporer l'eau, sans aucun déshydratant","La régénération se fait en injectant de l'eau pour nettoyer la cartouche","La valve de protection s'ouvre en dessous de 1 bar pour vidanger l'air sec"],
+   blanks:[{text:"Un ___ absorbe le condensat ; la valve de ___ au fond évacue l'eau. La ___ utilise l'air d'un réservoir dédié. La valve de protection s'ouvre vers ___ bars.",words:["déshydratant","drainage","régénération","14,3","filtre"],answers:["déshydratant","drainage","régénération","14,3"]}]},
+
+  {id:327,subject:'pneu',theme:"Applications auto",
+   q:"Quel est le principe général du freinage pneumatique sur poids lourd ?",
+   a:"Un compresseur alimente des réservoirs d'air comprimé. À l'action sur la pédale, un distributeur (valve de frein) envoie l'air comprimé vers les cylindres/récepteurs de frein de chaque roue, qui appliquent les garnitures. Le circuit est généralement double (essieux avant/arrière séparés) pour la sécurité, et l'air est asséché par le dessicateur en amont.",
+   profCorrection:"Principe : le compresseur (entraîné par le moteur) remplit des réservoirs d'air comprimé via le dessicateur. La pédale agit sur la valve de frein (distributeur), qui module la pression envoyée aux cylindres de frein de chaque essieu. La pression pousse une membrane/piston qui actionne les mâchoires ou plaquettes.\nLe circuit est dédoublé (au moins deux circuits indépendants) : en cas de défaillance d'un circuit, l'autre conserve une capacité de freinage → sécurité.",
+   wrong:["Le freinage poids lourd est purement hydraulique, sans air comprimé","Un seul circuit unique alimente toutes les roues, sans redondance de sécurité","C'est le vide (dépression) qui serre les freins, comme un servofrein essence"],
+   blanks:[{text:"Le ___ remplit des réservoirs d'air. La pédale agit sur la valve de frein qui envoie l'air aux ___ de frein. Le circuit est ___ pour la sécurité.",words:["compresseur","cylindres","double","moteur","simple"],answers:["compresseur","cylindres","double"]}]},
+
+  {id:328,subject:'pneu',theme:"Applications auto",
+   q:"Comment fonctionne le frein à ressort (cylindre tristop) et pourquoi est-il « à sécurité positive » ?",
+   a:"Dans le cylindre de frein de stationnement/secours, un puissant ressort tend à serrer le frein ; c'est la pression d'air qui comprime ce ressort et MAINTIENT le frein desserré. En cas de chute de pression (fuite, panne, coupure moteur), le ressort se détend et SERRE automatiquement les freins. La sécurité est « positive » : l'absence d'air = freins serrés, donc le véhicule ne peut pas partir librement.",
+   profCorrection:"Le cylindre à ressort (combiné service + ressort) : un ressort de forte raideur applique le frein. En fonctionnement, l'air comprimé comprime ce ressort et libère le frein (desserré). Si la pression chute (fuite, rupture de conduite, arrêt moteur, frein de parking actionné), le ressort se détend et serre les freins automatiquement.\nC'est une sécurité positive : la défaillance (perte d'air) conduit à l'état sûr (freins serrés), et non au relâchement.",
+   wrong:["L'air comprimé serre le frein et le ressort le desserre : sans air, le véhicule roule libre","Le ressort n'a qu'un rôle de rappel de pédale, sans lien avec la sécurité","Le frein à ressort se serre uniquement quand la pression dépasse le maximum"],
+   blanks:[{text:"La pression d'air comprime le ressort et maintient le frein ___ . En cas de chute de pression, le ressort ___ le frein : sécurité ___ .",words:["desserré","serre","positive","serré","négative"],answers:["desserré","serre","positive"]}]},
+
+  {id:329,subject:'pneu',theme:"Applications auto",
+   q:"Pourquoi le circuit de freinage pneumatique d'un poids lourd est-il à plusieurs réservoirs/circuits ?",
+   a:"Pour la sécurité et la disponibilité. Plusieurs réservoirs et au moins deux circuits indépendants (typiquement avant / arrière, plus stationnement et accessoires) garantissent qu'une fuite ou rupture sur un circuit ne supprime pas tout le freinage : l'autre circuit reste opérationnel. Des valves anti-retour isolent les réservoirs.",
+   profCorrection:"Le circuit est segmenté (plusieurs réservoirs + circuits indépendants : essieu AV, essieu AR, stationnement/secours, accessoires) afin d'assurer un freinage de secours en cas de défaillance d'un circuit. Des clapets anti-retour empêchent qu'une fuite vide tous les réservoirs. Objectif : sécurité (redondance) et réserve d'air suffisante.",
+   wrong:["Pour augmenter la pression maximale en additionnant celle de chaque réservoir","Parce qu'un seul gros réservoir coûterait plus cher à fabriquer","Pour pouvoir rouler sans compresseur grâce à une réserve infinie d'air"],
+   blanks:[{text:"Plusieurs circuits ___ assurent un freinage de ___ si l'un fuit. Des clapets ___-retour isolent les réservoirs.",words:["indépendants","secours","anti","communs","de service"],answers:["indépendants","secours","anti"]}]},
+
+];
+
 
 // ===================== ITEMS (CAISSES) =====================
 const ITEMS = {
@@ -1139,6 +1192,18 @@ let selectedThemes = new Set();
 let selfGradeDone = false;
 const DIFF_TIMES_MECA = {easy:30,normal:20,hard:15,none:0};
 const DIFF_TIMES_THERMO = {easy:60,normal:40,hard:25,none:0};
+const DIFF_TIMES_PNEU = {easy:45,normal:30,hard:20,none:0};
+const SUBJECT_META = {
+  meca:{label:'Mécanique',icon:'🔧',badge:'meca',times:DIFF_TIMES_MECA},
+  thermo:{label:'Thermodynamique',icon:'🔥',badge:'thermo',times:DIFF_TIMES_THERMO},
+  pneu:{label:'Pneumatique',icon:'⚙️',badge:'pneu',times:DIFF_TIMES_PNEU},
+};
+const THEME_ICONS={
+  "Fixation des essieux":"⚙️","Les suspensions":"🔧","Transmission intégrale":"🔩","Boîtes automatiques":"⚡","Boîte DSG / Double embrayage":"🎛️",
+  "Logique combinatoire":"🔢","Technologie":"🔧","Applications auto":"🚛"
+};
+// Renvoie le jeu de questions par thèmes selon la matière active (meca ou pneu)
+function getThemedQuestions(){ return currentSubject==='pneu' ? QUESTIONS_PNEU : QUESTIONS_MECA; }
 const CASE_PRICE = 200;
 const SELL_PRICES = {common:20,rare:50,epic:150,legendary:400};
 
@@ -1180,6 +1245,16 @@ function addCoins(amount){
   coins+=amount; sessionCoins+=amount;
   updateCoinDisplay();
   showCoinToast(amount);
+}
+
+// Notation centralisée Bon/Partiel/Raté (+15 / +8 / +0) — utilisée par TOUS les modes Pneumatique.
+// statsData.answered est géré par chaque mode ; ici on gère streak, correct et pièces.
+function applyGrade(level){
+  if(level==='bon'){ streak++; statsData.correct++; addCoins(Math.round(15*getMultiplier())); }
+  else if(level==='partiel'){ addCoins(Math.round(8*getMultiplier())); } // streak gelé (ni +1 ni reset)
+  else { streak=0; } // raté
+  updateStreakBadge();
+  saveAll();
 }
 
 function updateStats(){
@@ -1235,8 +1310,9 @@ function showModeSelect(){
   document.getElementById('quizContent').style.display='none';
 
   const badge=document.getElementById('modePaneBadge');
-  badge.className='subject-badge '+(currentSubject==='meca'?'meca':'thermo');
-  badge.textContent=currentSubject==='meca'?'🔧 Mécanique':'🔥 Thermodynamique';
+  const meta=SUBJECT_META[currentSubject]||SUBJECT_META.meca;
+  badge.className='subject-badge '+meta.badge;
+  badge.textContent=meta.icon+' '+meta.label;
 
   const grid=document.getElementById('modeGrid');
   const modes=[
@@ -1255,10 +1331,10 @@ function showModeSelect(){
 
 function selectMode(mode){
   currentMode=mode;
-  if(currentSubject==='meca'){
-    showThemeSelect();
-  } else {
+  if(currentSubject==='thermo'){
     showExamSelect();
+  } else {
+    showThemeSelect();
   }
 }
 
@@ -1266,25 +1342,35 @@ function backToModeSelect(){
   showModeSelect();
 }
 
-// ===================== MECA THEME SELECT =====================
+// ===================== THEME SELECT (Meca / Pneu) =====================
 function showThemeSelect(){
   document.getElementById('modeSelectPane').style.display='none';
   document.getElementById('themeSelectPane').style.display='block';
   const modeLabels={flashcard:'Flashcards',mcq:'QCM',blank:'Texte à trou',open:'Question ouverte'};
   document.getElementById('modeSubtitle').textContent='Mode : '+modeLabels[currentMode];
+  // Badge matière
+  const meta=SUBJECT_META[currentSubject]||SUBJECT_META.meca;
+  const badge=document.getElementById('themePaneBadge');
+  badge.className='subject-badge '+meta.badge;
+  badge.textContent=meta.icon+' '+meta.label;
+  // Labels des timers selon la matière
+  const t=meta.times;
+  document.getElementById('themeDiffEasy').textContent=`🟢 Facile ${t.easy}s`;
+  document.getElementById('themeDiffNormal').textContent=`🟡 Normal ${t.normal}s`;
+  document.getElementById('themeDiffHard').textContent=`🔴 Difficile ${t.hard}s`;
   buildThemeGrid();
 }
 
 function buildThemeGrid(){
-  const THEMES=[...new Set(QUESTIONS_MECA.map(q=>q.theme))];
-  const icons={"Fixation des essieux":"⚙️","Les suspensions":"🔧","Transmission intégrale":"🔩","Boîtes automatiques":"⚡","Boîte DSG / Double embrayage":"🎛️"};
+  const SRC=getThemedQuestions();
+  const THEMES=[...new Set(SRC.map(q=>q.theme))];
   const grid=document.getElementById('themeGrid');
   selectedThemes.clear();
   updateStartSelectedBtn();
   grid.innerHTML=THEMES.map(theme=>{
-    const count=QUESTIONS_MECA.filter(q=>q.theme===theme).length;
-    return `<div class="theme-btn" onclick="toggleTheme('${theme}',this)">
-      <span class="theme-emoji">${icons[theme]||'📚'}</span>
+    const count=SRC.filter(q=>q.theme===theme).length;
+    return `<div class="theme-btn" onclick="toggleTheme('${theme.replace(/'/g,"\\'")}',this)">
+      <span class="theme-emoji">${THEME_ICONS[theme]||'📚'}</span>
       <div class="theme-info"><h3>${theme}</h3><span>${count} questions</span></div>
       <div class="check"></div>
     </div>`;
@@ -1300,9 +1386,10 @@ function toggleTheme(theme,btn){
 function updateStartSelectedBtn(){
   const btn=document.getElementById('startSelectedBtn');
   if(!btn) return;
+  const SRC=getThemedQuestions();
   if(selectedThemes.size===0){btn.textContent='Sélectionne un thème';btn.classList.remove('ready');}
   else{
-    const total=[...selectedThemes].reduce((acc,t)=>acc+QUESTIONS_MECA.filter(q=>q.theme===t).length,0);
+    const total=[...selectedThemes].reduce((acc,t)=>acc+SRC.filter(q=>q.theme===t).length,0);
     btn.textContent=`▶ Lancer (${selectedThemes.size} thème${selectedThemes.size>1?'s':''} · ${total} questions)`;
     btn.classList.add('ready');
   }
@@ -1310,14 +1397,18 @@ function updateStartSelectedBtn(){
 
 function startSelectedThemes(){
   if(selectedThemes.size===0) return;
-  const qs=QUESTIONS_MECA.filter(q=>[...selectedThemes].includes(q.theme));
+  const qs=getThemedQuestions().filter(q=>[...selectedThemes].includes(q.theme));
   launchQuiz(qs.sort(()=>Math.random()-0.5));
 }
 
-function startQuizMeca(theme){
-  const qs=(theme==='all'?[...QUESTIONS_MECA]:QUESTIONS_MECA.filter(q=>q.theme===theme)).sort(()=>Math.random()-0.5);
+// Lance un quiz sur un thème (ou 'all') de la matière active (meca ou pneu)
+function startQuizThemed(theme){
+  const SRC=getThemedQuestions();
+  const qs=(theme==='all'?[...SRC]:SRC.filter(q=>q.theme===theme)).sort(()=>Math.random()-0.5);
   launchQuiz(qs);
 }
+// Alias rétro-compatible
+function startQuizMeca(theme){ startQuizThemed(theme); }
 
 // ===================== THERMO EXAM SELECT =====================
 function showExamSelect(){
@@ -1355,7 +1446,7 @@ function launchQuiz(qs){
 }
 
 function getDiffTime(){
-  const times = currentSubject==='thermo' ? DIFF_TIMES_THERMO : DIFF_TIMES_MECA;
+  const times = (SUBJECT_META[currentSubject]||SUBJECT_META.meca).times;
   return times[difficulty]||0;
 }
 
@@ -1437,11 +1528,12 @@ function showQuestion(){
 }
 
 function setBadge(subj){
+  const meta=SUBJECT_META[subj]||SUBJECT_META.meca;
   ['fcBadge','mcqBadge','blankBadge','openBadge'].forEach(id=>{
     const el=document.getElementById(id);
     if(el){
-      el.className='subject-badge '+(subj==='meca'?'meca':'thermo');
-      el.textContent=subj==='meca'?'🔧 Mécanique':'🔥 Thermodynamique';
+      el.className='subject-badge '+meta.badge;
+      el.textContent=meta.icon+' '+meta.label;
     }
   });
 }
@@ -1455,6 +1547,8 @@ function showFlashcard(q){
   document.getElementById('fcAnswer').classList.remove('show');
   document.getElementById('fcHint').style.display='block';
   document.getElementById('fcActions').style.display='none';
+  // Bouton "À moitié" (crédit partiel) seulement en Pneumatique
+  document.getElementById('fcPartialBtn').style.display=(currentSubject==='pneu')?'block':'none';
 }
 
 function revealFlashcard(){
@@ -1465,12 +1559,17 @@ function revealFlashcard(){
   document.getElementById('fcActions').style.display='flex';
 }
 
-function flashcardAnswer(correct){
+function flashcardGrade(level){
   if(answered) return;
   answered=true; statsData.answered++;
-  if(correct){streak++;statsData.correct++;addCoins(Math.round(10*getMultiplier()));}
-  else{streak=0;}
-  saveAll();
+  if(currentSubject==='pneu'){
+    applyGrade(level); // +15 / +8 / +0
+  } else {
+    // Méca / Thermo : comportement d'origine (binaire, +10 sur "Je savais")
+    if(level==='bon'){streak++;statsData.correct++;addCoins(Math.round(10*getMultiplier()));}
+    else{streak=0;}
+    saveAll();
+  }
   setTimeout(()=>{currentIndex++;showQuestion();},500);
 }
 
@@ -1499,9 +1598,14 @@ function selectMCQ(btn,correct,options,grid){
   answered=true; stopTimer(); statsData.answered++;
   const allBtns=grid.querySelectorAll('.option-btn');
   allBtns.forEach((b,i)=>{b.disabled=true;if(options[i].correct)b.classList.add('correct');});
-  if(correct){btn.classList.add('correct');streak++;statsData.correct++;addCoins(Math.round(10*getMultiplier()));}
-  else{btn.classList.add('wrong');streak=0;}
-  saveAll();
+  btn.classList.add(correct?'correct':'wrong');
+  if(currentSubject==='pneu'){
+    applyGrade(correct?'bon':'rate'); // QCM juste = Bon (+15), faux = Raté
+  } else {
+    if(correct){streak++;statsData.correct++;addCoins(Math.round(10*getMultiplier()));}
+    else{streak=0;}
+    saveAll();
+  }
   document.getElementById('mcqNext').classList.add('show');
 }
 
@@ -1603,10 +1707,15 @@ function submitBlank(){
     if(isOk) correctCount++;
   });
   statsData.answered++;
-  if(correctCount===blankData.answers.length){streak++;statsData.correct++;addCoins(Math.round(10*getMultiplier()));}
-  else if(correctCount>0){addCoins(Math.round(5*getMultiplier()));}
-  else{streak=0;}
-  saveAll();
+  if(currentSubject==='pneu'){
+    const lvl = correctCount===blankData.answers.length ? 'bon' : (correctCount>0 ? 'partiel' : 'rate');
+    applyGrade(lvl); // ex. 2/4 → Partiel (+8)
+  } else {
+    if(correctCount===blankData.answers.length){streak++;statsData.correct++;addCoins(Math.round(10*getMultiplier()));}
+    else if(correctCount>0){addCoins(Math.round(5*getMultiplier()));}
+    else{streak=0;}
+    saveAll();
+  }
   document.getElementById('blankReveal').classList.add('show');
   document.getElementById('blankFullAnswer').textContent=q.a;
   document.getElementById('blankNext').classList.add('show');
@@ -1643,7 +1752,8 @@ async function submitOpen(){
   aiDiv.innerHTML=`<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="color:var(--text-dim);font-size:0.85rem;">Analyse de ta réponse en cours...</span></div>`;
 
   try {
-    const prompt=`Tu es un professeur de thermodynamique automobile (Auto Bloc 2, HEL-ISET Belgique). 
+    const subjLabel = (SUBJECT_META[currentSubject]||SUBJECT_META.meca).label;
+    const prompt=`Tu es un professeur de ${subjLabel} automobile (Auto Bloc 2, HEL-ISET Belgique). 
 Un étudiant a répondu à cette question d'examen.
 
 Question : "${q.q}"
